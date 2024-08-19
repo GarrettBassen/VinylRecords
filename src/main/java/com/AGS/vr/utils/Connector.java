@@ -13,9 +13,26 @@ public class Connector
     public static Connection conn;
 
     // WARNING Do NOT push with your unique username and password
-    private static final String url =  "jdbc:mysql://localhost:3306/vinyl_records_database";
-    private static final String usr =  "";
-    private static final String pass = "";
+    private static final String url =  "jdbc:mysql://localhost:3306/Record_Keeping";
+    private static String usr =  "";
+    private static String pass = "";
+
+    /**
+     * Sets username of log in credentials
+     * @param u username
+     */
+    public static void setUsr(String u){
+        usr = u;
+    }
+
+    /**
+     * Sets password of log in credentials
+     * @param p
+     */
+    public static void setPass(String p){
+        pass = p;
+    }
+
 
     /**
      * Attempts to connect to database and assigns 'con' Connection object.
