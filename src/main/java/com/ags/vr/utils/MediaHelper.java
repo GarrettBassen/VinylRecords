@@ -1,4 +1,4 @@
-package com.AGS.vr.utils;
+package com.ags.vr.utils;
 
 public class MediaHelper
 {

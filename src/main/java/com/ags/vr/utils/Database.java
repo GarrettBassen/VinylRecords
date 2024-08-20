@@ -1,4 +1,4 @@
-package com.AGS.vr.utils;
+package com.ags.vr.utils;
 
 import com.AGS.vr.objects.Media;
 
@@ -6,7 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
-import static com.AGS.vr.utils.Connector.conn;
+
+import static com.ags.vr.utils.Connector.conn;
 
 
 public class Database

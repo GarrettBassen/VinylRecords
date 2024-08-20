@@ -1,4 +1,4 @@
-package com.AGS.vr.utils;
+package com.ags.vr.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,26 +13,9 @@ public class Connector
     public static Connection conn;
 
     // WARNING Do NOT push with your unique username and password
-    private static final String url =  "jdbc:mysql://localhost:3306/Record_Keeping";
+    private static final String url =  "jdbc:mysql://localhost:3306/vinyl_records";
     private static String usr =  "";
     private static String pass = "";
-
-    /**
-     * Sets username of log in credentials
-     * @param u username
-     */
-    public static void setUsr(String u){
-        usr = u;
-    }
-
-    /**
-     * Sets password of log in credentials
-     * @param p
-     */
-    public static void setPass(String p){
-        pass = p;
-    }
-
 
     /**
      * Attempts to connect to database and assigns 'con' Connection object.
