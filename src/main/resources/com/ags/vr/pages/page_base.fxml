@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -15,9 +16,9 @@
    <children>
       <BorderPane fx:id="content_pane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <VBox alignment="CENTER" maxHeight="135.0" maxWidth="1.7976931348623157E308" minHeight="135.0" minWidth="600.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" maxHeight="145.0" maxWidth="1.7976931348623157E308" minHeight="145.0" minWidth="600.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <children>
-                  <BorderPane maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="100.0" style="-fx-background-color: #2a292e;">
+                  <BorderPane depthTest="DISABLE" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="100.0" style="-fx-background-color: #2a292e;">
                      <center>
                         <ImageView fitHeight="100.0" fitWidth="1000.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                            <image>
@@ -26,9 +27,10 @@
                         </ImageView>
                      </center>
                   </BorderPane>
-                  <AnchorPane maxHeight="35.0" prefHeight="35.0" VBox.vgrow="NEVER">
+                  <AnchorPane maxHeight="45.0" maxWidth="1.7976931348623157E308" minHeight="45.0" prefHeight="0.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <GridPane gridLinesVisible="true" maxHeight="35.0" prefHeight="35.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Pane maxHeight="5.0" maxWidth="1.7976931348623157E308" minHeight="5.0" style="-fx-background-color: #242424;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <GridPane gridLinesVisible="true" maxHeight="35.0" minHeight="35.0" style="-fx-background-color: #383845;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                           <columnConstraints>
                             <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="100.0" />
                             <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="100.0" />
@@ -39,28 +41,29 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button alignment="CENTER" maxHeight="30.0" maxWidth="1.7976931348623157E308" minHeight="30.0" mnemonicParsing="false" onAction="#PageAccessBrowse" style="-fx-background-color: transparent;" text="Browse" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                              <Button alignment="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#PageAccessBrowse" style="-fx-background-color: #383845;" text="Browse" textFill="#b2b2b2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                              <Button alignment="CENTER" maxHeight="30.0" maxWidth="1.7976931348623157E308" minHeight="30.0" mnemonicParsing="false" onAction="#PageAccessAdd" style="-fx-background-color: transparent;" text="Add" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                              <Button alignment="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#PageAccessAdd" style="-fx-background-color: #383845;" text="Add" textFill="#b2b2b2" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                              <Button alignment="CENTER" maxHeight="30.0" maxWidth="1.7976931348623157E308" minHeight="30.0" mnemonicParsing="false" onAction="#PageAccessInventory" style="-fx-background-color: transparent;" text="Inventory" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                              <Button alignment="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#PageAccessInventory" style="-fx-background-color: #383845;" text="Inventory" textFill="#b2b2b2" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
-                              <Button alignment="CENTER" maxHeight="30.0" maxWidth="1.7976931348623157E308" minHeight="30.0" mnemonicParsing="false" onAction="#PageAccessRequests" style="-fx-background-color: transparent;" text="Requests" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+                              <Button alignment="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#PageAccessRequests" style="-fx-background-color: #383845;" text="Requests" textFill="#b2b2b2" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Button>
                            </children>
                         </GridPane>
+                        <Pane maxHeight="5.0" maxWidth="1.7976931348623157E308" minHeight="5.0" style="-fx-background-color: #242424;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                      </children>
                   </AnchorPane>
                </children>
