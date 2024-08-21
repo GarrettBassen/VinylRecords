@@ -1,4 +1,4 @@
-package com.AGS.vr.objects;
+package com.ags.vr.objects;
 
 public class TYPE
 {

@@ -1,6 +1,6 @@
 package com.ags.vr.utils;
 
-import com.AGS.vr.objects.Media;
+import com.ags.vr.objects.Media;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
