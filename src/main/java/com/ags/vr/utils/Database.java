@@ -44,7 +44,7 @@ public class Database
     }
 
     /**
-     * Inserts a genre into the database
+     * Inserts a genre into the database.
      * @param genre name of genera added
      * @return true if the method ran successfully, false if the method failed
      * @throws SQLException
@@ -53,11 +53,20 @@ public class Database
     {
         boolean bool = false;
 
+        //copy of genre, will be modified to a standard input for hashing
+        String hashStr = genre.toLowerCase();
+        hashStr = hashStr.strip();
+
+        //hash code that will be stored as the genres ID
+        int hash = generalUtil.hash(hashStr);
+        String ID = String.valueOf(hash);
+
+
         try
         {
             //inserting the genera into the database
             PreparedStatement stmt = con.prepareStatement("INSERT INTO genres VALUES (?,?)");
-            stmt.setString(1,"0");
+            stmt.setString(1, ID);
             stmt.setString(2,genre);
             stmt.execute();
             //as genre was added so updating bool
@@ -85,6 +94,12 @@ public class Database
         //to be returned
         boolean bool = false;
 
+        //hash value (ID) of genre
+        genre = genre.toLowerCase();
+        genre = genre.strip();
+        int ID = generalUtil.hash(genre);
+
+
         try
         {
             stmt = con.createStatement();
@@ -98,7 +113,7 @@ public class Database
             while(rs.next())
             {
                 //if genre is found update bool to true
-                if(rs.getString("name").equals(genre))
+                if(rs.getInt("ID")==ID)
                 {
                     bool = true;
                 }
@@ -133,11 +148,16 @@ public class Database
     {
         boolean bool = false;
 
+        //hash value (ID) of genre
+        genre = genre.toLowerCase();
+        genre = genre.strip();
+        String ID = Integer.toString(generalUtil.hash(genre));
+
         try
         {
             //inserting the genera into the database
-            PreparedStatement stmt = con.prepareStatement("DELETE FROM genres WHERE name = (?)");
-            stmt.setString(1,genre);
+            PreparedStatement stmt = con.prepareStatement("DELETE FROM genres WHERE ID = (?)");
+            stmt.setString(1,ID);
             stmt.execute();
             //as genre was added so updating bool
             bool = true;
