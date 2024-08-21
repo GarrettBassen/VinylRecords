@@ -1,21 +1,44 @@
 package com.ags.vr.controllers;
 
 import com.ags.vr.utils.Connector;
+import com.ags.vr.utils.Graphical;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 public class PageBaseController
 {
     // VARIABLES
     @FXML
-    private AnchorPane content_anchor;
+    private BorderPane content_pane;
 
     @FXML
     private void initialize()
     {
         Connector.connect();
+    }
+
+    /**
+     * Switches pages by loading selected page in page_base center.
+     * @param pageName Page fxml name
+     */
+    private void LoadPage(String pageName)
+    {
+        try
+        {
+            Node page = FXMLLoader.load(getClass().getResource("/com/ags/vr/pages/" + pageName));
+            content_pane.setCenter(page);
+        }
+        catch (Exception e)
+        {
+            Graphical.ErrorPopup("Error Opening Page",String.format(
+                    "Failed to open %s\n\nCode:%s",pageName,e.getMessage()
+            ));
+        }
     }
 
     /**
@@ -25,8 +48,7 @@ public class PageBaseController
     @FXML
     void PageAccessAdd(ActionEvent event)
     {
-        // TODO LINK PAGE
-        System.out.println("ADD PAGE");
+        LoadPage("page_add.fxml");
     }
 
     /**
@@ -36,8 +58,7 @@ public class PageBaseController
     @FXML
     void PageAccessBrowse(ActionEvent event)
     {
-        // TODO LINK PAGE
-        System.out.println("BROWSE PAGE");
+        LoadPage("page_browse.fxml");
     }
 
     /**
@@ -47,8 +68,7 @@ public class PageBaseController
     @FXML
     void PageAccessInventory(ActionEvent event)
     {
-        // TODO LINK PAGE
-        System.out.println("INVENTORY PAGE");
+        LoadPage("page_inventory.fxml");
     }
 
     /**
@@ -58,8 +78,7 @@ public class PageBaseController
     @FXML
     void PageAccessRequests(ActionEvent event)
     {
-        // TODO LINK PAGE
-        System.out.println("REQUESTS PAGE");
+        LoadPage("page_requests.fxml");
     }
 
 }

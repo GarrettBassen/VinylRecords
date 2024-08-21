@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-import static com.ags.vr.utils.Connector.conn;
+import static com.ags.vr.utils.Connector.con;
 
 
 public class Database
@@ -26,7 +26,7 @@ public class Database
             String[] data = media.getData();
 
             // Create statement and execute
-            PreparedStatement statement = conn.prepareStatement("INSERT INTO media VALUES (?,?,?,?,?)");
+            PreparedStatement statement = con.prepareStatement("INSERT INTO media VALUES (?,?,?,?,?)");
             statement.setString(1,data[0]);
             statement.setString(2,data[1]);
             statement.setString(3,data[2]);
@@ -56,7 +56,7 @@ public class Database
         try
         {
             //inserting the genera into the database
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO genres VALUES (?,?)");
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO genres VALUES (?,?)");
             stmt.setString(1,"0");
             stmt.setString(2,genre);
             stmt.execute();
@@ -87,7 +87,7 @@ public class Database
 
         try
         {
-            stmt = conn.createStatement();
+            stmt = con.createStatement();
             //checking if genre is in database
             rs = stmt.executeQuery("SELECT * FROM genres");
 
@@ -136,7 +136,7 @@ public class Database
         try
         {
             //inserting the genera into the database
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM genres WHERE name = (?)");
+            PreparedStatement stmt = con.prepareStatement("DELETE FROM genres WHERE name = (?)");
             stmt.setString(1,genre);
             stmt.execute();
             //as genre was added so updating bool
