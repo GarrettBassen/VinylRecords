@@ -20,9 +20,9 @@
                <children>
                   <BorderPane depthTest="DISABLE" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="100.0" style="-fx-background-color: #2a292e;">
                      <center>
-                        <ImageView fitHeight="100.0" fitWidth="1000.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                        <ImageView fitHeight="125.0" fitWidth="586.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                            <image>
-                              <Image url="@../artwork/UI/banner.png" />
+                              <Image url="@../artwork/UI/header.png" />
                            </image>
                         </ImageView>
                      </center>

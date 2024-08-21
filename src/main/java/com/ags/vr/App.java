@@ -15,7 +15,7 @@ public class App extends Application
     public void start(Stage stage) throws IOException
     {
         // Stage setup
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("artwork/icons/placeholder_icon.png")));
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("artwork/icons/icon_bg.png")));
         stage.setTitle("Old Skool's Inventory Management System");
         stage.setMinWidth(600);
         stage.setMinHeight(600);
