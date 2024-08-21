@@ -20,6 +20,7 @@ public class PageBaseController
     private void initialize()
     {
         Connector.connect();
+        LoadPage("page_browse.fxml");
     }
 
     /**
