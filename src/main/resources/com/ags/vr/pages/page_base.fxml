@@ -15,17 +15,17 @@
    <children>
       <BorderPane fx:id="content_pane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <VBox maxHeight="135.0" maxWidth="1.7976931348623157E308" minHeight="135.0" minWidth="600.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" maxHeight="135.0" maxWidth="1.7976931348623157E308" minHeight="135.0" minWidth="600.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane maxHeight="100.0" prefHeight="100.0" VBox.vgrow="NEVER">
-                     <children>
-                        <ImageView fitHeight="100.0" fitWidth="1000.0" layoutY="-1.0" pickOnBounds="true">
+                  <BorderPane maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="100.0" style="-fx-background-color: #2a292e;">
+                     <center>
+                        <ImageView fitHeight="100.0" fitWidth="1000.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                            <image>
                               <Image url="@../artwork/UI/banner.png" />
                            </image>
                         </ImageView>
-                     </children>
-                  </AnchorPane>
+                     </center>
+                  </BorderPane>
                   <AnchorPane maxHeight="35.0" prefHeight="35.0" VBox.vgrow="NEVER">
                      <children>
                         <GridPane gridLinesVisible="true" maxHeight="35.0" prefHeight="35.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
