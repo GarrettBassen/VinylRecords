@@ -44,4 +44,19 @@ public class Connector
             );
         }
     }
+
+    /**
+     * Safely disconnects from the database.
+     */
+    public static void disconnect()
+    {
+        try
+        {
+            conn.close();
+        }
+        catch (SQLException e)
+        {
+            System.out.println("ERROR DISCONNECTING FROM DATABASE!\n\n" + e.getMessage());
+        }
+    }
 }
