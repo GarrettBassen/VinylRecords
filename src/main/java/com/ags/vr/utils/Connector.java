@@ -29,19 +29,19 @@ public class Connector
         }
 
         // Try to connect if database is not connected
-        try {
+        try
+        {
             conn = DriverManager.getConnection(url, usr, pass);
-
-            // Display error popup if database is not connected
-            if (conn == null)
-            {
-                Graphical.ErrorPopup("Cannot Connection Error",
-                        "Could not connect to database. Please check internet connection and try again.");
-            }
         }
         catch (SQLException e)
         {
-            Graphical.ErrorPopup("Database Connection Error", e.toString());
+            Graphical.ErrorPopup("Database Connection Error",
+                    String.format(
+                            "Error connecting to database. Please ensure username, password, and url are " +
+                            "valid and that the database is running on the device.\n\nCODE: %s\n%s",
+                            e.getErrorCode(), e.getMessage()
+                    )
+            );
         }
     }
 }

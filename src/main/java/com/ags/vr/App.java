@@ -22,11 +22,12 @@ public class App extends Application
         stage.show();
     }
 
+    /**
+     * Launches graphical application.
+     * @param args args
+     */
     public static void main(String[] args)
     {
-        // Connect to database and launch
-        Connector.connect();
         launch();
-        LocalTesting.Testing();
     }
 }

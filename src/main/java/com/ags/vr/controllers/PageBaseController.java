@@ -1,5 +1,6 @@
 package com.ags.vr.controllers;
 
+import com.ags.vr.utils.Connector;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -9,6 +10,12 @@ public class PageBaseController
     // VARIABLES
     @FXML
     private AnchorPane content_anchor;
+
+    @FXML
+    private void initialize()
+    {
+        Connector.connect();
+    }
 
     /**
      * Opens "Add" page to add media to inventory when button is pressed.

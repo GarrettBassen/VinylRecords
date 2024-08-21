@@ -1,5 +1,7 @@
 package com.ags.vr.utils;
 
+import javafx.scene.control.Alert;
+
 public class Graphical
 {
     // TODO CREATE POPUP WINDOWS AND OTHER GRAPHICAL UI UTILS
@@ -11,8 +13,10 @@ public class Graphical
      */
     public static void ErrorPopup(String title, String message)
     {
-        // TODO IMPLEMENT
-        System.out.println("IMPLEMENT ERROR POPUP");
-        System.err.printf("%s: %s\n", title, message);
+        Alert popup = new Alert(Alert.AlertType.ERROR);
+        popup.setTitle(title);
+        popup.setHeaderText(null);
+        popup.setContentText(message);
+        popup.showAndWait();
     }
 }
