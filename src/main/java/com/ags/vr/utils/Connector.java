@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class Connector
 {
     // Connection object
-    public static Connection conn;
+    public static Connection con;
 
     // WARNING Do NOT push with your unique username and password
     private static final String url =  "jdbc:mysql://localhost:3306/oldSkoolDB";
@@ -23,7 +23,7 @@ public class Connector
     public static void connect()
     {
         // Do nothing if database is connected
-        if (conn != null)
+        if (con != null)
         {
             return;
         }
@@ -31,7 +31,7 @@ public class Connector
         // Try to connect if database is not connected
         try
         {
-            conn = DriverManager.getConnection(url, usr, pass);
+            con = DriverManager.getConnection(url, usr, pass);
         }
         catch (SQLException e)
         {
@@ -50,9 +50,16 @@ public class Connector
      */
     public static void disconnect()
     {
+        // Do nothing if database is not connected
+        if (con == null)
+        {
+            return;
+        }
+
+        // Try to close database connection
         try
         {
-            conn.close();
+            con.close();
         }
         catch (SQLException e)
         {
