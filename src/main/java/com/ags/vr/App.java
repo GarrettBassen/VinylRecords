@@ -13,9 +13,11 @@ public class App extends Application
     @Override
     public void start(Stage stage) throws IOException
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("pages/hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("pages/page_base.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+        stage.setTitle("Old Skool's Inventory Management System");
+        stage.setMinWidth(600);
+        stage.setMinHeight(600);
         stage.setScene(scene);
         stage.show();
     }

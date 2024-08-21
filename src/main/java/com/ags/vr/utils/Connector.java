@@ -13,7 +13,7 @@ public class Connector
     public static Connection conn;
 
     // WARNING Do NOT push with your unique username and password
-    private static final String url =  "jdbc:mysql://localhost:3306/vinyl_records";
+    private static final String url =  "jdbc:mysql://localhost:3306/oldSkoolDB";
     private static String usr =  "";
     private static String pass = "";
 
