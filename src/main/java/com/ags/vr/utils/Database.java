@@ -44,20 +44,30 @@ public class Database
     }
 
     /**
-     * Inserts a genre into the database
-     * @param genre name of genera added
-     * @return true if the method ran successfully, false if the method failed
+     * Inserts a genre into the database.
+     * @param genre name of genera added.
+     * @return true if the method ran successfully, false if the method failed.
      * @throws SQLException
      */
     public static boolean insertGenre(String genre) throws SQLException
     {
+        PreparedStatement stmt = null;
         boolean bool = false;
+
+        //copy of genre, will be modified to a standard input for hashing
+        String hashStr = genre.toLowerCase();
+        hashStr = hashStr.strip();
+
+        //hash code that will be stored as the genres ID
+        int hash = generalUtil.hash(hashStr);
+        String ID = String.valueOf(hash);
+
 
         try
         {
             //inserting the genera into the database
-            PreparedStatement stmt = con.prepareStatement("INSERT INTO genres VALUES (?,?)");
-            stmt.setString(1,"0");
+            stmt = con.prepareStatement("INSERT INTO genres VALUES (?,?)");
+            stmt.setString(1, ID);
             stmt.setString(2,genre);
             stmt.execute();
             //as genre was added so updating bool
@@ -67,6 +77,12 @@ public class Database
         {
             //throwing error
             Graphical.ErrorPopup("Database Error", e.toString());
+        }
+        finally
+        {
+            if(stmt != null){
+                stmt.close();
+            }
         }
 
         return bool;
@@ -85,6 +101,12 @@ public class Database
         //to be returned
         boolean bool = false;
 
+        //hash value (ID) of genre
+        genre = genre.toLowerCase();
+        genre = genre.strip();
+        int ID = generalUtil.hash(genre);
+
+
         try
         {
             stmt = con.createStatement();
@@ -98,7 +120,7 @@ public class Database
             while(rs.next())
             {
                 //if genre is found update bool to true
-                if(rs.getString("name").equals(genre))
+                if(rs.getInt("ID")==ID)
                 {
                     bool = true;
                 }
@@ -131,15 +153,21 @@ public class Database
      */
     public static boolean deleteGenre(String genre) throws SQLException
     {
+        PreparedStatement stmt = null;
         boolean bool = false;
+
+        //hash value (ID) of genre
+        genre = genre.toLowerCase();
+        genre = genre.strip();
+        String ID = Integer.toString(generalUtil.hash(genre));
 
         try
         {
-            //inserting the genera into the database
-            PreparedStatement stmt = con.prepareStatement("DELETE FROM genres WHERE name = (?)");
-            stmt.setString(1,genre);
+            //deleting the genera from the database
+            stmt = con.prepareStatement("DELETE FROM genres WHERE ID = (?)");
+            stmt.setString(1,ID);
             stmt.execute();
-            //as genre was added so updating bool
+            //as genre was deleted so updating bool
             bool = true;
         }
         catch (SQLException e)
@@ -147,9 +175,155 @@ public class Database
             //throwing error
             Graphical.ErrorPopup("Database Error", e.toString());
         }
+        finally
+        {
+            if(stmt != null)
+            {
+                stmt.close();
+            }
+        }
 
         return bool;
     }
 
+    // TODO TEST ALL GENRE METHODS
+    // TODO UPDATE containsGenre if containsBand WORKS AS INTENDED
+
+    /**
+     * Insets a band into the database,
+     * @param band name of band that is to be inserted
+     * @return true if the band is successfully inserted, false otherwise
+     * @throws SQLException
+     */
+    public static boolean insertBand(String band) throws SQLException
+    {
+        PreparedStatement stmt = null;
+        boolean bool = false;
+
+        //copy of band that will turn into the hashed ID of band
+        String hashStr = band.toLowerCase();
+        hashStr = hashStr.strip();
+        String ID = String.valueOf(generalUtil.hash(hashStr));
+
+        try
+        {
+            //inserting the band into the database
+            stmt = con.prepareStatement("INSERT INTO bands VALUES (?,?)");
+            stmt.setString(1, ID);
+            stmt.setString(2, band);
+            stmt.execute();
+            //as band was added so updating bool
+            bool = true;
+        }
+        catch (SQLException e)
+        {
+            //throwing error
+            Graphical.ErrorPopup("Database Error", e.toString());
+        }
+        finally
+        {
+            if(stmt != null)
+            {
+                stmt.close();
+            }
+        }
+
+        return bool;
+    }
+
+    /**
+     * Checks if the inputted band is contained within the database.
+     * @param band name of band being searched for.
+     * @return True if the band is within the database, otherwise false.
+     * @throws SQLException
+     */
+    public static boolean containsBand(String band) throws SQLException
+    {
+        //statement and result set
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        //to be returned
+        boolean bool = false;
+
+        //hash value (ID) of genre
+        band = band.toLowerCase();
+        band = band.strip();
+        String ID = Integer.toString(generalUtil.hash(band));
+
+        try
+        {
+            //searching for the ID in the database
+            stmt = con.prepareStatement("SELECT * FROM bands WHERE ID = (?)");
+            stmt.setString(1, ID);
+            stmt.execute();
+            rs = stmt.getResultSet();
+
+            if(rs.getInt("ID") == Integer.parseInt(ID))
+            {
+                bool = true;
+            }
+        }
+        catch (SQLException e)
+        {
+            //throwing error
+            Graphical.ErrorPopup("Database Error", e.toString());
+        }
+
+        finally
+        {
+            if(rs != null){
+                rs.close();
+            }
+
+            if(stmt != null){
+                stmt.close();
+            }
+        }
+
+        return bool;
+    }
+
+    /**
+     * Removed a band from the database.
+     * @param band name of band to be removed
+     * @return true if the band was removed, false otherwise.
+     * @throws SQLException
+     */
+    public static boolean deleteBand(String band) throws SQLException
+    {
+        PreparedStatement stmt = null;
+        boolean bool = false;
+
+        //hash value (ID) of genre
+        band = band.toLowerCase();
+        band = band.strip();
+        String ID = Integer.toString(generalUtil.hash(band));
+
+        try
+        {
+            //deleting band from the database
+            stmt = con.prepareStatement("DELETE FROM bands WHERE ID = (?)");
+            stmt.setString(1,ID);
+            stmt.execute();
+            //as band was deleted so updating bool
+            bool = true;
+        }
+        catch (SQLException e)
+        {
+            //throwing error
+            Graphical.ErrorPopup("Database Error", e.toString());
+        }
+        finally
+        {
+            if(stmt != null)
+            {
+                stmt.close();
+            }
+        }
+
+        return bool;
+    }
+
+    // TODO TEST ALL BAND METHODS
     // TODO ALLOWS MODIFICATION AND COLLECTION OF DATA FROM DATABASE
 }
