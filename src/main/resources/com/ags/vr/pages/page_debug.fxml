@@ -16,13 +16,13 @@
       <Text layoutX="14.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Band Name" />
       <Text layoutX="14.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Genre" />
       <Button fx:id="btn_submit" layoutX="373.0" layoutY="43.0" mnemonicParsing="false" onAction="#AddMedia" prefHeight="75.0" prefWidth="139.0" text="Submit" />
-      <CheckBox layoutX="34.0" layoutY="174.0" mnemonicParsing="false" text="Single" />
-      <CheckBox layoutX="139.0" layoutY="174.0" mnemonicParsing="false" text="EP" />
-      <CheckBox layoutX="241.0" layoutY="174.0" mnemonicParsing="false" text="LP" />
-      <CheckBox layoutX="348.0" layoutY="174.0" mnemonicParsing="false" text="DLP" />
-      <CheckBox layoutX="34.0" layoutY="209.0" mnemonicParsing="false" text="Vinyl" />
-      <CheckBox layoutX="139.0" layoutY="209.0" mnemonicParsing="false" text="CD" />
-      <CheckBox layoutX="241.0" layoutY="209.0" mnemonicParsing="false" text="Cassette" />
+      <CheckBox fx:id="cb_format_single" layoutX="34.0" layoutY="174.0" mnemonicParsing="false" text="Single" />
+      <CheckBox fx:id="cb_format_EP" layoutX="139.0" layoutY="174.0" mnemonicParsing="false" text="EP" />
+      <CheckBox fx:id="cb_format_LP" layoutX="241.0" layoutY="174.0" mnemonicParsing="false" text="LP" />
+      <CheckBox fx:id="cb_format_DLP" layoutX="348.0" layoutY="174.0" mnemonicParsing="false" text="DLP" />
+      <CheckBox fx:id="cb_medium_vinyl" layoutX="34.0" layoutY="209.0" mnemonicParsing="false" text="Vinyl" />
+      <CheckBox fx:id="cb_medium_CD" layoutX="139.0" layoutY="209.0" mnemonicParsing="false" text="CD" />
+      <CheckBox fx:id="cb_medium_cassette" layoutX="241.0" layoutY="209.0" mnemonicParsing="false" text="Cassette" />
       <Text layoutX="19.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Year" />
       <TextField fx:id="txt_year" layoutX="114.0" layoutY="119.0" />
       <Text layoutX="111.0" layoutY="328.0" strokeType="OUTSIDE" strokeWidth="0.0" text="DEBUG PAGE">
