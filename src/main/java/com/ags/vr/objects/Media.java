@@ -1,10 +1,13 @@
 package com.ags.vr.objects;
 
+import com.ags.vr.utils.DBHelper;
+
 /**
  * Media object adds readability and make media-related database operations easier.
  */
 public class Media
 {
+    private int ID;
     private String title = null;
     private TYPE.medium medium = null;
     private TYPE.format format = null;
@@ -21,6 +24,7 @@ public class Media
      */
     public Media(String title, TYPE.medium medium, TYPE.format format, byte year, int bandID)
     {
+        ID = DBHelper.StringHash(title);
         this.title = title;
         this.medium = medium;
         this.format = format;
@@ -43,6 +47,7 @@ public class Media
     {
         return new String[]
                 {
+                        Integer.toString(ID),
                         this.title,
                         Integer.toString(this.medium.ordinal()),
                         Integer.toString(this.format.ordinal()),
@@ -103,6 +108,15 @@ public class Media
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                              GETTERS                                                      */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Returns media ID.
+     * @return Media ID.
+     */
+    public int getID()
+    {
+        return ID;
+    }
 
     /**
      * Returns album title.

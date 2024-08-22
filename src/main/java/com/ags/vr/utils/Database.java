@@ -53,14 +53,8 @@ public class Database
         PreparedStatement stmt = null;
         boolean bool = false;
 
-        //copy of genre, will be modified to a standard input for hashing
-        String hashStr = genre.toLowerCase();
-        hashStr = hashStr.strip();
-
-        //hash code that will be stored as the genres ID
-        int hash = GeneralUtil.hash(hashStr);
-        String ID = String.valueOf(hash);
-
+        //Generated String ID
+        String ID = String.valueOf(DBHelper.StringHash(genre));
 
         try
         {
@@ -100,10 +94,8 @@ public class Database
         //to be returned
         boolean bool = false;
 
-        //hash value (ID) of genre
-        genre = genre.toLowerCase();
-        genre = genre.strip();
-        String ID = Integer.toString(GeneralUtil.hash(genre));
+        //Generated String ID
+        String ID = String.valueOf(DBHelper.StringHash(genre));
 
         try
         {
@@ -141,9 +133,10 @@ public class Database
     }
 
     /**
-     * Deletes genre
-     * @param genre genre to be deleted
-     * @return true if the genre was successfully deleted, false otherwise
+     * Deletes genre.
+     * @param genre Genre to be deleted.
+     * @return true if the genre was successfully deleted or if the genre
+     * was already in the database, false otherwise.
      * @throws SQLException
      */
     public static boolean deleteGenre(String genre) throws SQLException
@@ -151,10 +144,8 @@ public class Database
         PreparedStatement stmt = null;
         boolean bool = false;
 
-        //hash value (ID) of genre
-        genre = genre.toLowerCase();
-        genre = genre.strip();
-        String ID = Integer.toString(GeneralUtil.hash(genre));
+        //Generated String ID
+        String ID = String.valueOf(DBHelper.StringHash(genre));
 
         try
         {
@@ -193,10 +184,8 @@ public class Database
         PreparedStatement stmt = null;
         boolean bool = false;
 
-        //copy of band that will turn into the hashed ID of band
-        String hashStr = band.toLowerCase();
-        hashStr = hashStr.strip();
-        String ID = String.valueOf(GeneralUtil.hash(hashStr));
+        //Generated String ID
+        String ID = String.valueOf(DBHelper.StringHash(band));
 
         try
         {
@@ -238,10 +227,8 @@ public class Database
         //to be returned
         boolean bool = false;
 
-        //hash value (ID) of genre
-        band = band.toLowerCase();
-        band = band.strip();
-        String ID = Integer.toString(GeneralUtil.hash(band));
+        //Generated String ID
+        String ID = String.valueOf(DBHelper.StringHash(band));
 
         try
         {
@@ -281,7 +268,7 @@ public class Database
     /**
      * Removed a band from the database.
      * @param band name of band to be removed
-     * @return true if the band was removed, false otherwise.
+     * @return true if the band was removed or was already not in the database, false otherwise.
      * @throws SQLException
      */
     public static boolean deleteBand(String band) throws SQLException
@@ -289,10 +276,8 @@ public class Database
         PreparedStatement stmt = null;
         boolean bool = false;
 
-        //hash value (ID) of genre
-        band = band.toLowerCase();
-        band = band.strip();
-        String ID = Integer.toString(GeneralUtil.hash(band));
+        //Generated String ID
+        String ID = String.valueOf(DBHelper.StringHash(band));
 
         try
         {
@@ -319,5 +304,132 @@ public class Database
         return bool;
     }
 
+    /**
+     * Inserts the provided media into the database
+     * @param media Media object to be inserted.
+     * @return True if the media was successfully inserted, otherwise false.
+     * @throws SQLException
+     */
+    public static boolean insertMedia(Media media) throws SQLException
+    {
+        PreparedStatement stmt = null;
+        boolean bool = false;
+
+        //data
+        String[] data = media.getData();
+
+        try
+        {
+            //adding all values to database
+           stmt = con.prepareStatement("INSERT INTO media VALUES (?,?,?,?,?,?)");
+           stmt.setString(1, data[0]);
+           stmt.setString(2, data[1]);
+           stmt.setString(3, data[2]);
+           stmt.setString(4, data[3]);
+           stmt.setString(5, data[4]);
+           stmt.setString(6, data[5]);
+           stmt.execute();
+           //data successfully added
+           bool = true;
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Database Error", e.toString());
+        }
+        finally
+        {
+            if(stmt != null)
+            {
+                stmt.close();
+            }
+        }
+        return bool;
+    }
+
+    /**
+     * Checks if the provided media is within the database.
+     * @param media Media object to be searched for.
+     * @return True if the media is within the database, otherwise false.
+     * @throws SQLException
+     */
+    public static boolean containsMedia(Media media) throws SQLException
+    {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean bool = false;
+        String ID = String.valueOf(media.getID());
+
+        try
+        {
+            //running query (searching for same ID)
+            stmt = con.prepareStatement("SELECT * FROM media WHERE ID = (?)");
+            stmt.setString(1, ID);
+            stmt.execute();
+            rs = stmt.getResultSet();
+
+            //if there is something in rs then the media is contained within the database
+            if(rs.next())
+            {
+                bool = true;
+            }
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Database Error", e.toString());
+        }
+        finally
+        {
+            if(rs != null)
+            {
+                rs.close();
+            }
+
+            if(stmt != null)
+            {
+                stmt.close();
+            }
+        }
+
+        return bool;
+    }
+
+    /**
+     * Removes the provided media from the database.
+     * @param media Media object to be delted.
+     * @return True if the media was succsefully deleted or already not within
+     * the database, otherwise false.
+     * @throws SQLException
+     */
+    public static boolean deleteMedia(Media media) throws SQLException
+    {
+        PreparedStatement stmt = null;
+        boolean bool = false;
+
+        //ID
+        String ID = String.valueOf(media.getID());
+
+        try
+        {
+            stmt = con.prepareStatement("DELETE FROM media WHERE ID = (?)");
+            stmt.setString(1, ID);
+            stmt.execute();
+            bool = true;
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Database Error", e.toString());
+        }
+        finally
+        {
+            if(stmt != null)
+            {
+                stmt.close();
+            }
+        }
+
+        return bool;
+    }
+
+    // TODO TEST MEDIA METHODS
     // TODO ALLOWS MODIFICATION AND COLLECTION OF DATA FROM DATABASE
 }

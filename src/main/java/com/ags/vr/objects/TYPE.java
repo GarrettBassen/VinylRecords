@@ -6,7 +6,8 @@ public class TYPE
     {
         VINYL,
         CD,
-        CASSETTE
+        CASSETTE,
+        OTHER
     }
 
     public enum format
