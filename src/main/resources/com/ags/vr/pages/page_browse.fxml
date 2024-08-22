@@ -51,11 +51,11 @@
                               <Insets left="35.0" />
                            </GridPane.margin>
                         </ImageView>
-                        <Button fx:id="btn_search" mnemonicParsing="false" onAction="#SearchButton" prefHeight="40.0" prefWidth="46.0" style="-fx-background-color: transparent;" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+                        <Button fx:id="btn_search" mnemonicParsing="false" onAction="#SearchButton" prefHeight="40.0" prefWidth="34.0" style="-fx-background-color: transparent;" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
                            <GridPane.margin>
                               <Insets left="32.0" />
                            </GridPane.margin></Button>
-                        <TextField fx:id="txt_search" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" onKeyPressed="#InputValidation" promptText="Search" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="NEVER">
+                        <TextField fx:id="txt_search" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" onKeyPressed="#InputValidation" promptText="Search" stylesheets="@../css/page_browse.css" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="NEVER">
                            <font>
                               <Font size="18.0" />
                            </font>
