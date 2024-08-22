@@ -323,6 +323,37 @@ public class Database
     /*                                              BAND LINKER                                                  */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+    public static boolean createBandLink(Media media, String band) throws SQLException
+    {
+        PreparedStatement stmt = null;
+        boolean bool = false;
+
+        //IDs of the media and band
+        String mediaID = String.valueOf(media.getID());
+        String bandID = String.valueOf(DBHelper.StringHash(band));
+
+        try
+        {
+            //updating the band_ID
+            stmt = con.prepareStatement("UPDATE media SET band_ID = (?) WHERE ID = (?)");
+            stmt.setString(1,bandID);
+            stmt.setString(2,mediaID);
+            stmt.execute();
+            bool = true;
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Database Error", e.toString());
+        }
+        finally
+        {
+            if(stmt != null)
+            {
+                stmt.close();
+            }
+        }
+        return bool;
+    }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                              MEDIA METHODS                                                */

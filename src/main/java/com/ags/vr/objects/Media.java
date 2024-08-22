@@ -20,16 +20,14 @@ public class Media
      * @param medium TYPE.medium (vinyl, CD, cassette)
      * @param format TYPE.format (Single, EP, LP, DLP)
      * @param year Release Year
-     * @param bandID Bind ID
      */
-    public Media(String title, TYPE.medium medium, TYPE.format format, byte year, int bandID)
+    public Media(String title, TYPE.medium medium, TYPE.format format, byte year)
     {
         ID = DBHelper.StringHash(title);
         this.title = title;
         this.medium = medium;
         this.format = format;
         this.year = year;
-        this.bandID = bandID;
     }
 
     /**
