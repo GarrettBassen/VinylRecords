@@ -6,14 +6,20 @@ package com.ags.vr.utils;
 public class DBHelper
 {
     /**
-     * Takes string and returns unique integer hash code.
-     * @param str String to hash
-     * @return Integer hash code
+     * Takes n many strings, concatenates them, strips of special characters, then returns hash from inputs.
+     * @param string 1-n String inputs
+     * @return Integer unique hash code
      */
-    public static int StringHash(String str)
+    public static int StringHash(String... string)
     {
-        // Removes all punctuation, white space, and converts string to lowercase
-        str = str.toLowerCase().strip().replaceAll("[^a-zA-Z ]","");
-        return str.hashCode();
+        // Concatenate all strings
+        StringBuilder raw = new StringBuilder();
+        for (String s : string)
+        {
+            raw.append(s);
+        }
+
+        // Removes all punctuation, white space, and converts string to lowercase then returns hash
+        return raw.toString().toLowerCase().strip().replaceAll("[^a-zA-Z ]","").hashCode();
     }
 }
