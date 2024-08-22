@@ -4,7 +4,6 @@ import com.ags.vr.objects.Media;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.ResultSet;
 
 import static com.ags.vr.utils.Connector.con;
@@ -59,7 +58,7 @@ public class Database
         hashStr = hashStr.strip();
 
         //hash code that will be stored as the genres ID
-        int hash = generalUtil.hash(hashStr);
+        int hash = GeneralUtil.hash(hashStr);
         String ID = String.valueOf(hash);
 
 
@@ -95,8 +94,8 @@ public class Database
      * @throws SQLException
      */
     public static boolean containsGenre(String genre) throws SQLException{
-        //statement and result
-        Statement stmt = null;
+        //statement and result set
+        PreparedStatement stmt = null;
         ResultSet rs = null;
         //to be returned
         boolean bool = false;
@@ -104,27 +103,22 @@ public class Database
         //hash value (ID) of genre
         genre = genre.toLowerCase();
         genre = genre.strip();
-        int ID = generalUtil.hash(genre);
-
+        String ID = Integer.toString(GeneralUtil.hash(genre));
 
         try
         {
-            stmt = con.createStatement();
-            //checking if genre is in database
-            rs = stmt.executeQuery("SELECT * FROM genres");
-
-            //checking result
+            //searching for the ID in the database
+            stmt = con.prepareStatement("SELECT * FROM genres WHERE ID = (?)");
+            stmt.setString(1, ID);
+            stmt.execute();
             rs = stmt.getResultSet();
 
-            //loop through result to search for genre
-            while(rs.next())
+            //if there is something within the result set then the genre is contained
+            if(rs.next())
             {
-                //if genre is found update bool to true
-                if(rs.getInt("ID")==ID)
-                {
-                    bool = true;
-                }
+                bool = true;
             }
+
         }
         catch (SQLException e)
         {
@@ -142,6 +136,7 @@ public class Database
                 stmt.close();
             }
         }
+
         return bool;
     }
 
@@ -159,7 +154,7 @@ public class Database
         //hash value (ID) of genre
         genre = genre.toLowerCase();
         genre = genre.strip();
-        String ID = Integer.toString(generalUtil.hash(genre));
+        String ID = Integer.toString(GeneralUtil.hash(genre));
 
         try
         {
@@ -186,8 +181,6 @@ public class Database
         return bool;
     }
 
-    // TODO TEST ALL GENRE METHODS
-    // TODO UPDATE containsGenre if containsBand WORKS AS INTENDED
 
     /**
      * Insets a band into the database,
@@ -203,7 +196,7 @@ public class Database
         //copy of band that will turn into the hashed ID of band
         String hashStr = band.toLowerCase();
         hashStr = hashStr.strip();
-        String ID = String.valueOf(generalUtil.hash(hashStr));
+        String ID = String.valueOf(GeneralUtil.hash(hashStr));
 
         try
         {
@@ -248,7 +241,7 @@ public class Database
         //hash value (ID) of genre
         band = band.toLowerCase();
         band = band.strip();
-        String ID = Integer.toString(generalUtil.hash(band));
+        String ID = Integer.toString(GeneralUtil.hash(band));
 
         try
         {
@@ -258,10 +251,12 @@ public class Database
             stmt.execute();
             rs = stmt.getResultSet();
 
-            if(rs.getInt("ID") == Integer.parseInt(ID))
+            //if there is something within the result set then the band is contained
+            if(rs.next())
             {
                 bool = true;
             }
+
         }
         catch (SQLException e)
         {
@@ -297,7 +292,7 @@ public class Database
         //hash value (ID) of genre
         band = band.toLowerCase();
         band = band.strip();
-        String ID = Integer.toString(generalUtil.hash(band));
+        String ID = Integer.toString(GeneralUtil.hash(band));
 
         try
         {
@@ -324,6 +319,5 @@ public class Database
         return bool;
     }
 
-    // TODO TEST ALL BAND METHODS
     // TODO ALLOWS MODIFICATION AND COLLECTION OF DATA FROM DATABASE
 }

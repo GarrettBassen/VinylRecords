@@ -1,6 +1,6 @@
 package com.ags.vr.utils;
 
-public class generalUtil {
+public class GeneralUtil {
     /**
      * Uses each character in a string to generate a unique integer representation of that string.
      * @param str The string that will be hashed.
