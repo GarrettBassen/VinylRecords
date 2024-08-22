@@ -1,6 +1,10 @@
 .text-field {
-    -fx-background-radius: 18;
-    -fx-border-radius: 18;
-    -fx-border-color: #000000;
+    -fx-background-image: url('../artwork/icons/search.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: 10 center;
+
     -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-border-radius: 32 18 18 32;
+    -fx-background-radius: 32 18 18 32;
 }
