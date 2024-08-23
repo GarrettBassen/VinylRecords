@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 
 import static com.ags.vr.utils.Connector.con;
 
-
 public class Database
 {
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -144,6 +143,7 @@ public class Database
 
         return bool;
     }
+
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                              GENRE LINKER                                                 */
@@ -291,7 +291,7 @@ public class Database
         try
         {
             // Get band by ID
-            PreparedStatement statement = con.prepareStatement("SELECT name FROM bands WHERE 'ID'=?");
+            PreparedStatement statement = con.prepareStatement("SELECT name FROM bands WHERE ID=?");
             statement.setInt(1,bandID);
             ResultSet result = statement.executeQuery();
 
@@ -302,6 +302,7 @@ public class Database
         catch (SQLException e)
         {
             Graphical.ErrorPopup("SQL ERROR","Error getting band.\ngetBand() | Database.java");
+            return "__NULL_ERROR";
         }
     }
 
@@ -343,6 +344,8 @@ public class Database
 
         return bool;
     }
+
+
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                              BAND LINKER                                                  */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -379,49 +382,37 @@ public class Database
         return bool;
     }
 
+
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                              MEDIA METHODS                                                */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /**
-     * Inserts the provided media into the database
+     * Inserts the provided media object into the database.
      * @param media Media object to be inserted.
-     * @return True if the media was successfully inserted, otherwise false.
-     * @throws SQLException
+     * @return True if insert was successful; false otherwise.
      */
-    public static boolean insertMedia(Media media) throws SQLException
+    public static boolean insertMedia(Media media)
     {
-        PreparedStatement stmt = null;
-        boolean bool = false;
-
-        //data
-        String[] data = media.getData();
-
         try
         {
             //adding all values to database
-           stmt = con.prepareStatement("INSERT INTO media VALUES (?,?,?,?,?,?)");
-           stmt.setString(1, data[0]);
-           stmt.setString(2, data[1]);
-           stmt.setString(3, data[2]);
-           stmt.setString(4, data[3]);
-           stmt.setString(5, data[4]);
-           stmt.setString(6, data[5]);
-           stmt.execute();
-           //data successfully added
-           bool = true;
+            String[] data = media.getData();
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO media VALUES (?,?,?,?,?,?)");
+            stmt.setString(1, data[0]);
+            stmt.setString(2, data[1]);
+            stmt.setString(3, data[2]);
+            stmt.setString(4, data[3]);
+            stmt.setString(5, data[4]);
+            stmt.setString(6, data[5]);
+            stmt.execute();
+
+            return true;
         }
         catch (SQLException e)
         {
             Graphical.ErrorPopup("Database Error", e.toString());
+            return false;
         }
-        finally
-        {
-            if(stmt != null)
-            {
-                stmt.close();
-            }
-        }
-        return bool;
     }
 
     /**

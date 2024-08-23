@@ -1,5 +1,7 @@
 package com.ags.vr.controllers;
 
+import com.ags.vr.utils.Connector;
+
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -34,10 +36,16 @@ public class DebugController
     @FXML
     private TextField txt_year;
 
+    @FXML
+    private void initialize()
+    {
+        Connector.connect();
+    }
+
     // Methods
     @FXML
-    void AddMedia(ActionEvent event)
+    private void AddMedia(ActionEvent event)
     {
-        // TODO MAKE SQL QUERY HERE
+
     }
 }

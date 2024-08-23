@@ -8,13 +8,18 @@ import com.ags.vr.utils.Database;
  */
 public class Media
 {
-    private int ID;
-    private int oldID;
+    private int ID = Integer.MIN_VALUE;
+    private int oldID = Integer.MIN_VALUE;
     private String title = null;
     private TYPE.medium medium = null;
     private TYPE.format format = null;
-    private byte year = -1;
-    private int bandID = -1;
+    private short year = Short.MIN_VALUE;
+    private int bandID = Integer.MIN_VALUE;
+
+    /**
+     * Default constructor.
+     */
+    public Media() {}
 
     /**
      * Creates media object for use in database.
@@ -24,9 +29,8 @@ public class Media
      * @param year Release Year
      * @param bandID Band ID
      */
-    public Media(String title, TYPE.medium medium, TYPE.format format, byte year, int bandID)
+    public Media(String title, TYPE.medium medium, TYPE.format format, short year, int bandID)
     {
-        this.ID = this.oldID = Integer.MIN_VALUE;
         this.title = title;
         this.medium = medium;
         this.format = format;
@@ -44,10 +48,9 @@ public class Media
      * @param year Release Year
      * @param bandID Band ID
      */
-    public Media(Integer ID, String title, TYPE.medium medium, TYPE.format format, byte year, int bandID)
+    public Media(Integer ID, String title, TYPE.medium medium, TYPE.format format, short year, int bandID)
     {
         this.ID = ID;
-        this.oldID = Integer.MIN_VALUE;
         this.title = title;
         this.medium = medium;
         this.format = format;
@@ -75,7 +78,7 @@ public class Media
                         this.title,
                         Integer.toString(this.medium.ordinal()),
                         Integer.toString(this.format.ordinal()),
-                        Byte.toString(this.year),
+                        Short.toString(this.year),
                         Integer.toString(bandID)
                 };
     }
@@ -89,12 +92,16 @@ public class Media
      */
     private void setID()
     {
+        // Do nothing if one or more hash input is null
+        if (this.title.isBlank() || this.bandID == Integer.MIN_VALUE) { return; }
+
         // Save ID for database safety if media
         if (this.ID != Integer.MIN_VALUE)
         {
             this.oldID = this.ID;
         }
 
+        // TODO CREATE BAND IN LINKER IF BAND DOES NOT EXIST
         this.ID = DBHelper.StringHash(this.title,Database.getBand(this.bandID));
     }
 
@@ -130,7 +137,7 @@ public class Media
      * Sets release year.
      * @param year year
      */
-    public void setYear(byte year)
+    public void setYear(short year)
     {
         this.year = year;
     }
@@ -199,7 +206,7 @@ public class Media
      * Returns album release year.
      * @return Release year
      */
-    public byte getYear()
+    public short getYear()
     {
         return this.year;
     }
