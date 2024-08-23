@@ -1,5 +1,6 @@
 package com.ags.vr.objects;
 
+import com.ags.vr.utils.database.DBBands;
 import com.ags.vr.utils.database.Hash;
 
 /**
@@ -45,16 +46,16 @@ public class Media
      * @param medium TYPE.medium (vinyl, CD, cassette)
      * @param format TYPE.format (Single, EP, LP, DLP)
      * @param year Release Year
-     * @param band Band Name
+     * @param bandID Band ID
      */
-    public Media(Integer ID, String title, TYPE.medium medium, TYPE.format format, short year, String band)
+    public Media(Integer ID, String title, TYPE.medium medium, TYPE.format format, short year, int bandID)
     {
         this.ID = ID;
         this.title = title;
         this.medium = medium;
         this.format = format;
         this.year = year;
-        this.band = band;
+        this.band = DBBands.getBand(bandID);
     }
 
     /**
