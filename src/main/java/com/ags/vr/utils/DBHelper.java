@@ -19,7 +19,17 @@ public class DBHelper
             raw.append(s);
         }
 
-        // Removes all punctuation, white space, and converts string to lowercase then returns hash
-        return raw.toString().toLowerCase().strip().replaceAll("[^a-zA-Z ]","").hashCode();
+        //Removes all punctuation, white space
+        String str = raw.toString().toLowerCase().strip();
+        //hash that will be returned
+        int hash = 7;
+
+        //converting the string into a hashed integer
+        for(int i = 0; i < str.length(); i++)
+        {
+            hash += str.charAt(i) * 17;
+        }
+
+        return hash;
     }
 }
