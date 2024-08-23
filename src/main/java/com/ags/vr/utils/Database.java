@@ -282,6 +282,30 @@ public class Database
     }
 
     /**
+     * TODO COMMENT AND TEST
+     * @param bandID
+     * @return
+     */
+    public static String getBand(int bandID)
+    {
+        try
+        {
+            // Get band by ID
+            PreparedStatement statement = con.prepareStatement("SELECT name FROM bands WHERE 'ID'=?");
+            statement.setInt(1,bandID);
+            ResultSet result = statement.executeQuery();
+
+            // Get band name
+            result.next();
+            return result.getString(1);
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("SQL ERROR","Error getting band.\ngetBand() | Database.java");
+        }
+    }
+
+    /**
      * Removed a band from the database.
      * @param band name of band to be removed
      * @return true if the band was removed or was already not in the database, false otherwise.

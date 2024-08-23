@@ -1,6 +1,7 @@
 package com.ags.vr.objects;
 
 import com.ags.vr.utils.DBHelper;
+import com.ags.vr.utils.Database;
 
 /**
  * Media object adds readability and make media-related database operations easier.
@@ -8,6 +9,7 @@ import com.ags.vr.utils.DBHelper;
 public class Media
 {
     private int ID;
+    private int oldID;
     private String title = null;
     private TYPE.medium medium = null;
     private TYPE.format format = null;
@@ -20,14 +22,37 @@ public class Media
      * @param medium TYPE.medium (vinyl, CD, cassette)
      * @param format TYPE.format (Single, EP, LP, DLP)
      * @param year Release Year
+     * @param bandID Band ID
      */
-    public Media(String title, TYPE.medium medium, TYPE.format format, byte year)
+    public Media(String title, TYPE.medium medium, TYPE.format format, byte year, int bandID)
     {
-        ID = DBHelper.StringHash(title);
+        this.ID = this.oldID = Integer.MIN_VALUE;
         this.title = title;
         this.medium = medium;
         this.format = format;
         this.year = year;
+        this.bandID = bandID;
+        setID();
+    }
+
+    /**
+     * Creates media object from database.
+     * @param ID Media ID
+     * @param title Media Title
+     * @param medium TYPE.medium (vinyl, CD, cassette)
+     * @param format TYPE.format (Single, EP, LP, DLP)
+     * @param year Release Year
+     * @param bandID Band ID
+     */
+    public Media(Integer ID, String title, TYPE.medium medium, TYPE.format format, byte year, int bandID)
+    {
+        this.ID = ID;
+        this.oldID = Integer.MIN_VALUE;
+        this.title = title;
+        this.medium = medium;
+        this.format = format;
+        this.year = year;
+        this.bandID = bandID;
     }
 
     /**
@@ -46,7 +71,7 @@ public class Media
     {
         return new String[]
                 {
-                        Integer.toString(ID),
+                        Integer.toString(this.ID),
                         this.title,
                         Integer.toString(this.medium.ordinal()),
                         Integer.toString(this.format.ordinal()),
@@ -60,12 +85,27 @@ public class Media
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
-     * Sets album title.
+     * Saves original ID to oldID and sets new ID as a hash of the concatenated album name and band name.
+     */
+    private void setID()
+    {
+        // Save ID for database safety if media
+        if (this.ID != Integer.MIN_VALUE)
+        {
+            this.oldID = this.ID;
+        }
+
+        this.ID = DBHelper.StringHash(this.title,Database.getBand(this.bandID));
+    }
+
+    /**
+     * Sets album title and updates media ID.
      * @param title title
      */
     public void setTitle(String title)
     {
         this.title = title;
+        setID();
     }
 
     /**
@@ -96,12 +136,13 @@ public class Media
     }
 
     /**
-     * Sets band ID.
+     * Sets band ID and updates media ID.
      * @param bandID band ID
      */
     public void setBandID(int bandID)
     {
         this.bandID = bandID;
+        this.setID();
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -114,7 +155,17 @@ public class Media
      */
     public int getID()
     {
-        return ID;
+        return this.ID;
+    }
+
+    /**
+     * Returns old ID if ID was changed due to album or band name modification. Used to delete previous entry
+     * from database before adding new media object with correct ID.
+     * @return Old ID or Integer.MIN_VALUE if ID has not changed.
+     */
+    public int getOldID()
+    {
+        return this.oldID;
     }
 
     /**
@@ -123,7 +174,7 @@ public class Media
      */
     public String getTitle()
     {
-        return title;
+        return this.title;
     }
 
     /**
@@ -132,7 +183,7 @@ public class Media
      */
     public TYPE.medium getMedium()
     {
-        return medium;
+        return this.medium;
     }
 
     /**
@@ -141,7 +192,7 @@ public class Media
      */
     public TYPE.format getFormat()
     {
-        return format;
+        return this.format;
     }
 
     /**
@@ -150,7 +201,7 @@ public class Media
      */
     public byte getYear()
     {
-        return year;
+        return this.year;
     }
 
     /**
@@ -159,6 +210,6 @@ public class Media
      */
     public int getBandID()
     {
-        return bandID;
+        return this.bandID;
     }
 }
