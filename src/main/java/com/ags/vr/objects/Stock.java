@@ -10,6 +10,15 @@ public class Stock
     private int backFair = 0;
     private int backPoor = 0;
 
+    /**
+     * Default constructor
+     */
+    public Stock() {}
+
+    /**
+     * Constructor.
+     * @param media Media object
+     */
     public Stock(Media media)
     {
         mediaID = media.getID();

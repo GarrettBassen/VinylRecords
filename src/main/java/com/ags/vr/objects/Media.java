@@ -58,7 +58,7 @@ public class Media
             this.medium = media.getString("medium");
             this.format = media.getString("album_format");
             this.year = media.getShort("year");
-            this.band = DBBands.getBand(media.getInt("band_id"));
+            this.band = DBBands.GetName(media.getInt("band_id"));
         }
         catch (SQLException e)
         {

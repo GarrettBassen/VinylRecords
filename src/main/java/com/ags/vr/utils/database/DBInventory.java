@@ -9,48 +9,29 @@ import java.sql.SQLException;
 
 import static com.ags.vr.utils.Connector.con;
 
-public class DBStock
+public class DBInventory
 {
-    /**
-     * Creates a media table for the provided media. All stock values are set to 0
-     * as the default.
-     * @param media Media object of which a table will be created for.
-     * @return True if the table was created successfully, otherwise false.
-     * @throws SQLException
-     */
-    public static boolean createStock(Media media) throws SQLException
+    // TODO COMMENT
+    public static void Insert(Stock stock)
     {
-        PreparedStatement stmt = null;
-        boolean bool = false;
-
-        //media ID (used to connect stock to media
-        String mediaID = String.valueOf(media.getID());
-
+        // TODO TEST
         try
         {
-            stmt = con.prepareStatement("INSERT INTO stock VALUES (?,?,?,?,?,?,?)");
-            stmt.setString(1, mediaID);
-            stmt.setString(2, "0");
-            stmt.setString(3, "0");
-            stmt.setString(4, "0");
-            stmt.setString(5, "0");
-            stmt.setString(6, "0");
-            stmt.setString(7, "0");
-            stmt.execute();
-            bool = true;
+            PreparedStatement statement = con.prepareStatement("INSERT INTO inventory VALUES (?,?,?,?,?,?,?)");
+            statement.setInt(1, stock.getMediaID());
+            statement.setInt(2, stock.getFrontGood());
+            statement.setInt(3, stock.getFrontFair());
+            statement.setInt(4, stock.getFrontPoor());
+            statement.setInt(5, stock.getBackGood());
+            statement.setInt(6, stock.getBackFair());
+            statement.setInt(7, stock.getBackPoor());
+            statement.execute();
         }
         catch (SQLException e)
         {
+            // TODO UPDATE ERROR
             Graphical.ErrorPopup("Database Error", e.toString());
         }
-        finally
-        {
-            if(stmt != null)
-            {
-                stmt.close();
-            }
-        }
-        return bool;
     }
 
     /**
@@ -59,7 +40,7 @@ public class DBStock
      * @return True if the stock was updated successfully, otherwise false.
      * @throws SQLException
      */
-    public static boolean modifyStock(Stock stock) throws SQLException
+    public static boolean Modify(Stock stock) throws SQLException
     {
         PreparedStatement stmt = null;
         boolean bool = false;
@@ -103,7 +84,7 @@ public class DBStock
      * @return True if the table was successfully deleted.
      * @throws SQLException
      */
-    public static boolean deleteStock(Media media) throws SQLException
+    public static boolean Delete(Media media) throws SQLException
     {
         PreparedStatement stmt = null;
         boolean bool = false;

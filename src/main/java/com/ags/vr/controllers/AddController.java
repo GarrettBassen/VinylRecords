@@ -1,10 +1,12 @@
 package com.ags.vr.controllers;
 
 import com.ags.vr.objects.Media;
+import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.database.DBBands;
 import com.ags.vr.utils.database.DBMedia;
 
+import com.ags.vr.utils.database.DBInventory;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -12,29 +14,30 @@ import java.time.Year;
 
 public class AddController
 {
-    // Variables
-    @FXML
-    private CheckBox cb_CD;
-    @FXML
-    private CheckBox cb_DLP;
-    @FXML
-    private CheckBox cb_EP;
-    @FXML
-    private CheckBox cb_LP;
-    @FXML
-    private CheckBox cb_cassette;
-    @FXML
-    private CheckBox cb_single;
-    @FXML
-    private CheckBox cb_vinyl;
-    @FXML
-    private TextArea ta_genres;
-    @FXML
-    private TextField tf_band;
-    @FXML
-    private TextField tf_title;
-    @FXML
-    private TextField tf_year;
+    // Medium variables
+    @FXML private CheckBox cb_vinyl;
+    @FXML private CheckBox cb_CD;
+    @FXML private CheckBox cb_cassette;
+
+    // Album format variables
+    @FXML private CheckBox cb_DLP;
+    @FXML private CheckBox cb_EP;
+    @FXML private CheckBox cb_LP;
+    @FXML private CheckBox cb_single;
+
+    // Text variables
+    @FXML private TextArea ta_genres;
+    @FXML private TextField tf_band;
+    @FXML private TextField tf_title;
+    @FXML private TextField tf_year;
+
+    // Inventory variables
+    @FXML private Spinner<Integer> sp_front_good;
+    @FXML private Spinner<Integer> sp_front_fair;
+    @FXML private Spinner<Integer> sp_front_poor;
+    @FXML private Spinner<Integer> sp_back_good;
+    @FXML private Spinner<Integer> sp_back_fair;
+    @FXML private Spinner<Integer> sp_back_poor;
 
     // Input validation arrays
     private CheckBox[] array_medium;
@@ -46,6 +49,7 @@ public class AddController
     @FXML
     private void initialize()
     {
+        SpinnerInitialize();
         array_medium = new CheckBox[] { cb_vinyl, cb_CD, cb_cassette };
         array_format = new CheckBox[] { cb_single, cb_EP, cb_LP, cb_DLP };
     }
@@ -55,63 +59,63 @@ public class AddController
      * @param event Event
      */
     @FXML
-    void AddMedia(ActionEvent event)
+    private void AddMedia(ActionEvent event)
     {
-        // Validate all text inputs
-        if (!TextInputValidation()) return;
+        // Validate all inputs
+        if (!TextInputValidation())                                    { return; }
+        if (!CheckboxValidation(array_medium,"media type"))     { return; }
+        if (!CheckboxValidation(array_format,"album format"))   { return; }
 
-        // Validate checkbox sections
-        if (!CheckboxValidation(array_medium,"media type"))     return;
-        if (!CheckboxValidation(array_format,"album format"))   return;
-
+        // Create media and ensure is unique
         Media media = CreateMedia();
+        if (DBMedia.Contains(media))
+        {
+            GotoInventory(media);
+        }
 
         // Create band, media, and inventory table
-        if (media != null)
-        {
-            DBBands.containsBand(media.getBand(), true);
-            DBMedia.insertMedia(media);
-            // TODO ADD INVENTORY TABLE
-        }
+        DBBands.Contains(media.getBand(), true);
+        DBMedia.Insert(media);
+        DBInventory.Insert(GenerateStock(media));
+        // TODO ADD INVENTORY TABLE
     }
 
 
-    private Media CreateMedia()
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                           VALIDATION METHODS                                                  */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Ensures that one and only one of the checkboxes in the given array are activated. If an error is found,
+     * a False boolean is returned and the error is displayed to the user in an error popup.
+     * @param array Checkbox array to validate
+     * @param section Section title for error message
+     * @return True for valid inputs; false otherwise.
+     */
+    private boolean CheckboxValidation(CheckBox[] array, String section)
     {
-        Media media = new Media();
-        media.setTitle(tf_title.getText());
-        media.setYear(Short.parseShort(tf_year.getText()));
-        media.setBand(tf_band.getText());
+        int count = 0;
 
-        // Set medium
-        if      (cb_vinyl.isSelected())     { media.setMedium("vinyl"); }
-        else if (cb_CD.isSelected())        { media.setMedium("CD"); }
-        else if (cb_cassette.isSelected())  { media.setMedium("cassette"); }
-
-        // Set format
-        if      (cb_single.isSelected())    { media.setFormat("single"); }
-        else if (cb_EP.isSelected())        { media.setFormat("EP"); }
-        else if (cb_LP.isSelected())        { media.setFormat("LP"); }
-        else if (cb_DLP.isSelected())       { media.setFormat("DLP"); }
-
-        // Check if media exists in database already
-        if (DBMedia.ContainsMedia(media))
+        // Count activated checkboxes
+        for (CheckBox cb : array)
         {
-            boolean GotoPage = Graphical.ConfirmationPopup("Media Already Exists",String.format(
-                    "%s by %s is already in your system. Would you like to go to the inventory page to" +
-                            "modify this item or its stock?",tf_title.getText(),tf_band.getText())
-            );
-
-            if (GotoPage)
-            {
-                // TODO BRING USER TO INVENTORY PAGE FOR THE MEDIA ENTRY
-                System.out.println("FIX ME TextInputValidation() AddController.java");
-            }
-
-            return null;
+            count += cb.isSelected()? 1 : 0;
         }
 
-        return media;
+        if (count == 0)
+        {
+            Graphical.ErrorPopup("No Selection",
+                    String.format("No %s is selected. Please review selections.",section));
+            return false;
+        }
+        else if (count > 1)
+        {
+            Graphical.ErrorPopup("Too Many Selections",
+                    String.format("More than one %s is selected. Please review selections.",section));
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -156,36 +160,81 @@ public class AddController
         return true;
     }
 
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                              HELPER METHODS                                                   */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
     /**
-     * Ensures that one and only one of the checkboxes in the given array are activated. If an error is found,
-     * a False boolean is returned and the error is displayed to the user in an error popup.
-     * @param array Checkbox array to validate
-     * @param section Section title for error message
-     * @return True for valid inputs; false otherwise.
+     * Generates stock object.
+     * @return Stock object
      */
-    private boolean CheckboxValidation(CheckBox[] array, String section)
+    private Stock GenerateStock(Media media)
     {
-        int count = 0;
+        Stock stock = new Stock(media);
+        stock.setFrontGood(sp_front_good.getValue());
+        stock.setFrontFair(sp_front_fair.getValue());
+        stock.setFrontPoor(sp_front_poor.getValue());
+        stock.setBackGood(sp_back_good.getValue());
+        stock.setBackFair(sp_back_fair.getValue());
+        stock.setBackPoor(sp_back_poor.getValue());
+        return stock;
+    }
 
-        // Count activated checkboxes
-        for (CheckBox cb : array)
-        {
-            count += cb.isSelected()? 1 : 0;
-        }
+    // TODO IMPLEMENT
+    private void GotoInventory(Media media)
+    {
+        boolean GotoPage = Graphical.ConfirmationPopup("Media Already Exists",String.format(
+                "'%s' by '%s' is already in your system. Would you like to go to the inventory page to " +
+                        "modify this item or change its stock?",tf_title.getText(),tf_band.getText())
+        );
 
-        if (count == 0)
+        if (GotoPage)
         {
-            Graphical.ErrorPopup("No Selection",
-                    String.format("No %s is selected. Please review selections.",section));
-            return false;
+            // TODO BRING USER TO INVENTORY PAGE FOR THE MEDIA ENTRY
+            System.out.println("FIX ME TextInputValidation() AddController.java");
         }
-        else if (count > 1)
-        {
-            Graphical.ErrorPopup("Too Many Selections",
-                    String.format("More than one %s is selected. Please review selections.",section));
-            return false;
-        }
+    }
 
-        return true;
+    /**
+     * Initializes spinners and sets value range.
+     */
+    private void SpinnerInitialize()
+    {
+        Spinner<Integer>[] spinners = new Spinner[] {
+                sp_front_good, sp_front_fair, sp_front_poor,
+                sp_back_good, sp_back_fair, sp_back_poor
+        };
+
+        // Initialize spinners
+        for (Spinner<Integer> sp : spinners)
+        {
+            sp.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0,255));
+        }
+    }
+
+    /**
+     * Creates media object from inputs.
+     * @return Media object
+     */
+    private Media CreateMedia()
+    {
+        // Set text inputs
+        Media media = new Media();
+        media.setTitle(tf_title.getText());
+        media.setYear(Short.parseShort(tf_year.getText()));
+        media.setBand(tf_band.getText());
+
+        // Set medium
+        if      (cb_vinyl.isSelected())     { media.setMedium("vinyl"); }
+        else if (cb_CD.isSelected())        { media.setMedium("CD"); }
+        else if (cb_cassette.isSelected())  { media.setMedium("cassette"); }
+
+        // Set format
+        if      (cb_single.isSelected())    { media.setFormat("single"); }
+        else if (cb_EP.isSelected())        { media.setFormat("EP"); }
+        else if (cb_LP.isSelected())        { media.setFormat("LP"); }
+        else if (cb_DLP.isSelected())       { media.setFormat("DLP"); }
+
+        return media;
     }
 }

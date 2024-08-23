@@ -8,13 +8,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+
+import java.io.IOException;
 
 public class PageBaseController
 {
     // VARIABLES
-    @FXML
-    private BorderPane content_pane;
+    @FXML private BorderPane content_pane;
 
     @FXML
     private void initialize()
@@ -34,10 +34,10 @@ public class PageBaseController
             Node page = FXMLLoader.load(getClass().getResource("/com/ags/vr/pages/" + pageName));
             content_pane.setCenter(page);
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             Graphical.ErrorPopup("Error Opening Page",String.format(
-                    "Failed to open %s\n\nCode:%s",pageName,e.getMessage()
+                    "Failed to open %s\n\nError:%s",pageName,e.getMessage()
             ));
         }
     }
@@ -47,7 +47,7 @@ public class PageBaseController
      * @param event Event handler
      */
     @FXML
-    void PageAccessAdd(ActionEvent event)
+    private void PageAccessAdd(ActionEvent event)
     {
         LoadPage("page_add.fxml");
     }
@@ -57,7 +57,7 @@ public class PageBaseController
      * @param event Event handler
      */
     @FXML
-    void PageAccessBrowse(ActionEvent event)
+    private void PageAccessBrowse(ActionEvent event)
     {
         LoadPage("page_browse.fxml");
     }
@@ -67,7 +67,7 @@ public class PageBaseController
      * @param event Event handler
      */
     @FXML
-    void PageAccessInventory(ActionEvent event)
+    private void PageAccessInventory(ActionEvent event)
     {
         LoadPage("page_inventory.fxml");
     }
@@ -77,7 +77,7 @@ public class PageBaseController
      * @param event Event handler
      */
     @FXML
-    void PageAccessRequests(ActionEvent event)
+    private void PageAccessRequests(ActionEvent event)
     {
         LoadPage("page_requests.fxml");
     }

@@ -16,7 +16,7 @@ public class DBBands
      * @param band Band Name
      * @return True if insert was successful; false otherwise
      */
-    public static boolean insertBand(String band)
+    public static boolean Insert(String band)
     {
         try
         {
@@ -41,7 +41,7 @@ public class DBBands
      * @param create Create band if it does not exist
      * @return True if the band exists; false otherwise
      */
-    public static boolean containsBand(String band, boolean create)
+    public static boolean Contains(String band, boolean create)
     {
         try
         {
@@ -52,7 +52,7 @@ public class DBBands
 
             if (create && !exists)
             {
-                return insertBand(band);
+                return Insert(band);
             }
             else
             {
@@ -73,7 +73,7 @@ public class DBBands
      * @param bandID
      * @return
      */
-    public static String getBand(int bandID)
+    public static String GetName(int bandID)
     {
         try
         {
@@ -99,7 +99,7 @@ public class DBBands
      * @return true if the band was removed or was already not in the database, false otherwise.
      * @throws SQLException
      */
-    public static boolean deleteBand(String band) throws SQLException
+    public static boolean Delete(String band) throws SQLException
     {
         PreparedStatement stmt = null;
         boolean bool = false;

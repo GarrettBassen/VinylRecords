@@ -15,7 +15,7 @@ public class DBMedia
      * Inserts the provided media object into the database.
      * @param media Media object
      */
-    public static void insertMedia(Media media)
+    public static void Insert(Media media)
     {
         try
         {
@@ -33,18 +33,22 @@ public class DBMedia
         catch (SQLException e)
         {
             Graphical.ErrorPopup("Database Error",String.format(
-                    "Could not add media to database insertMedia(Media media) DBMedia.java\n\nCode: %s\n%s",
+                    "Could not add media to database in insertMedia(Media media) DBMedia.java\n\nCode: %s\n%s",
                     e.getErrorCode(), e.getMessage()
             ));
         }
     }
 
-    // TODO TEST
-    public static boolean ContainsMedia(Media media)
+    /**
+     * Checks if media exists within database.
+     * @param media Media object
+     * @return True if media exists; false otherwise
+     */
+    public static boolean Contains(Media media)
     {
         try
         {
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE 'ID'=?");
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE media_id=?");
             statement.setInt(1,media.getID());
             ResultSet result = statement.executeQuery();
             return result.next();
@@ -52,7 +56,7 @@ public class DBMedia
         catch (SQLException e)
         {
             Graphical.ErrorPopup("Database Error",String.format(
-                    "Error finding media ContainsMedia(int ID) DBMedia.java\n\nCode: %s\n%s",
+                    "Error finding media in ContainsMedia(int ID) | DBMedia.java\n\nCode: %s\n%s",
                     e.getErrorCode(), e.getMessage()
             ));
             return false;
@@ -63,13 +67,13 @@ public class DBMedia
      * Removes the provided media object from the database.
      * @param media Media object.
      */
-    public static void deleteMedia(Media media)
+    public static void Delete(Media media)
     {
         // TODO TEST
         try
         {
             // TODO REMOVE MEDIA FROM GENRE LINKER AND INVENTORY TABLES
-            PreparedStatement statement = con.prepareStatement("DELETE FROM media WHERE ID=?");
+            PreparedStatement statement = con.prepareStatement("DELETE FROM media WHERE media_id=?");
             statement.setInt(1,media.getID());
             statement.execute();
         }
