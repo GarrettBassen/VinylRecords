@@ -3,17 +3,21 @@ package com.ags.vr.objects;
 import com.ags.vr.utils.database.DBBands;
 import com.ags.vr.utils.database.Hash;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Media object adds readability and make media-related database operations easier.
  */
 public class Media
 {
+    // Variables
     private int ID = Integer.MIN_VALUE;
     private int oldID = Integer.MIN_VALUE;
-    private String title = "";
-    private TYPE.medium medium = null;
-    private TYPE.format format = null;
     private short year = Short.MIN_VALUE;
+    private String title = "";
+    private String medium = "";
+    private String format = "";
     private String band = "";
 
     /**
@@ -24,12 +28,12 @@ public class Media
     /**
      * Creates media object for use in database.
      * @param title Media Title
-     * @param medium TYPE.medium (vinyl, CD, cassette)
-     * @param format TYPE.format (Single, EP, LP, DLP)
+     * @param medium vinyl, CD, cassette
+     * @param format Single, EP, LP, DLP
      * @param year Release Year
      * @param band Band Name
      */
-    public Media(String title, TYPE.medium medium, TYPE.format format, short year, String band)
+    public Media(String title, String medium, String format, short year, String band)
     {
         this.title = title;
         this.medium = medium;
@@ -41,21 +45,25 @@ public class Media
 
     /**
      * Creates media object from database.
-     * @param ID Media ID
-     * @param title Media Title
-     * @param medium TYPE.medium (vinyl, CD, cassette)
-     * @param format TYPE.format (Single, EP, LP, DLP)
-     * @param year Release Year
-     * @param bandID Band ID
+     * @param media Media ResultSet
      */
-    public Media(Integer ID, String title, TYPE.medium medium, TYPE.format format, short year, int bandID)
+    public Media(ResultSet media)
     {
-        this.ID = ID;
-        this.title = title;
-        this.medium = medium;
-        this.format = format;
-        this.year = year;
-        this.band = DBBands.getBand(bandID);
+        // TODO TEST
+        try
+        {
+            media.next();
+            this.ID = media.getInt("media_id");
+            this.title = media.getString("title");
+            this.medium = media.getString("medium");
+            this.format = media.getString("album_format");
+            this.year = media.getShort("year");
+            this.band = DBBands.getBand(media.getInt("band_id"));
+        }
+        catch (SQLException e)
+        {
+            // TODO DISPLAY ERROR
+        }
     }
 
     /**
@@ -76,8 +84,8 @@ public class Media
                 {
                         Integer.toString(this.ID),
                         this.title,
-                        Integer.toString(this.medium.ordinal()),
-                        Integer.toString(this.format.ordinal()),
+                        this.medium,
+                        this.format,
                         Short.toString(this.year),
                         Integer.toString(Hash.StringHash(this.band))
                 };
@@ -116,19 +124,19 @@ public class Media
     }
 
     /**
-     * Sets medium type (Vinyl, CD, Cassette).
-     * @param medium TYPE.medium type
+     * Sets medium type.
+     * @param medium vinyl, CD, cassette
      */
-    public void setMedium(TYPE.medium medium)
+    public void setMedium(String medium)
     {
         this.medium = medium;
     }
 
     /**
-     * Sets album format (Single, EP, LP, DLP).
-     * @param format TYPE.format type
+     * Sets album format.
+     * @param format single, EP, LP, DLP
      */
-    public void setFormat(TYPE.format format)
+    public void setFormat(String format)
     {
         this.format = format;
     }
@@ -185,19 +193,19 @@ public class Media
     }
 
     /**
-     * Returns medium type (Vinyl, CD, Cassette).
-     * @return TYPE.medium type
+     * Returns medium type.
+     * @return vinyl, CD, cassette
      */
-    public TYPE.medium getMedium()
+    public String getMedium()
     {
         return this.medium;
     }
 
     /**
-     * Returns album format (Single, EP, LP, DLP).
-     * @return TYPE.format type
+     * Returns album format.
+     * @return single, EP, LP, DLP
      */
-    public TYPE.format getFormat()
+    public String getFormat()
     {
         return this.format;
     }
@@ -213,10 +221,19 @@ public class Media
 
     /**
      * Returns band name.
-     * @return band name
+     * @return Band Name
      */
     public String getBand()
     {
         return this.band;
+    }
+
+    /**
+     * Returns band ID hash.
+     * @return Band ID
+     */
+    public int getBandID()
+    {
+        return Hash.StringHash(this.band);
     }
 }

@@ -12,95 +12,60 @@ import static com.ags.vr.utils.Connector.con;
 public class DBBands
 {
     /**
-     * Insets a band into the database,
-     * @param band name of band that is to be inserted
-     * @return true if the band is successfully inserted, false otherwise
-     * @throws SQLException
+     * Insets a band into the database by name.
+     * @param band Band Name
+     * @return True if insert was successful; false otherwise
      */
-    public static boolean insertBand(String band) throws SQLException
+    public static boolean insertBand(String band)
     {
-        PreparedStatement stmt = null;
-        boolean bool = false;
-
-        //Generated String ID
-        String ID = String.valueOf(Hash.StringHash(band));
-
         try
         {
             //inserting the band into the database
-            stmt = con.prepareStatement("INSERT INTO bands VALUES (?,?)");
-            stmt.setString(1, ID);
-            stmt.setString(2, band);
-            stmt.execute();
-            //as band was added so updating bool
-            bool = true;
+            PreparedStatement statement = con.prepareStatement("INSERT INTO bands VALUES (?,?)");
+            statement.setInt   (1, Hash.StringHash(band));
+            statement.setString(2, band);
+            statement.execute();
+            return true;
         }
         catch (SQLException e)
         {
             //throwing error
             Graphical.ErrorPopup("Database Error", e.toString());
+            return false;
         }
-        finally
-        {
-            if(stmt != null)
-            {
-                stmt.close();
-            }
-        }
-
-        return bool;
     }
 
     /**
-     * Checks if the inputted band is contained within the database.
-     * @param band name of band being searched for.
-     * @return True if the band is within the database, otherwise false.
-     * @throws SQLException
+     * Checks if the given band exists within the database.
+     * @param band Band Name
+     * @param create Create band if it does not exist
+     * @return True if the band exists; false otherwise
      */
-    public static boolean containsBand(String band) throws SQLException
+    public static boolean containsBand(String band, boolean create)
     {
-        //statement and result set
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        //to be returned
-        boolean bool = false;
-
-        //Generated String ID
-        String ID = String.valueOf(Hash.StringHash(band));
-
         try
         {
             //searching for the ID in the database
-            stmt = con.prepareStatement("SELECT * FROM bands WHERE ID = (?)");
-            stmt.setString(1, ID);
-            stmt.execute();
-            rs = stmt.getResultSet();
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM bands WHERE band_id=?");
+            statement.setInt(1,Hash.StringHash(band));
+            boolean exists = statement.executeQuery().next();
 
-            //if there is something within the result set then the band is contained
-            if(rs.next())
+            if (create && !exists)
             {
-                bool = true;
+                return insertBand(band);
             }
-
+            else
+            {
+                return exists;
+            }
         }
         catch (SQLException e)
         {
+            // TODO FIX ERROR
             //throwing error
             Graphical.ErrorPopup("Database Error", e.toString());
+            return false;
         }
-
-        finally
-        {
-            if(rs != null){
-                rs.close();
-            }
-
-            if(stmt != null){
-                stmt.close();
-            }
-        }
-
-        return bool;
     }
 
     /**

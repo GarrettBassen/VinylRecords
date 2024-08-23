@@ -1,8 +1,9 @@
 package com.ags.vr.controllers;
 
+import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
+import com.ags.vr.utils.database.DBBands;
 import com.ags.vr.utils.database.DBMedia;
-import com.ags.vr.utils.database.Hash;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
@@ -62,6 +63,55 @@ public class AddController
         // Validate checkbox sections
         if (!CheckboxValidation(array_medium,"media type"))     return;
         if (!CheckboxValidation(array_format,"album format"))   return;
+
+        Media media = CreateMedia();
+
+        // Create band, media, and inventory table
+        if (media != null)
+        {
+            DBBands.containsBand(media.getBand(), true);
+            DBMedia.insertMedia(media);
+            // TODO ADD INVENTORY TABLE
+        }
+    }
+
+
+    private Media CreateMedia()
+    {
+        Media media = new Media();
+        media.setTitle(tf_title.getText());
+        media.setYear(Short.parseShort(tf_year.getText()));
+        media.setBand(tf_band.getText());
+
+        // Set medium
+        if      (cb_vinyl.isSelected())     { media.setMedium("vinyl"); }
+        else if (cb_CD.isSelected())        { media.setMedium("CD"); }
+        else if (cb_cassette.isSelected())  { media.setMedium("cassette"); }
+
+        // Set format
+        if      (cb_single.isSelected())    { media.setFormat("single"); }
+        else if (cb_EP.isSelected())        { media.setFormat("EP"); }
+        else if (cb_LP.isSelected())        { media.setFormat("LP"); }
+        else if (cb_DLP.isSelected())       { media.setFormat("DLP"); }
+
+        // Check if media exists in database already
+        if (DBMedia.ContainsMedia(media))
+        {
+            boolean GotoPage = Graphical.ConfirmationPopup("Media Already Exists",String.format(
+                    "%s by %s is already in your system. Would you like to go to the inventory page to" +
+                            "modify this item or its stock?",tf_title.getText(),tf_band.getText())
+            );
+
+            if (GotoPage)
+            {
+                // TODO BRING USER TO INVENTORY PAGE FOR THE MEDIA ENTRY
+                System.out.println("FIX ME TextInputValidation() AddController.java");
+            }
+
+            return null;
+        }
+
+        return media;
     }
 
     /**
@@ -100,21 +150,6 @@ public class AddController
         if (year < 1887 || year > Year.now().getValue())
         {
             Graphical.ErrorPopup("Invalid Year",String.format("The year '%s' is invalid.",year));
-            return false;
-        }
-
-        // Check if media exists in database already
-        if (DBMedia.ContainsMedia(Hash.StringHash(tf_title.getText(),tf_band.getText())))
-        {
-            boolean GotoPage = Graphical.ConfirmationPopup("Media Already Exists",String.format(
-                    "%s by %s is already in your system. Would you like to go to the inventory page to" +
-                            "modify this item or its stock?",tf_title.getText(),tf_band.getText()));
-
-            if (GotoPage)
-            {
-                // TODO BRING USER TO INVENTORY PAGE FOR THE MEDIA ENTRY
-                System.out.println("FIX ME TextInputValidation() AddController.java");
-            }
             return false;
         }
 

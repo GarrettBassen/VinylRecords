@@ -19,15 +19,15 @@ public class DBMedia
     {
         try
         {
-            String[] data = media.getData();
+            // TODO CREATE GENRE LINKER ENTRIES AND INVENTORY TABLES
 
             PreparedStatement stmt = con.prepareStatement("INSERT INTO media VALUES (?,?,?,?,?,?)");
-            stmt.setString(1, data[0]);
-            stmt.setString(2, data[1]);
-            stmt.setString(3, data[2]);
-            stmt.setString(4, data[3]);
-            stmt.setString(5, data[4]);
-            stmt.setString(6, data[5]);
+            stmt.setInt   (1, media.getID());
+            stmt.setString(2, media.getTitle());
+            stmt.setString(3, media.getMedium());
+            stmt.setString(4, media.getFormat());
+            stmt.setShort (5, media.getYear());
+            stmt.setInt   (6, media.getBandID());
             stmt.execute();
         }
         catch (SQLException e)
@@ -40,56 +40,42 @@ public class DBMedia
     }
 
     // TODO TEST
-    public static boolean ContainsMedia(int ID)
+    public static boolean ContainsMedia(Media media)
     {
         try
         {
             PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE 'ID'=?");
-            statement.setInt(1,ID);
+            statement.setInt(1,media.getID());
             ResultSet result = statement.executeQuery();
             return result.next();
         }
         catch (SQLException e)
         {
-            System.err.println("ERROR IN MediaExists(int ID) DBHelper.java");
+            Graphical.ErrorPopup("Database Error",String.format(
+                    "Error finding media ContainsMedia(int ID) DBMedia.java\n\nCode: %s\n%s",
+                    e.getErrorCode(), e.getMessage()
+            ));
             return false;
         }
     }
 
     /**
-     * Removes the provided media from the database.
-     * @param media Media object to be delted.
-     * @return True if the media was succsefully deleted or already not within
-     * the database, otherwise false.
-     * @throws SQLException
+     * Removes the provided media object from the database.
+     * @param media Media object.
      */
-    public static boolean deleteMedia(Media media) throws SQLException
+    public static void deleteMedia(Media media)
     {
-        PreparedStatement stmt = null;
-        boolean bool = false;
-
-        //ID
-        String ID = String.valueOf(media.getID());
-
+        // TODO TEST
         try
         {
-            stmt = con.prepareStatement("DELETE FROM media WHERE ID = (?)");
-            stmt.setString(1, ID);
-            stmt.execute();
-            bool = true;
+            // TODO REMOVE MEDIA FROM GENRE LINKER AND INVENTORY TABLES
+            PreparedStatement statement = con.prepareStatement("DELETE FROM media WHERE ID=?");
+            statement.setInt(1,media.getID());
+            statement.execute();
         }
         catch (SQLException e)
         {
             Graphical.ErrorPopup("Database Error", e.toString());
         }
-        finally
-        {
-            if(stmt != null)
-            {
-                stmt.close();
-            }
-        }
-
-        return bool;
     }
 }
