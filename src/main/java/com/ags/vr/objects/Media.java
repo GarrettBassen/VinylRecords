@@ -1,7 +1,6 @@
 package com.ags.vr.objects;
 
-import com.ags.vr.utils.DBHelper;
-import com.ags.vr.utils.Database;
+import com.ags.vr.utils.database.Hash;
 
 /**
  * Media object adds readability and make media-related database operations easier.
@@ -10,11 +9,11 @@ public class Media
 {
     private int ID = Integer.MIN_VALUE;
     private int oldID = Integer.MIN_VALUE;
-    private String title = null;
+    private String title = "";
     private TYPE.medium medium = null;
     private TYPE.format format = null;
     private short year = Short.MIN_VALUE;
-    private int bandID = Integer.MIN_VALUE;
+    private String band = "";
 
     /**
      * Default constructor.
@@ -27,15 +26,15 @@ public class Media
      * @param medium TYPE.medium (vinyl, CD, cassette)
      * @param format TYPE.format (Single, EP, LP, DLP)
      * @param year Release Year
-     * @param bandID Band ID
+     * @param band Band Name
      */
-    public Media(String title, TYPE.medium medium, TYPE.format format, short year, int bandID)
+    public Media(String title, TYPE.medium medium, TYPE.format format, short year, String band)
     {
         this.title = title;
         this.medium = medium;
         this.format = format;
         this.year = year;
-        this.bandID = bandID;
+        this.band = band;
         setID();
     }
 
@@ -46,16 +45,16 @@ public class Media
      * @param medium TYPE.medium (vinyl, CD, cassette)
      * @param format TYPE.format (Single, EP, LP, DLP)
      * @param year Release Year
-     * @param bandID Band ID
+     * @param band Band Name
      */
-    public Media(Integer ID, String title, TYPE.medium medium, TYPE.format format, short year, int bandID)
+    public Media(Integer ID, String title, TYPE.medium medium, TYPE.format format, short year, String band)
     {
         this.ID = ID;
         this.title = title;
         this.medium = medium;
         this.format = format;
         this.year = year;
-        this.bandID = bandID;
+        this.band = band;
     }
 
     /**
@@ -79,7 +78,7 @@ public class Media
                         Integer.toString(this.medium.ordinal()),
                         Integer.toString(this.format.ordinal()),
                         Short.toString(this.year),
-                        Integer.toString(bandID)
+                        Integer.toString(Hash.StringHash(this.band))
                 };
     }
 
@@ -93,7 +92,7 @@ public class Media
     private void setID()
     {
         // Do nothing if one or more hash input is null
-        if (this.title.isBlank() || this.bandID == Integer.MIN_VALUE) { return; }
+        if (this.title.isBlank() || this.band.isBlank()) { return; }
 
         // Save ID for database safety if media
         if (this.ID != Integer.MIN_VALUE)
@@ -102,7 +101,7 @@ public class Media
         }
 
         // TODO CREATE BAND IN LINKER IF BAND DOES NOT EXIST
-        this.ID = DBHelper.StringHash(this.title,Database.getBand(this.bandID));
+        this.ID = Hash.StringHash(this.title,this.band);
     }
 
     /**
@@ -143,12 +142,12 @@ public class Media
     }
 
     /**
-     * Sets band ID and updates media ID.
-     * @param bandID band ID
+     * Sets band name and updates media ID.
+     * @param band band Name
      */
-    public void setBandID(int bandID)
+    public void setBand(String band)
     {
-        this.bandID = bandID;
+        this.band = band;
         this.setID();
     }
 
@@ -212,11 +211,11 @@ public class Media
     }
 
     /**
-     * Returns band ID.
-     * @return band ID
+     * Returns band name.
+     * @return band name
      */
-    public int getBandID()
+    public String getBand()
     {
-        return this.bandID;
+        return this.band;
     }
 }

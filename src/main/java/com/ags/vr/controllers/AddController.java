@@ -1,12 +1,12 @@
 package com.ags.vr.controllers;
 
-import com.ags.vr.utils.DBHelper;
 import com.ags.vr.utils.Graphical;
+import com.ags.vr.utils.database.DBMedia;
+import com.ags.vr.utils.database.Hash;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
-
 import java.time.Year;
 
 public class AddController
@@ -104,7 +104,7 @@ public class AddController
         }
 
         // Check if media exists in database already
-        if (DBHelper.MediaExists(DBHelper.StringHash(tf_title.getText(),tf_band.getText())))
+        if (DBMedia.ContainsMedia(Hash.StringHash(tf_title.getText(),tf_band.getText())))
         {
             boolean GotoPage = Graphical.ConfirmationPopup("Media Already Exists",String.format(
                     "%s by %s is already in your system. Would you like to go to the inventory page to" +
