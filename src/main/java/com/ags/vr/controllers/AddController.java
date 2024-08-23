@@ -74,7 +74,10 @@ public class AddController
         }
 
         // Create band, media, and inventory table
-        DBBands.Contains(media.getBand(), true);
+        if (!DBBands.Contains(media.getBand()))
+        {
+            DBBands.Insert(media.getBand());
+        }
         DBMedia.Insert(media);
         DBInventory.Insert(GenerateStock(media));
         // TODO ADD INVENTORY TABLE

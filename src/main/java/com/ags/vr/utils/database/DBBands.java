@@ -38,32 +38,24 @@ public class DBBands
     /**
      * Checks if the given band exists within the database.
      * @param band Band Name
-     * @param create Create band if it does not exist
      * @return True if the band exists; false otherwise
      */
-    public static boolean Contains(String band, boolean create)
+    public static boolean Contains(String band)
     {
         try
         {
             //searching for the ID in the database
             PreparedStatement statement = con.prepareStatement("SELECT * FROM bands WHERE band_id=?");
             statement.setInt(1,Hash.StringHash(band));
-            boolean exists = statement.executeQuery().next();
-
-            if (create && !exists)
-            {
-                return Insert(band);
-            }
-            else
-            {
-                return exists;
-            }
+            ResultSet result = statement.executeQuery();
+            return result.next();
         }
         catch (SQLException e)
         {
-            // TODO FIX ERROR
-            //throwing error
-            Graphical.ErrorPopup("Database Error", e.toString());
+            Graphical.ErrorPopup("Database Error", String.format(
+                    "Could not find if database contains band '%s'.\n\nCode: %s\n%s",
+                    band,e.getErrorCode(),e.getMessage()
+            ));
             return false;
         }
     }
