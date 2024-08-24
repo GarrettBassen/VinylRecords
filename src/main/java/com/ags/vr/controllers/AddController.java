@@ -6,7 +6,7 @@ import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.database.DBBands;
 import com.ags.vr.utils.database.DBMedia;
 
-import com.ags.vr.utils.database.DBInventory;
+import com.ags.vr.utils.database.DBStock;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -70,7 +70,7 @@ public class AddController
         Media media = CreateMedia();
         if (DBMedia.Contains(media))
         {
-            GotoInventory(media);
+            GotoStock(media);
         }
 
         // Create band, media, and inventory table
@@ -79,7 +79,7 @@ public class AddController
             DBBands.Insert(media.getBand());
         }
         DBMedia.Insert(media);
-        DBInventory.Insert(GenerateStock(media));
+        DBStock.Insert(GenerateStock(media));
         // TODO ADD INVENTORY TABLE
     }
 
@@ -184,7 +184,7 @@ public class AddController
     }
 
     // TODO IMPLEMENT
-    private void GotoInventory(Media media)
+    private void GotoStock(Media media)
     {
         boolean GotoPage = Graphical.ConfirmationPopup("Media Already Exists",String.format(
                 "'%s' by '%s' is already in your system. Would you like to go to the inventory page to " +

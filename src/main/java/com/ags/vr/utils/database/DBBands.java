@@ -22,7 +22,8 @@ public class DBBands
         {
             //inserting the band into the database
             PreparedStatement statement = con.prepareStatement("INSERT INTO bands VALUES (?,?)");
-            statement.setInt   (1, Hash.StringHash(band));
+            int bandID = Hash.StringHash(band);
+            statement.setInt(1, bandID);
             statement.setString(2, band);
             statement.execute();
             return true;
@@ -45,7 +46,7 @@ public class DBBands
         try
         {
             //searching for the ID in the database
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM bands WHERE band_id=?");
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM bands WHERE ID=?");
             statement.setInt(1,Hash.StringHash(band));
             ResultSet result = statement.executeQuery();
             return result.next();

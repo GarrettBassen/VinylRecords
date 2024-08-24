@@ -48,7 +48,7 @@ public class DBMedia
     {
         try
         {
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE media_id=?");
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE ID=?");
             statement.setInt(1,media.getID());
             ResultSet result = statement.executeQuery();
             return result.next();
@@ -73,7 +73,7 @@ public class DBMedia
         try
         {
             // TODO REMOVE MEDIA FROM GENRE LINKER AND INVENTORY TABLES
-            PreparedStatement statement = con.prepareStatement("DELETE FROM media WHERE media_id=?");
+            PreparedStatement statement = con.prepareStatement("DELETE FROM media WHERE ID=?");
             statement.setInt(1,media.getID());
             statement.execute();
         }

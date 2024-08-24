@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 import static com.ags.vr.utils.Connector.con;
 
-public class DBInventory
+public class DBStock
 {
     // TODO COMMENT
     public static void Insert(Stock stock)
@@ -17,7 +17,7 @@ public class DBInventory
         // TODO TEST
         try
         {
-            PreparedStatement statement = con.prepareStatement("INSERT INTO inventory VALUES (?,?,?,?,?,?,?)");
+            PreparedStatement statement = con.prepareStatement("INSERT INTO stock VALUES (?,?,?,?,?,?,?)");
             statement.setInt(1, stock.getMediaID());
             statement.setInt(2, stock.getFrontGood());
             statement.setInt(3, stock.getFrontFair());
