@@ -13,11 +13,6 @@ public class Hash
         String raw = String.join("",string);
 
         // Removes all punctuation, white space, and converts string to lowercase then returns hash
-        int i = raw.toLowerCase().strip().replaceAll("[^a-zA-Z0-9]","").hashCode();
-        if(i < 0)
-        {
-            i *= -1;
-        }
-        return i;
+        return raw.toLowerCase().strip().replaceAll("[^a-zA-Z0-9]","").hashCode();
     }
 }
