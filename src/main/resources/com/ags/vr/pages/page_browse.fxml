@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -11,19 +13,81 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="600.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.BrowseController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <VBox maxHeight="1.7976931348623157E308" prefWidth="300.0" BorderPane.alignment="CENTER">
+            <VBox maxHeight="1.7976931348623157E308" prefWidth="350.0" style="-fx-background-color: #525252;" BorderPane.alignment="CENTER">
                <children>
-                  <Pane maxWidth="300.0" minWidth="200.0" prefWidth="0.0" style="-fx-background-color: gray;" VBox.vgrow="ALWAYS" />
+                  <Accordion stylesheets="@../css/page_browse.css">
+                    <panes>
+                      <TitledPane id="top-title-pane" animated="false" stylesheets="@../css/page_browse.css" text="Genre">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                      </TitledPane>
+                      <TitledPane animated="false" text="Album Format">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                      </TitledPane>
+                      <TitledPane animated="false" text="Medium">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                      </TitledPane>
+                        <TitledPane animated="false" text="Band">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                           </content>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TitledPane>
+                        <TitledPane id="bottom-title-pane" animated="false" text="Year Range">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="130.0">
+                                 <children>
+                                    <TextField layoutX="91.0" layoutY="24.0" prefHeight="32.0" prefWidth="101.0" />
+                                    <TextField layoutX="91.0" layoutY="74.0" prefHeight="32.0" prefWidth="101.0" />
+                                    <Text layoutX="29.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Min: ">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Text>
+                                    <Text layoutX="21.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max: ">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </TitledPane>
+                    </panes>
+                     <VBox.margin>
+                        <Insets bottom="30.0" left="15.0" right="5.0" top="37.0" />
+                     </VBox.margin>
+                  </Accordion>
                </children>
             </VBox>
          </left>
          <center>
-            <GridPane BorderPane.alignment="BOTTOM_CENTER">
+            <GridPane style="-fx-background-color: #525252;" BorderPane.alignment="BOTTOM_CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
@@ -37,7 +101,7 @@
                         <Insets left="30.0" top="1.0" />
                      </GridPane.margin>
                   </Button>
-                  <TextField fx:id="txt_search" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" minWidth="200.0" onKeyReleased="#CreateSpace" onKeyTyped="#InputValidation" onMousePressed="#CreateSpace" prefHeight="60.0" promptText="    Search" stylesheets="@../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+                  <TextField id="browse-input" fx:id="txt_search" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" minWidth="200.0" onKeyReleased="#CreateSpace" onKeyTyped="#InputValidation" onMousePressed="#CreateSpace" prefHeight="60.0" promptText="    Search" stylesheets="@../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
                      <font>
                         <Font size="28.0" />
                      </font>
@@ -45,7 +109,11 @@
                         <Insets bottom="5.0" left="20.0" right="20.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Pane style="-fx-background-color: silver;" GridPane.rowIndex="1" />
+                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                     <children>
+                        <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #242424;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
                </children>
             </GridPane>
          </center>
