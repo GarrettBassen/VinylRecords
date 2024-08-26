@@ -4,9 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 
 public class InventoryController {
 
@@ -59,19 +57,16 @@ public class InventoryController {
     private TextField removeGenre;
 
     @FXML
-    private SplitPane split;
-
-    @FXML
     private Button stockSave;
 
     @FXML
     private TextField upBand;
 
     @FXML
-    private Text upFormat;
+    private TextField upFormat;
 
     @FXML
-    private Text upMedium;
+    private TextField upMedium;
 
     @FXML
     private TextField upName;
@@ -101,4 +96,3 @@ public class InventoryController {
     }
 
 }
-

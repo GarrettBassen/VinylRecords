@@ -2,82 +2,57 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="600.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.InventoryController">
    <children>
-      <SplitPane fx:id="split" dividerPositions="0.3186372745490982" layoutX="3.0" layoutY="2.0" prefHeight="1000.0" prefWidth="1000.0" AnchorPane.bottomAnchor="624.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="323.0">
-               <children>
-                  <Text layoutX="14.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Media Name" />
-                  <TextField fx:id="input" layoutX="125.0" layoutY="40.0" promptText="name here" />
-                  <Button fx:id="button" layoutX="14.0" layoutY="75.0" mnemonicParsing="false" onAction="#mediaSearch" prefHeight="24.0" prefWidth="82.0" text="Search" />
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="667.0">
-               <children>
-                  <Text layoutX="42.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-                  <Text layoutX="42.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Band" wrappingWidth="38.3525390625" />
-                  <Text layoutX="42.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Genres" />
-                  <Text layoutX="402.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Year" />
-                  <Text layoutX="402.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Medium" />
-                  <Text layoutX="402.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Format" />
-                  <TextField fx:id="nameDisplay" editable="false" layoutX="120.0" layoutY="28.0" />
-                  <TextField fx:id="bandDisplay" editable="false" layoutX="120.0" layoutY="75.0" />
-                  <TextField fx:id="genresDisplay" editable="false" layoutX="120.0" layoutY="121.0" />
-                  <TextField fx:id="yearDisplay" editable="false" layoutX="481.0" layoutY="28.0" />
-                  <TextField fx:id="mediumDisplay" editable="false" layoutX="481.0" layoutY="75.0" />
-                  <TextField fx:id="formatDisplay" editable="false" layoutX="481.0" layoutY="120.0" />
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-      <SplitPane dividerPositions="0.3186372745490982" layoutX="335.0" layoutY="173.0" prefHeight="627.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="173.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <Spinner fx:id="gfSpinner" layoutX="138.0" layoutY="61.0" />
-                  <Text layoutX="4.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Good Front Stock" />
-                  <Text layoutX="9.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fair Front Stock" />
-                  <Text layoutX="7.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Poor Front Stock" />
-                  <Text layoutX="6.0" layoutY="272.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Good Back Stock" />
-                  <Text layoutX="11.0" layoutY="326.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fair Back Stock" />
-                  <Text layoutX="9.0" layoutY="389.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Poor Back Stock" />
-                  <Spinner fx:id="ffSpinner" layoutX="138.0" layoutY="132.0" />
-                  <Spinner fx:id="pfSpinner" layoutX="138.0" layoutY="195.0" />
-                  <Spinner fx:id="bgSpinner" layoutX="138.0" layoutY="255.0" />
-                  <Spinner fx:id="bfSpinner" layoutX="138.0" layoutY="309.0" />
-                  <Spinner fx:id="bpSpinner" layoutX="138.0" layoutY="372.0" />
-                  <Text layoutX="117.0" layoutY="490.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Stock" wrappingWidth="81.529296875" />
-                  <Button fx:id="stockSave" layoutX="48.0" layoutY="428.0" mnemonicParsing="false" onAction="#stockSave" prefHeight="24.0" prefWidth="218.0" text="Save" />
-                  <TextField fx:id="invTotal" editable="false" layoutX="73.0" layoutY="505.0" />
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <Text layoutX="315.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update" />
-                  <Text layoutX="68.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Name" />
-                  <Text layoutX="68.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Band" />
-                  <Text layoutX="67.0" layoutY="239.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Genre" />
-                  <Text layoutX="61.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Remove Genre" />
-                  <Text layoutX="60.0" layoutY="349.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Year" />
-                  <Text fx:id="upMedium" layoutX="49.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Medium" />
-                  <Text fx:id="upFormat" layoutX="52.0" layoutY="445.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Format" />
-                  <TextField fx:id="upName" layoutX="253.0" layoutY="88.0" />
-                  <TextField fx:id="upBand" layoutX="253.0" layoutY="153.0" />
-                  <TextField fx:id="addGenre" layoutX="253.0" layoutY="223.0" />
-                  <TextField fx:id="removeGenre" layoutX="253.0" layoutY="276.0" />
-                  <TextField fx:id="upYear" layoutX="253.0" layoutY="340.0" />
-                  <TextField layoutX="253.0" layoutY="386.0" />
-                  <TextField layoutX="253.0" layoutY="428.0" />
-                  <Button fx:id="update" layoutX="250.0" layoutY="512.0" mnemonicParsing="false" onAction="#applyUpdate" prefHeight="24.0" prefWidth="171.0" text="Update" />
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
+      <Text layoutX="22.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Media Name" />
+      <TextField fx:id="input" layoutX="128.0" layoutY="33.0" promptText="name here" />
+      <Button fx:id="button" layoutX="28.0" layoutY="70.0" mnemonicParsing="false" onAction="#mediaSearch" prefHeight="24.0" prefWidth="82.0" text="Search" />
+      <Text layoutX="369.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+      <Text layoutX="369.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Band" wrappingWidth="38.3525390625" />
+      <Text layoutX="365.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Genres" />
+      <Text layoutX="737.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Year" />
+      <Text layoutX="726.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Medium" />
+      <Text layoutX="728.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Format" />
+      <TextField fx:id="nameDisplay" editable="false" layoutX="442.0" layoutY="33.0" />
+      <TextField fx:id="bandDisplay" editable="false" layoutX="442.0" layoutY="74.0" />
+      <TextField fx:id="genresDisplay" editable="false" layoutX="442.0" layoutY="117.0" />
+      <TextField fx:id="yearDisplay" editable="false" layoutX="796.0" layoutY="33.0" />
+      <TextField fx:id="mediumDisplay" editable="false" layoutX="796.0" layoutY="74.0" />
+      <TextField fx:id="formatDisplay" editable="false" layoutX="796.0" layoutY="116.0" />
+      <Spinner fx:id="gfSpinner" layoutX="154.0" layoutY="326.0" />
+      <Text layoutX="24.0" layoutY="342.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Good Front Stock" />
+      <Text layoutX="29.0" layoutY="394.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fair Front Stock" />
+      <Text layoutX="26.0" layoutY="453.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Poor Front Stock" />
+      <Text layoutX="25.0" layoutY="495.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Good Back Stock" />
+      <Text layoutX="30.0" layoutY="543.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fair Back Stock" />
+      <Text layoutX="28.0" layoutY="589.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Poor Back Stock" />
+      <Spinner fx:id="ffSpinner" layoutX="154.0" layoutY="378.0" />
+      <Spinner fx:id="pfSpinner" layoutX="154.0" layoutY="429.0" />
+      <Spinner fx:id="bgSpinner" layoutX="154.0" layoutY="478.0" />
+      <Spinner fx:id="bfSpinner" layoutX="154.0" layoutY="526.0" />
+      <Spinner fx:id="bpSpinner" layoutX="154.0" layoutY="572.0" />
+      <Text layoutX="39.0" layoutY="710.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Stock" wrappingWidth="81.529296875" />
+      <Button fx:id="stockSave" layoutX="131.0" layoutY="618.0" mnemonicParsing="false" onAction="#stockSave" prefHeight="24.0" prefWidth="218.0" text="Save" />
+      <TextField fx:id="invTotal" editable="false" layoutX="155.0" layoutY="694.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Update" />
+      <Text layoutX="483.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Name" />
+      <Text layoutX="480.0" layoutY="394.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Band" />
+      <Text layoutX="478.0" layoutY="446.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Genre" />
+      <Text layoutX="473.0" layoutY="495.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Remove Genre" />
+      <Text layoutX="472.0" layoutY="542.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Year" />
+      <TextField fx:id="upName" layoutX="625.0" layoutY="317.0" />
+      <TextField fx:id="upBand" layoutX="625.0" layoutY="378.0" />
+      <TextField fx:id="addGenre" layoutX="625.0" layoutY="437.0" />
+      <TextField fx:id="removeGenre" layoutX="625.0" layoutY="478.0" />
+      <TextField fx:id="upYear" layoutX="625.0" layoutY="526.0" />
+      <Button fx:id="update" layoutX="641.0" layoutY="670.0" mnemonicParsing="false" onAction="#applyUpdate" prefHeight="24.0" prefWidth="171.0" text="Update" />
+      <Text layoutX="461.0" layoutY="581.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Medium" />
+      <Text layoutX="464.0" layoutY="631.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Format" />
+      <TextField fx:id="upMedium" layoutX="625.0" layoutY="572.0" />
+      <TextField fx:id="upFormat" layoutX="625.0" layoutY="606.0" />
    </children>
 </AnchorPane>
