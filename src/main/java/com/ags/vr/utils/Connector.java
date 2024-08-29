@@ -1,8 +1,12 @@
 package com.ags.vr.utils;
 
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.apache.ibatis.jdbc.ScriptRunner;
+import java.io.Reader;
+import java.io.BufferedReader;
 
 /**
  * Connects software to database using user credentials and assigns 'con' object for use throughout software.
@@ -13,7 +17,7 @@ public class Connector
     public static Connection con;
 
     // WARNING Do NOT push with your unique username and password
-    private static final String url =  "jdbc:mysql://localhost:3306/oldSkoolDB";
+    private static String url =  "jdbc:mysql://localhost:3306";
     private static String usr =  "";
     private static String pass = "";
 
@@ -31,6 +35,13 @@ public class Connector
         // Try to connect if database is not connected
         try
         {
+            con = DriverManager.getConnection(url, usr, pass);
+
+            //try to install sql schema
+            sqlInstall();
+            con.close();
+            //connect to new database
+            url += "/oldSkoolDB";
             con = DriverManager.getConnection(url, usr, pass);
         }
         catch (SQLException e)
@@ -66,4 +77,25 @@ public class Connector
             System.out.println("ERROR DISCONNECTING FROM DATABASE!\n\n" + e.getMessage());
         }
     }
+
+    /**
+     * Installs the database schema oldSkoolDB.
+     */
+    public static void sqlInstall()
+    {
+        try
+        {
+            //Initialize the script runner
+            ScriptRunner sr = new ScriptRunner(con);
+            //Creating a reader object
+            Reader reader = new BufferedReader(new FileReader("database/buildOldSkoolDB.sql"));
+            //Running the script
+            sr.runScript(reader);
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+    //TODO MAKE INSTALL SAFER AND FASTER
 }
