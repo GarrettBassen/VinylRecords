@@ -54,5 +54,6 @@
       <Text layoutX="464.0" layoutY="631.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Update Format" />
       <TextField fx:id="upMedium" layoutX="625.0" layoutY="572.0" />
       <TextField fx:id="upFormat" layoutX="625.0" layoutY="606.0" />
+      <Button fx:id="delete" layoutX="38.0" layoutY="108.0" mnemonicParsing="false" onAction="#deleteEntry" text="Delete" />
    </children>
 </AnchorPane>

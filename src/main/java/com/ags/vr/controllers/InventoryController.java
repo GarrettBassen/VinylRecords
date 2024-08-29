@@ -27,6 +27,9 @@ public class InventoryController {
     private Button button;
 
     @FXML
+    private Button delete;
+
+    @FXML
     private Spinner<?> ffSpinner;
 
     @FXML
@@ -82,6 +85,11 @@ public class InventoryController {
 
     @FXML
     void applyUpdate(ActionEvent event) {
+
+    }
+
+    @FXML
+    void deleteEntry(ActionEvent event) {
 
     }
 
