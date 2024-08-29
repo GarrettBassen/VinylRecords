@@ -29,7 +29,7 @@ public class InventoryController {
     private Spinner<?> bpSpinner;
 
     @FXML
-    private Button button;
+    private Button searchButton;
 
     @FXML
     private Button delete;
@@ -88,6 +88,11 @@ public class InventoryController {
     @FXML
     private TextField yearDisplay;
 
+    public void initialize()
+    {
+        SpinnerInitialize();
+    }
+
     @FXML
     void applyUpdate(ActionEvent event) {
 
@@ -98,18 +103,20 @@ public class InventoryController {
 
     }
 
-    //TODO COMPRESS WITH DIFFERENT METHODS FOR INPUT VALIDATION
-    //TODO GET RID OF UNNEEDED ERROR POPUP
+
+    /**
+     * Takes the title of a media and searches the database for it. The results are
+     * displayed in their corresponding text fields. If the media does not exist
+     * the user is prompted to the add page. If the input box is empty, the user
+     * is prompted to enter a valid input.
+     * @param event action event from button press.
+     */
     @FXML
     void mediaSearch(ActionEvent event)
     {
         String name = input.getText();
 
-        if(name.isEmpty())
-        {
-            Graphical.InfoPopup("Invalid Input", "Please enter a valid name in the \"name\" text field.");
-        }
-        else if(DBMedia.Contains(name))
+        if(!invalidInput(event))
         {
             //getting the media from the db
             Media m = DBMedia.getMedia(name);
@@ -125,7 +132,6 @@ public class InventoryController {
             Stock st = new Stock(m);
             int[] data = st.getData();
             //setting the stock spinners
-            SpinnerInitialize();
             gfSpinner.increment(data[1]);
             ffSpinner.increment(data[2]);
             pfSpinner.increment(data[3]);
@@ -133,23 +139,11 @@ public class InventoryController {
             bfSpinner.increment(data[5]);
             bpSpinner.increment(data[6]);
         }
-        else
-        {
-            boolean GotoPage = Graphical.ConfirmationPopup("Media Already Exists",String.format(
-                    "'%s'is not in your system. Would you like to go to the add page to " +
-                            "insert this item?",name)
-            );
-
-            if (GotoPage)
-            {
-                // TODO BRING USER TO ADD PAGE FOR THE MEDIA ENTRY
-                System.out.println("Media Search InventoryController.java");
-            }
-        }
     }
 
     @FXML
-    void stockSave(ActionEvent event) {
+    void stockSave(ActionEvent event)
+    {
 
     }
 
@@ -169,6 +163,36 @@ public class InventoryController {
         {
             sp.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0,255));
         }
+    }
+
+    //TODO UPDATE WITH MORE INPUT SCENARIOS AS THEY COME UP
+    /**
+     * Deals with all possible invalid input cases.
+     * @param event action event of current method being run.
+     * @return Returns true if an invalid input is detected. Returns false if there is no invalid input.
+     */
+    public boolean invalidInput(ActionEvent event)
+    {
+        if(event.getSource().equals(searchButton) && input.getText().isEmpty())
+        {
+            Graphical.InfoPopup("Invalid Input", "Please enter a valid name in the \"Media Name\" text field.");
+            return true;
+        }
+        else if(event.getSource().equals(searchButton) && !DBMedia.Contains(input.getText()))
+        {
+            boolean GotoPage = Graphical.ConfirmationPopup("Media Does not exist",String.format(
+                    "'%s'is not in your system. Would you like to go to the add page to " +
+                            "insert this item?",input.getText())
+            );
+
+            if (GotoPage)
+            {
+                // TODO BRING USER TO ADD PAGE FOR THE MEDIA ENTRY
+                System.out.println("Media Search InventoryController.java");
+            }
+            return true;
+        }
+        return false;
     }
 
 }

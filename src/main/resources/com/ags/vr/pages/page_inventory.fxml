@@ -10,7 +10,7 @@
    <children>
       <Text layoutX="22.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Media Name" />
       <TextField fx:id="input" layoutX="128.0" layoutY="33.0" promptText="name here" />
-      <Button fx:id="button" layoutX="28.0" layoutY="70.0" mnemonicParsing="false" onAction="#mediaSearch" prefHeight="24.0" prefWidth="82.0" text="Search" />
+      <Button fx:id="searchButton" layoutX="28.0" layoutY="70.0" mnemonicParsing="false" onAction="#mediaSearch" prefHeight="24.0" prefWidth="82.0" text="Search" />
       <Text layoutX="369.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
       <Text layoutX="369.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Band" wrappingWidth="38.3525390625" />
       <Text layoutX="365.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Genres" />
