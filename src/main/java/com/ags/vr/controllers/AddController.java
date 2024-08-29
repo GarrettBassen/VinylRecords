@@ -4,9 +4,9 @@ import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.database.DBBands;
+import com.ags.vr.utils.database.DBInventory;
 import com.ags.vr.utils.database.DBMedia;
 
-import com.ags.vr.utils.database.DBStock;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -31,7 +31,7 @@ public class AddController
     @FXML private TextField tf_title;
     @FXML private TextField tf_year;
 
-    // Inventory variables
+    // Spinners are integers treated as bytes
     @FXML private Spinner<Integer> sp_front_good;
     @FXML private Spinner<Integer> sp_front_fair;
     @FXML private Spinner<Integer> sp_front_poor;
@@ -79,8 +79,8 @@ public class AddController
             DBBands.Insert(media.getBand());
         }
         DBMedia.Insert(media);
-        DBStock.Insert(GenerateStock(media));
-        // TODO ADD INVENTORY TABLE
+        DBInventory.Insert(new Stock(media.getID(),getStockData()));
+        // TODO ADD GENRE LINKER
     }
 
 
@@ -168,19 +168,20 @@ public class AddController
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
-     * Generates stock object.
-     * @return Stock object
+     * Generates stock data array from inputs.
+     * @return Byte[] stock data
      */
-    private Stock GenerateStock(Media media)
+    private byte[] getStockData()
     {
-        Stock stock = new Stock(media);
-        stock.setFrontGood(sp_front_good.getValue());
-        stock.setFrontFair(sp_front_fair.getValue());
-        stock.setFrontPoor(sp_front_poor.getValue());
-        stock.setBackGood(sp_back_good.getValue());
-        stock.setBackFair(sp_back_fair.getValue());
-        stock.setBackPoor(sp_back_poor.getValue());
-        return stock;
+        return new byte[]
+                {
+                        sp_front_good.getValue().byteValue(),
+                        sp_front_fair.getValue().byteValue(),
+                        sp_front_poor.getValue().byteValue(),
+                        sp_back_good.getValue().byteValue(),
+                        sp_back_fair.getValue().byteValue(),
+                        sp_back_poor.getValue().byteValue()
+                };
     }
 
     // TODO IMPLEMENT
@@ -211,7 +212,7 @@ public class AddController
         // Initialize spinners
         for (Spinner<Integer> sp : spinners)
         {
-            sp.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0,255));
+            sp.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0,127));
         }
     }
 

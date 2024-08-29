@@ -2,6 +2,7 @@ package com.ags.vr.utils.database;
 
 import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
+import com.ags.vr.utils.Hash;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ public class DBGenreLinker
         PreparedStatement stmt = null;
         boolean bool = false;
         String genreID = String.valueOf(Hash.StringHash(genre));
-        String mediaID = String.valueOf(media.getMedia_ID());
+        String mediaID = String.valueOf(media.getID());
 
         try
         {

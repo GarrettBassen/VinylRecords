@@ -5,20 +5,20 @@ import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static com.ags.vr.utils.Connector.con;
 
-public class DBStock
+public class DBInventory
 {
-    // TODO COMMENT
+    // TODO TEST
     public static void Insert(Stock stock)
     {
-        // TODO TEST
         try
         {
             PreparedStatement statement = con.prepareStatement("INSERT INTO inventory VALUES (?,?,?,?,?,?,?)");
-            statement.setInt(1, stock.getMediaID());
+            statement.setInt(1, stock.getID());
             statement.setInt(2, stock.getFrontGood());
             statement.setInt(3, stock.getFrontFair());
             statement.setInt(4, stock.getFrontPoor());
@@ -29,11 +29,33 @@ public class DBStock
         }
         catch (SQLException e)
         {
-            // TODO UPDATE ERROR
-            Graphical.ErrorPopup("Database Error", e.toString());
+            Graphical.ErrorPopup("Database Error",String.format(
+                    "Error creating stock for ID:%s in Insert(Stock) | DBInventory.java\n\nCode: %s\n%s",
+                    stock.getID(), e.getErrorCode(), e.getMessage()
+            ));
         }
     }
 
+    // TODO TEST
+    public static ResultSet getStock(Media media)
+    {
+        try
+        {
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM inventory WHERE media_id=?");
+            stmt.setInt(1, media.getID());
+            return stmt.executeQuery();
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Database Error",String.format(
+                    "Could not get stock for %s in getStock(Media) | DBInventory.java\n\nCode: %s\n%s",
+                    media.getTitle(), e.getErrorCode(), e.getMessage()
+            ));
+            return null;
+        }
+    }
+
+    // TODO TEST
     /**
      * Updates the values of the stock table with new values from a provided Stock object.
      * @param stock Stock object of which the stock table will get its new values from.
@@ -77,6 +99,7 @@ public class DBStock
         return bool;
     }
 
+    // TODO TEST
     /**
      * Deletes the stock entry from the database. Uses a media object to find and
      * delete its corresponding stock entry.
@@ -90,7 +113,7 @@ public class DBStock
         boolean bool = false;
 
         //mediaID, used to find which stock entry to delete.
-        String mediaID = String.valueOf(media.getMedia_ID());
+        String mediaID = String.valueOf(media.getID());
 
         try
         {

@@ -1,21 +1,21 @@
 package com.ags.vr.objects;
 
 import com.ags.vr.utils.Graphical;
+import com.ags.vr.utils.database.DBInventory;
+import com.ags.vr.utils.database.DBMedia;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
-import static com.ags.vr.utils.Connector.con;
+import java.sql.SQLException;
 
 public class Stock
 {
-    private int mediaID;
-    private int frontGood = 0;
-    private int frontFair = 0;
-    private int frontPoor = 0;
-    private int backGood = 0;
-    private int backFair = 0;
-    private int backPoor = 0;
+    private int media_id;
+    private byte frontGood = 0;
+    private byte frontFair = 0;
+    private byte frontPoor = 0;
+    private byte backGood = 0;
+    private byte backFair = 0;
+    private byte backPoor = 0;
 
     /**
      * Default constructor
@@ -23,43 +23,67 @@ public class Stock
     public Stock() {}
 
     /**
-     * Constructor.
+     * Constructs Stock object using media ID and byte array data.
+     * <br \>Byte[] Format:
+     * <ul>
+     *     <li>[0] Front Good</li>
+     *     <li>[1] Front Fair</li>
+     *     <li>[2] Front Poor</li>
+     *     <li>[3] Back Good</li>
+     *     <li>[4] Back Fair</li>
+     *     <li>[5] Back Poor</li>
+     * </ul>
+     * @param media_id Media ID
+     * @param data Byte[] stock amounts
+     */
+    public Stock(int media_id, byte[] data)
+    {
+        this.media_id = media_id;
+        this.frontGood = data[0];
+        this.frontFair = data[1];
+        this.frontPoor = data[2];
+        this.backGood = data[3];
+        this.backFair = data[4];
+        this.backPoor = data[5];
+    }
+
+    /**
+     * Constructs stock object from media object.
      * @param media Media object
      */
     public Stock(Media media)
     {
-        mediaID = media.getMedia_ID();
-
         try
         {
-            //getting the stock values out of the database
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM inventory WHERE media_id = ?");
-            stmt.setInt(1, mediaID);
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            //setting the values
-            frontGood = rs.getInt("front_good");
-            frontFair = rs.getInt("front_fair");
-            frontPoor = rs.getInt("front_poor");
-            backGood = rs.getInt("back_good");
-            backFair = rs.getInt("back_fair");
-            backPoor = rs.getInt("back_poor");
+            ResultSet result = DBInventory.getStock(media);
+            result.next();
+
+            //setting the values (null assigns 0)
+            this.frontGood = result.getByte("front_good");
+            this.frontFair = result.getByte("front_fair");
+            this.frontPoor = result.getByte("front_poor");
+            this.backGood  = result.getByte("back_good");
+            this.backFair  = result.getByte("back_fair");
+            this.backPoor  = result.getByte("back_poor");
         }
-        catch(Exception e)
+        catch (SQLException e)
         {
-            Graphical.ErrorPopup("Stock Creation Error", e.toString());
+            Graphical.ErrorPopup("Database Error",String.format(
+                    "ERROR CREATING STOCK IN Stock(ResultSet) | Stock.java\n\nCode: %s\n%s\n",
+                    e.getErrorCode(),e.getMessage()
+            ));
         }
     }
 
     /**
      * Returns formatted String array of stock data in the following format:
      * <ol>
-     *     <li>mediaID</li>
-     *     <li>frontGood</li>
-     *     <li>frontFair</li>
-     *     <li>frontPoor</li>
-     *     <li>backGood</li>
-     *     <li>backFair</li>
+     *      <li>mediaID</li>
+     *      <li>frontGood</li>
+     *      <li>frontFair</li>
+     *      <li>frontPoor</li>
+     *      <li>backGood</li>
+     *      <li>backFair</li>
      *      <li>backPoor</li>
      * </ol>
      * @return String array
@@ -68,28 +92,30 @@ public class Stock
     {
         int[] data =
                 {
-                        mediaID,
-                        frontGood,
-                        frontFair,
-                        frontPoor,
-                        backGood,
-                        backFair,
-                        backPoor
+                        this.media_id,
+                        this.frontGood,
+                        this.frontFair,
+                        this.frontPoor,
+                        this.backGood,
+                        this.backFair,
+                        this.backPoor
                 };
 
         return data;
     }
 
-    //Getters
-    //******************************************************************************
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                              GETTERS                                                      */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
-     * Gets the media_ID
+     * Gets the media_ID.
      * @return The media_ID
      */
-    public int getMediaID()
+    public int getID()
     {
-        return mediaID;
+        return this.media_id;
     }
 
     /**
@@ -98,7 +124,7 @@ public class Stock
      */
     public int getFrontGood()
     {
-        return frontGood;
+        return this.frontGood;
     }
 
     /**
@@ -107,7 +133,7 @@ public class Stock
      */
     public int getFrontFair()
     {
-        return frontFair;
+        return this.frontFair;
     }
 
     /**
@@ -116,7 +142,7 @@ public class Stock
      */
     public int getFrontPoor()
     {
-        return frontPoor;
+        return this.frontPoor;
     }
 
     /**
@@ -125,7 +151,7 @@ public class Stock
      */
     public int getBackGood()
     {
-        return backGood;
+        return this.backGood;
     }
 
     /**
@@ -134,7 +160,7 @@ public class Stock
      */
     public int getBackFair()
     {
-        return backFair;
+        return this.backFair;
     }
 
     /**
@@ -143,27 +169,39 @@ public class Stock
      */
     public int getBackPoor()
     {
-        return backPoor;
+        return this.backPoor;
     }
 
-    //setters
-    //**************************************************************************************
+    /**
+     * Returns total stock amount.
+     * @return Stock amount
+     */
+    public int getStockTotal()
+    {
+        return this.frontGood + this.frontFair + this.frontPoor + this.backGood + this.backFair + this.backPoor;
+    }
+
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                              SETTERS                                                      */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
      * WARNING: MAY BREAK MEDIA-STOCK CONNECTION.
      * Changes the current media ID value.
      * @param mediaID New ID that the current media ID will be changed to.
      */
-    public void setMediaID(int mediaID)
+    public void setID(int mediaID)
     {
-        this.mediaID = mediaID;
+        // TODO POSSIBLY CREATE 'oldID' INT
+        this.media_id = mediaID;
     }
 
     /**
      * Changes the current frontGood value.
      * @param frontGood New value that will replace the old value.
      */
-    public void setFrontGood(int frontGood)
+    public void setFrontGood(byte frontGood)
     {
         this.frontGood = frontGood;
     }
@@ -172,7 +210,7 @@ public class Stock
      * Changes the current frontFair value.
      * @param frontFair New value that will replace the old value.
      */
-    public void setFrontFair(int frontFair)
+    public void setFrontFair(byte frontFair)
     {
         this.frontFair = frontFair;
     }
@@ -181,7 +219,7 @@ public class Stock
      * Changes the current frontPoor value.
      * @param frontPoor New value that will replace the old value.
      */
-    public void setFrontPoor(int frontPoor)
+    public void setFrontPoor(byte frontPoor)
     {
         this.frontPoor = frontPoor;
     }
@@ -190,7 +228,7 @@ public class Stock
      * Changes the current backGood value.
      * @param backGood New value that will replace the old value.
      */
-    public void setBackGood(int backGood)
+    public void setBackGood(byte backGood)
     {
         this.backGood = backGood;
     }
@@ -199,7 +237,7 @@ public class Stock
      * Changes the current backFair value.
      * @param backFair New value that will replace the old value.
      */
-    public void setBackFair(int backFair)
+    public void setBackFair(byte backFair)
     {
         this.backFair = backFair;
     }
@@ -208,7 +246,7 @@ public class Stock
      * Changes the current backPoor value.
      * @param backPoor New value that will replace the old value.
      */
-    public void setBackPoor(int backPoor)
+    public void setBackPoor(byte backPoor)
     {
         this.backPoor = backPoor;
     }

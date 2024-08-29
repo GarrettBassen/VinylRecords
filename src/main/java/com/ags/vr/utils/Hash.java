@@ -1,4 +1,4 @@
-package com.ags.vr.utils.database;
+package com.ags.vr.utils;
 
 public class Hash
 {

@@ -2,6 +2,7 @@ package com.ags.vr.utils.database;
 
 import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
+import com.ags.vr.utils.Hash;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -135,7 +136,7 @@ public class DBBands
         boolean bool = false;
 
         //IDs of the media and band
-        String mediaID = String.valueOf(media.getMedia_ID());
+        String mediaID = String.valueOf(media.getID());
         String bandID = String.valueOf(Hash.StringHash(band));
 
         try

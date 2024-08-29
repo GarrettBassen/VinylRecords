@@ -1,6 +1,7 @@
 package com.ags.vr.utils.database;
 
 import com.ags.vr.utils.Graphical;
+import com.ags.vr.utils.Hash;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

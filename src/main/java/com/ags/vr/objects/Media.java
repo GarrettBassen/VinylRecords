@@ -1,7 +1,7 @@
 package com.ags.vr.objects;
 
 import com.ags.vr.utils.database.DBBands;
-import com.ags.vr.utils.database.Hash;
+import com.ags.vr.utils.Hash;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,8 +12,8 @@ import java.sql.SQLException;
 public class Media
 {
     // Variables
-    private int media_ID = Integer.MIN_VALUE;
-    private int oldID = Integer.MIN_VALUE;
+    private int media_id = Integer.MIN_VALUE;
+    private int old_id = Integer.MIN_VALUE;
     private short year = Short.MIN_VALUE;
     private String title = "";
     private String medium = "";
@@ -53,7 +53,7 @@ public class Media
         try
         {
             media.next();
-            this.media_ID = media.getInt("media_id");
+            this.media_id = media.getInt("media_id");
             this.title = media.getString("title");
             this.medium = media.getString("medium");
             this.format = media.getString("album_format");
@@ -66,30 +66,6 @@ public class Media
         }
     }
 
-    /**
-     * Returns formatted String array of media data in the following format:
-     * <ol>
-     *     <li>ID</li>
-     *     <li>Title</li>
-     *     <li>Medium</li>
-     *     <li>Album Format</li>
-     *     <li>Year</li>
-     *     <li>Band ID</li>
-     * </ol>
-     * @return String array
-     */
-    public String[] getData()
-    {
-        return new String[]
-                {
-                        Integer.toString(this.media_ID),
-                        this.title,
-                        this.medium,
-                        this.format,
-                        Short.toString(this.year),
-                        Integer.toString(Hash.StringHash(this.band))
-                };
-    }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                              SETTERS                                                      */
@@ -104,13 +80,12 @@ public class Media
         if (this.title.isBlank() || this.band.isBlank()) { return; }
 
         // Save ID for database safety if media
-        if (this.media_ID != Integer.MIN_VALUE)
+        if (this.media_id != Integer.MIN_VALUE)
         {
-            this.oldID = this.media_ID;
+            this.old_id = this.media_id;
         }
 
-        // TODO CREATE BAND IN LINKER IF BAND DOES NOT EXIST
-        this.media_ID = Hash.StringHash(this.title,this.band);
+        this.media_id = Hash.StringHash(this.title,this.band);
     }
 
     /**
@@ -168,9 +143,9 @@ public class Media
      * Returns media ID.
      * @return Media ID.
      */
-    public int getMedia_ID()
+    public int getID()
     {
-        return this.media_ID;
+        return this.media_id;
     }
 
     /**
@@ -180,7 +155,7 @@ public class Media
      */
     public int getOldID()
     {
-        return this.oldID;
+        return this.old_id;
     }
 
     /**
