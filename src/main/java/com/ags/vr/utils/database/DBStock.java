@@ -46,20 +46,20 @@ public class DBStock
         boolean bool = false;
 
         //updated values of stock table
-        String[] data = stock.getData();
+        int[] data = stock.getData();
 
         try
         {
             // TODO MAKE LOOK GOOD IF POSSIBLE
             //updating the table with all the values from the stock object
             stmt = con.prepareStatement("UPDATE inventory SET front_good = (?), front_fair = (?), front_poor = (?), back_good = (?), back_fair = (?), back_poor = (?) WHERE media_id = (?)");
-            stmt.setString(1, data[1]);
-            stmt.setString(2, data[2]);
-            stmt.setString(3, data[3]);
-            stmt.setString(4, data[4]);
-            stmt.setString(5, data[5]);
-            stmt.setString(6, data[6]);
-            stmt.setString(7, data[0]);
+            stmt.setInt(1, data[1]);
+            stmt.setInt(2, data[2]);
+            stmt.setInt(3, data[3]);
+            stmt.setInt(4, data[4]);
+            stmt.setInt(5, data[5]);
+            stmt.setInt(6, data[6]);
+            stmt.setInt(7, data[0]);
             stmt.execute();
             bool = true;
         }

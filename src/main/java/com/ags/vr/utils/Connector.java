@@ -18,8 +18,8 @@ public class Connector
 
     // WARNING Do NOT push with your unique username and password
     private static String url =  "jdbc:mysql://localhost:3306";
-    private static String usr =  "admin";
-    private static String pass = "Recordk33per";
+    private static String usr =  "";
+    private static String pass = "";
 
     /**
      * Attempts to connect to database and assigns 'con' Connection object.

@@ -64,6 +64,53 @@ public class DBMedia
     }
 
     /**
+     * Checks if media exists within database.
+     * @param name String name of the media
+     * @return True if media exists; false otherwise
+     */
+    public static boolean Contains(String name)
+    {
+        try
+        {
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE title=?");
+            statement.setString(1,name);
+            ResultSet result = statement.executeQuery();
+            return result.next();
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Database Error",String.format(
+                    "Error finding media in ContainsMedia(int ID) | DBMedia.java\n\nCode: %s\n%s",
+                    e.getErrorCode(), e.getMessage()
+            ));
+            return false;
+        }
+    }
+
+    public static Media getMedia(String name)
+    {
+        short year;
+        String medium = "";
+        String format = "";
+        String band = "";
+
+        try
+        {
+            //get the media from the database based on its name
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE title=?");
+            statement.setString(1,name);
+            ResultSet result = statement.executeQuery();
+            //create and return new media object
+            return new Media(result);
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Database Error", e.toString());
+        }
+        return null;
+    }
+
+    /**
      * Removes the provided media object from the database.
      * @param media Media object.
      */

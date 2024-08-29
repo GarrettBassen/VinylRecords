@@ -1,5 +1,12 @@
 package com.ags.vr.objects;
 
+import com.ags.vr.utils.Graphical;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import static com.ags.vr.utils.Connector.con;
+
 public class Stock
 {
     private int mediaID;
@@ -22,6 +29,26 @@ public class Stock
     public Stock(Media media)
     {
         mediaID = media.getMedia_ID();
+
+        try
+        {
+            //getting the stock values out of the database
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM inventory WHERE media_id = ?");
+            stmt.setInt(1, mediaID);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            //setting the values
+            frontGood = rs.getInt("front_good");
+            frontFair = rs.getInt("front_fair");
+            frontPoor = rs.getInt("front_poor");
+            backGood = rs.getInt("back_good");
+            backFair = rs.getInt("back_fair");
+            backPoor = rs.getInt("back_poor");
+        }
+        catch(Exception e)
+        {
+            Graphical.ErrorPopup("Stock Creation Error", e.toString());
+        }
     }
 
     /**
@@ -37,17 +64,17 @@ public class Stock
      * </ol>
      * @return String array
      */
-    public String[] getData()
+    public int[] getData()
     {
-        String[] data =
+        int[] data =
                 {
-                        String.valueOf(mediaID),
-                        String.valueOf(frontGood),
-                        String.valueOf(frontFair),
-                        String.valueOf(frontPoor),
-                        String.valueOf(backGood),
-                        String.valueOf(backFair),
-                        String.valueOf(backPoor)
+                        mediaID,
+                        frontGood,
+                        frontFair,
+                        frontPoor,
+                        backGood,
+                        backFair,
+                        backPoor
                 };
 
         return data;
