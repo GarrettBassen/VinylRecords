@@ -17,7 +17,7 @@ public class DBStock
         // TODO TEST
         try
         {
-            PreparedStatement statement = con.prepareStatement("INSERT INTO stock VALUES (?,?,?,?,?,?,?)");
+            PreparedStatement statement = con.prepareStatement("INSERT INTO inventory VALUES (?,?,?,?,?,?,?)");
             statement.setInt(1, stock.getMediaID());
             statement.setInt(2, stock.getFrontGood());
             statement.setInt(3, stock.getFrontFair());
@@ -52,7 +52,7 @@ public class DBStock
         {
             // TODO MAKE LOOK GOOD IF POSSIBLE
             //updating the table with all the values from the stock object
-            stmt = con.prepareStatement("UPDATE stock SET front_good = (?), front_fair = (?), front_poor = (?), back_good = (?), back_fair = (?), back_poor = (?) WHERE ID = (?)");
+            stmt = con.prepareStatement("UPDATE inventory SET front_good = (?), front_fair = (?), front_poor = (?), back_good = (?), back_fair = (?), back_poor = (?) WHERE media_id = (?)");
             stmt.setString(1, data[1]);
             stmt.setString(2, data[2]);
             stmt.setString(3, data[3]);
@@ -90,12 +90,12 @@ public class DBStock
         boolean bool = false;
 
         //mediaID, used to find which stock entry to delete.
-        String mediaID = String.valueOf(media.getID());
+        String mediaID = String.valueOf(media.getMedia_ID());
 
         try
         {
             //deleting the stock table entry
-            stmt = con.prepareStatement("DELETE FROM stock WHERE ID = (?)");
+            stmt = con.prepareStatement("DELETE FROM inventory WHERE media_id = (?)");
             stmt.setString(1, mediaID);
             stmt.execute();
             bool = true;

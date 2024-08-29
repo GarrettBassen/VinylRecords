@@ -22,7 +22,7 @@ public class DBMedia
             // TODO CREATE GENRE LINKER ENTRIES AND INVENTORY TABLES
 
             PreparedStatement stmt = con.prepareStatement("INSERT INTO media VALUES (?,?,?,?,?,?)");
-            stmt.setInt   (1, media.getID());
+            stmt.setInt   (1, media.getMedia_ID());
             stmt.setString(2, media.getTitle());
             stmt.setString(3, media.getMedium());
             stmt.setString(4, media.getFormat());
@@ -48,8 +48,8 @@ public class DBMedia
     {
         try
         {
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE ID=?");
-            statement.setInt(1,media.getID());
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE media_id=?");
+            statement.setInt(1,media.getMedia_ID());
             ResultSet result = statement.executeQuery();
             return result.next();
         }
@@ -73,8 +73,8 @@ public class DBMedia
         try
         {
             // TODO REMOVE MEDIA FROM GENRE LINKER AND INVENTORY TABLES
-            PreparedStatement statement = con.prepareStatement("DELETE FROM media WHERE ID=?");
-            statement.setInt(1,media.getID());
+            PreparedStatement statement = con.prepareStatement("DELETE FROM media WHERE media_id=?");
+            statement.setInt(1,media.getMedia_ID());
             statement.execute();
         }
         catch (SQLException e)

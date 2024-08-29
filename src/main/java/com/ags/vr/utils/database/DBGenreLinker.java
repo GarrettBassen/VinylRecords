@@ -23,7 +23,7 @@ public class DBGenreLinker
         PreparedStatement stmt = null;
         boolean bool = false;
         String genreID = String.valueOf(Hash.StringHash(genre));
-        String mediaID = String.valueOf(media.getID());
+        String mediaID = String.valueOf(media.getMedia_ID());
 
         try
         {

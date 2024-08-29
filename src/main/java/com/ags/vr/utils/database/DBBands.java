@@ -21,7 +21,7 @@ public class DBBands
         try
         {
             //inserting the band into the database
-            PreparedStatement statement = con.prepareStatement("INSERT INTO bands VALUES (?,?)");
+            PreparedStatement statement = con.prepareStatement("INSERT INTO band VALUES (?,?)");
             int bandID = Hash.StringHash(band);
             statement.setInt(1, bandID);
             statement.setString(2, band);
@@ -46,7 +46,7 @@ public class DBBands
         try
         {
             //searching for the ID in the database
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM bands WHERE ID=?");
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM band WHERE band_id=?");
             statement.setInt(1,Hash.StringHash(band));
             ResultSet result = statement.executeQuery();
             return result.next();
@@ -71,7 +71,7 @@ public class DBBands
         try
         {
             // Get band by ID
-            PreparedStatement statement = con.prepareStatement("SELECT name FROM bands WHERE ID=?");
+            PreparedStatement statement = con.prepareStatement("SELECT name FROM band WHERE band_id=?");
             statement.setInt(1,bandID);
             ResultSet result = statement.executeQuery();
 
@@ -103,7 +103,7 @@ public class DBBands
         try
         {
             //deleting band from the database
-            stmt = con.prepareStatement("DELETE FROM bands WHERE ID = (?)");
+            stmt = con.prepareStatement("DELETE FROM band WHERE band_id = (?)");
             stmt.setString(1,ID);
             stmt.execute();
             //as band was deleted so updating bool
@@ -135,13 +135,13 @@ public class DBBands
         boolean bool = false;
 
         //IDs of the media and band
-        String mediaID = String.valueOf(media.getID());
+        String mediaID = String.valueOf(media.getMedia_ID());
         String bandID = String.valueOf(Hash.StringHash(band));
 
         try
         {
             //updating the band_ID
-            stmt = con.prepareStatement("UPDATE media SET band_ID = (?) WHERE ID = (?)");
+            stmt = con.prepareStatement("UPDATE media SET band_id = (?) WHERE media_id = (?)");
             stmt.setString(1,bandID);
             stmt.setString(2,mediaID);
             stmt.execute();

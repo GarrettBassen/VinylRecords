@@ -21,7 +21,7 @@ public class Stock
      */
     public Stock(Media media)
     {
-        mediaID = media.getID();
+        mediaID = media.getMedia_ID();
     }
 
     /**

@@ -27,7 +27,7 @@ public class DBGenres
         try
         {
             //inserting the genera into the database
-            stmt = con.prepareStatement("INSERT INTO genres VALUES (?,?)");
+            stmt = con.prepareStatement("INSERT INTO genre VALUES (?,?)");
             stmt.setString(1, ID);
             stmt.setString(2,genre);
             stmt.execute();
@@ -68,7 +68,7 @@ public class DBGenres
         try
         {
             //searching for the ID in the database
-            stmt = con.prepareStatement("SELECT * FROM genres WHERE ID = (?)");
+            stmt = con.prepareStatement("SELECT * FROM genre WHERE genre_id = (?)");
             stmt.setString(1, ID);
             stmt.execute();
             rs = stmt.getResultSet();
@@ -118,7 +118,7 @@ public class DBGenres
         try
         {
             //deleting the genera from the database
-            stmt = con.prepareStatement("DELETE FROM genres WHERE ID = (?)");
+            stmt = con.prepareStatement("DELETE FROM genres WHERE genre_id = (?)");
             stmt.setString(1,ID);
             stmt.execute();
             //as genre was deleted so updating bool

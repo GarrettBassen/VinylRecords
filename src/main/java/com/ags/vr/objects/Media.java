@@ -12,7 +12,7 @@ import java.sql.SQLException;
 public class Media
 {
     // Variables
-    private int ID = Integer.MIN_VALUE;
+    private int media_ID = Integer.MIN_VALUE;
     private int oldID = Integer.MIN_VALUE;
     private short year = Short.MIN_VALUE;
     private String title = "";
@@ -53,7 +53,7 @@ public class Media
         try
         {
             media.next();
-            this.ID = media.getInt("media_id");
+            this.media_ID = media.getInt("media_id");
             this.title = media.getString("title");
             this.medium = media.getString("medium");
             this.format = media.getString("album_format");
@@ -82,7 +82,7 @@ public class Media
     {
         return new String[]
                 {
-                        Integer.toString(this.ID),
+                        Integer.toString(this.media_ID),
                         this.title,
                         this.medium,
                         this.format,
@@ -104,13 +104,13 @@ public class Media
         if (this.title.isBlank() || this.band.isBlank()) { return; }
 
         // Save ID for database safety if media
-        if (this.ID != Integer.MIN_VALUE)
+        if (this.media_ID != Integer.MIN_VALUE)
         {
-            this.oldID = this.ID;
+            this.oldID = this.media_ID;
         }
 
         // TODO CREATE BAND IN LINKER IF BAND DOES NOT EXIST
-        this.ID = Hash.StringHash(this.title,this.band);
+        this.media_ID = Hash.StringHash(this.title,this.band);
     }
 
     /**
@@ -168,9 +168,9 @@ public class Media
      * Returns media ID.
      * @return Media ID.
      */
-    public int getID()
+    public int getMedia_ID()
     {
-        return this.ID;
+        return this.media_ID;
     }
 
     /**
