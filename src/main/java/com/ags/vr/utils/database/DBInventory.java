@@ -62,11 +62,8 @@ public class DBInventory
      * @return True if the stock was updated successfully, otherwise false.
      * @throws SQLException
      */
-    public static boolean Modify(Stock stock) throws SQLException
+    public static void Modify(Stock stock) throws SQLException
     {
-        PreparedStatement stmt = null;
-        boolean bool = false;
-
         //updated values of stock table
         int[] data = stock.getData();
 
@@ -74,7 +71,7 @@ public class DBInventory
         {
             // TODO MAKE LOOK GOOD IF POSSIBLE
             //updating the table with all the values from the stock object
-            stmt = con.prepareStatement("UPDATE inventory SET front_good = (?), front_fair = (?), front_poor = (?), back_good = (?), back_fair = (?), back_poor = (?) WHERE media_id = (?)");
+            PreparedStatement stmt = con.prepareStatement("UPDATE inventory SET front_good = (?), front_fair = (?), front_poor = (?), back_good = (?), back_fair = (?), back_poor = (?) WHERE media_id = (?)");
             stmt.setInt(1, data[1]);
             stmt.setInt(2, data[2]);
             stmt.setInt(3, data[3]);
@@ -83,20 +80,11 @@ public class DBInventory
             stmt.setInt(6, data[6]);
             stmt.setInt(7, data[0]);
             stmt.execute();
-            bool = true;
         }
         catch (SQLException e)
         {
             Graphical.ErrorPopup("Database Error", e.toString());
         }
-        finally
-        {
-            if(stmt != null)
-            {
-                stmt.close();
-            }
-        }
-        return bool;
     }
 
     // TODO TEST

@@ -3,6 +3,7 @@ package com.ags.vr.controllers;
 import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
+import com.ags.vr.utils.database.DBInventory;
 import com.ags.vr.utils.database.DBMedia;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -128,6 +129,13 @@ public class InventoryController {
             mediumDisplay.setText(m.getMedium());
             formatDisplay.setText(m.getFormat());
 
+            //clear the spinners for update
+            gfSpinner.decrement((int) gfSpinner.getValue());
+            ffSpinner.decrement((int) ffSpinner.getValue());
+            pfSpinner.decrement((int) pfSpinner.getValue());
+            bgSpinner.decrement((int) bgSpinner.getValue());
+            bfSpinner.decrement((int) bfSpinner.getValue());
+            bgSpinner.decrement((int) bgSpinner.getValue());
             //stock object
             Stock st = new Stock(m);
             int[] data = st.getData();
@@ -141,10 +149,26 @@ public class InventoryController {
         }
     }
 
+    /**
+     * Updates the current media object with new stock values gathered from spinner objects.
+     * @param event Update save button press.
+     */
     @FXML
     void stockSave(ActionEvent event)
     {
-
+        if(!invalidInput(event))
+        {
+            try
+            {
+                //creating new stock object
+                Stock st = createUpdatedStock();
+                DBInventory.Modify(st);
+            }
+            catch(Exception e)
+            {
+                Graphical.ErrorPopup("Failed inventory update" ,e.getMessage());
+            }
+        }
     }
 
     //thanks garret
@@ -192,7 +216,45 @@ public class InventoryController {
             }
             return true;
         }
+        else if(event.getSource().equals(stockSave) && input.getText().isEmpty())
+        {
+            Graphical.InfoPopup("No Media Selected", "Please enter a valid name in the \"Media Name\" " +
+                    "text field for update.");
+            return true;
+        }
+        else if(event.getSource().equals(stockSave) && !DBMedia.Contains(input.getText()))
+        {
+            boolean GotoPage = Graphical.ConfirmationPopup("Media Does not exist",String.format(
+                    "'%s'is not in your system. Would you like to go to the add page to " +
+                            "insert this item?",input.getText())
+            );
+
+            if (GotoPage)
+            {
+                // TODO BRING USER TO ADD PAGE FOR THE MEDIA ENTRY
+                System.out.println("Media Search InventoryController.java");
+            }
+            return true;
+        }
         return false;
     }
 
+    /**
+     * Creates a stock object based off the current stock data in the spinners and the current input name.
+     * @return
+     */
+    public Stock createUpdatedStock()
+    {
+        byte[] ar = {
+                Byte.valueOf(gfSpinner.getValue().toString()),
+                Byte.valueOf(ffSpinner.getValue().toString()),
+                Byte.valueOf(pfSpinner.getValue().toString()),
+                Byte.valueOf(bgSpinner.getValue().toString()),
+                Byte.valueOf(bfSpinner.getValue().toString()),
+                Byte.valueOf(bpSpinner.getValue().toString()),
+        };
+        return new Stock(
+                DBMedia.getMedia(input.getText()).getID(), ar
+        );
+    }
 }
