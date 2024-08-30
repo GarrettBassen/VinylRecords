@@ -8,7 +8,6 @@ import com.ags.vr.utils.database.*;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import java.time.Year;
 
@@ -43,11 +42,10 @@ public class AddController
     private CheckBox[] array_medium;
     private CheckBox[] array_format;
 
-    /* TODO FIX THESE ISSUES
-     * Handle leading white space title
-     * Handle leading white space band name
-     * Handle leading white space genres
-     */
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                       INITIALIZATION METHODS                                                  */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
      * Initializes arrays for use in input validation.
@@ -61,54 +59,55 @@ public class AddController
     }
 
     /**
+     * Initializes spinners and sets value range.
+     */
+    private void SpinnerInitialize()
+    {
+        Spinner<Integer>[] spinners = new Spinner[] {
+                sp_front_good, sp_front_fair, sp_front_poor,
+                sp_back_good, sp_back_fair, sp_back_poor
+        };
+
+        // Initialize spinners
+        for (Spinner<Integer> sp : spinners)
+        {
+            sp.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0,127));
+        }
+    }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                            EVENT METHODS                                                      */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
      * Adds media when button is pressed.
-     * @param event Event
      */
     @FXML
-    private void AddMedia(ActionEvent event)
+    private void AddMedia()
     {
-        // Validate all inputs
+        // Validate all inputs and terminate for any errors
         if (!TextInputValidation())                                    { return; }
         if (!CheckboxValidation(array_medium,"media type"))     { return; }
         if (!CheckboxValidation(array_format,"album format"))   { return; }
 
-        // Create media and ensure is unique
+        // Create media from data, warn user if media already exists within database and terminate if so
         Media media = CreateMedia();
         if (DBMedia.Contains(media))
         {
-            GotoStock(media);
+            DuplicateMediaWarning();
+            return;
         }
 
-        // Create band, media, and inventory table
+        // Add band to database if it does not exist
         if (!DBBand.Contains(media.getBand()))
         {
             DBBand.Insert(media.getBand());
         }
+
+        // Insert media, inventory, and link genres
         DBMedia.Insert(media);
         DBInventory.Insert(new Stock(media.getID(),getStockData()));
-
-        AddGenres(media.getID());
-    }
-
-    // TODO TEST AND IMPLEMENT
-    private void AddGenres(int mediaID)
-    {
-        ObservableList<CharSequence> genres = ta_genres.getParagraphs();
-
-        for (CharSequence g : genres)
-        {
-            // Don't process empty lines
-            if (!g.toString().isBlank())
-            {
-                if (!DBGenre.Contains(g.toString()))
-                {
-                    DBGenre.Insert(g.toString());
-                }
-
-                // Add genre
-                DBGenreLinker.Insert(mediaID, Hash.StringHash(g.toString()));
-            }
-        }
+        LinkGenres(media.getID());
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -174,25 +173,24 @@ public class AddController
             return false;
         }
 
-        // Replace any white space
-        tf_year.setText(tf_year.getText().replace(" ",""));
         // Ensure valid year input
-        if (tf_year.getText().isBlank())
+        String year = tf_year.getText().strip();
+        if (year.isBlank())
         {
             Graphical.ErrorPopup("No Album Year","No album release year given. Please add release year.");
             return false;
         }
-        else if (!tf_year.getText().matches("^\\d+$"))
+        else if (!year.matches("^\\d+$"))
         {
             Graphical.ErrorPopup("Text in Album Year Input",
                     "Non-numeric text was detected in release year input box. " +
                             "Please delete any white space or characters.");
             return false;
         }
-        else if (Integer.parseInt(tf_year.getText()) < 1887 || Integer.parseInt(tf_year.getText()) > Year.now().getValue())
+        else if (Integer.parseInt(year) < 1887 || Integer.parseInt(year) > Year.now().getValue())
         {
             Graphical.ErrorPopup("Invalid Year",String.format(
-                    "The year '%s' is invalid.",Integer.parseInt(tf_year.getText()))
+                    "The year '%s' is invalid.",Integer.parseInt(year))
             );
             return false;
         }
@@ -203,6 +201,58 @@ public class AddController
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                              HELPER METHODS                                                   */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Creates media object from inputs.
+     * @return Media object
+     */
+    private Media CreateMedia()
+    {
+        // Set text inputs
+        Media media = new Media();
+        media.setTitle(tf_title.getText().strip());
+        media.setYear(Short.parseShort(tf_year.getText()));
+        media.setBand(tf_band.getText().strip());
+
+        // Set medium
+        if      (cb_vinyl.isSelected())     { media.setMedium("vinyl"); }
+        else if (cb_CD.isSelected())        { media.setMedium("CD"); }
+        else if (cb_cassette.isSelected())  { media.setMedium("cassette"); }
+
+        // Set format
+        if      (cb_single.isSelected())    { media.setFormat("single"); }
+        else if (cb_EP.isSelected())        { media.setFormat("EP"); }
+        else if (cb_LP.isSelected())        { media.setFormat("LP"); }
+        else if (cb_DLP.isSelected())       { media.setFormat("DLP"); }
+
+        return media;
+    }
+
+    /**
+     * Links all given genres to mediaID using genres text area.
+     * @param mediaID Media ID
+     */
+    private void LinkGenres(int mediaID)
+    {
+        // Gets each line in genres text area as a CharSequence
+        ObservableList<CharSequence> genres = ta_genres.getParagraphs();
+
+        // Loop through all genres and insert into genre linker
+        for (CharSequence g : genres)
+        {
+            // Skip empty lines
+            if (g.toString().isBlank()) { continue; }
+
+            // Add genre if it does not exist
+            if (!DBGenre.Contains(g.toString()))
+            {
+                DBGenre.Insert(g.toString().strip());
+            }
+
+            // Link genre to media
+            DBGenreLinker.Insert(mediaID, Hash.StringHash(g.toString()));
+        }
+    }
 
     /**
      * Generates stock data array from inputs.
@@ -221,61 +271,14 @@ public class AddController
                 };
     }
 
-    // TODO IMPLEMENT
-    private void GotoStock(Media media)
+    /**
+     * Warns user the media is a duplicate and informs them how to modify media data.
+     */
+    private void DuplicateMediaWarning()
     {
-        boolean GotoPage = Graphical.ConfirmationPopup("Media Already Exists",String.format(
-                "'%s' by '%s' is already in your system. Would you like to go to the inventory page to " +
-                        "modify this item or change its stock?",tf_title.getText(),tf_band.getText())
+        Graphical.InfoPopup("Media Already Exists",String.format(
+                "'%s' by '%s' is already in your system. To modify this album, please go to browse " +
+                        "and select the 'Edit' button.",tf_title.getText(),tf_band.getText())
         );
-
-        if (GotoPage)
-        {
-            // TODO BRING USER TO INVENTORY PAGE FOR THE MEDIA ENTRY
-            System.out.println("FIX ME TextInputValidation() AddController.java");
-        }
-    }
-
-    /**
-     * Initializes spinners and sets value range.
-     */
-    private void SpinnerInitialize()
-    {
-        Spinner<Integer>[] spinners = new Spinner[] {
-                sp_front_good, sp_front_fair, sp_front_poor,
-                sp_back_good, sp_back_fair, sp_back_poor
-        };
-
-        // Initialize spinners
-        for (Spinner<Integer> sp : spinners)
-        {
-            sp.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0,127));
-        }
-    }
-
-    /**
-     * Creates media object from inputs.
-     * @return Media object
-     */
-    private Media CreateMedia()
-    {
-        // Set text inputs
-        Media media = new Media();
-        media.setTitle(tf_title.getText());
-        media.setYear(Short.parseShort(tf_year.getText()));
-        media.setBand(tf_band.getText());
-
-        // Set medium
-        if      (cb_vinyl.isSelected())     { media.setMedium("vinyl"); }
-        else if (cb_CD.isSelected())        { media.setMedium("CD"); }
-        else if (cb_cassette.isSelected())  { media.setMedium("cassette"); }
-
-        // Set format
-        if      (cb_single.isSelected())    { media.setFormat("single"); }
-        else if (cb_EP.isSelected())        { media.setFormat("EP"); }
-        else if (cb_LP.isSelected())        { media.setFormat("LP"); }
-        else if (cb_DLP.isSelected())       { media.setFormat("DLP"); }
-
-        return media;
     }
 }
