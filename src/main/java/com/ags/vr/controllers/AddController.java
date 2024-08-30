@@ -3,10 +3,10 @@ package com.ags.vr.controllers;
 import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
-import com.ags.vr.utils.database.DBBands;
-import com.ags.vr.utils.database.DBInventory;
-import com.ags.vr.utils.database.DBMedia;
+import com.ags.vr.utils.Hash;
+import com.ags.vr.utils.database.*;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
@@ -43,6 +43,12 @@ public class AddController
     private CheckBox[] array_medium;
     private CheckBox[] array_format;
 
+    /* TODO FIX THESE ISSUES
+     * Handle leading white space title
+     * Handle leading white space band name
+     * Handle leading white space genres
+     */
+
     /**
      * Initializes arrays for use in input validation.
      */
@@ -74,15 +80,36 @@ public class AddController
         }
 
         // Create band, media, and inventory table
-        if (!DBBands.Contains(media.getBand()))
+        if (!DBBand.Contains(media.getBand()))
         {
-            DBBands.Insert(media.getBand());
+            DBBand.Insert(media.getBand());
         }
         DBMedia.Insert(media);
         DBInventory.Insert(new Stock(media.getID(),getStockData()));
-        // TODO ADD GENRE LINKER
+
+        AddGenres(media.getID());
     }
 
+    // TODO TEST AND IMPLEMENT
+    private void AddGenres(int mediaID)
+    {
+        ObservableList<CharSequence> genres = ta_genres.getParagraphs();
+
+        for (CharSequence g : genres)
+        {
+            // Don't process empty lines
+            if (!g.toString().isBlank())
+            {
+                if (!DBGenre.Contains(g.toString()))
+                {
+                    DBGenre.Insert(g.toString());
+                }
+
+                // Add genre
+                DBGenreLinker.Insert(mediaID, Hash.StringHash(g.toString()));
+            }
+        }
+    }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                           VALIDATION METHODS                                                  */
@@ -147,16 +174,26 @@ public class AddController
             return false;
         }
 
+        // Replace any white space
+        tf_year.setText(tf_year.getText().replace(" ",""));
         // Ensure valid year input
         if (tf_year.getText().isBlank())
         {
             Graphical.ErrorPopup("No Album Year","No album release year given. Please add release year.");
             return false;
         }
-        int year = Integer.parseInt(tf_year.getText());
-        if (year < 1887 || year > Year.now().getValue())
+        else if (!tf_year.getText().matches("^\\d+$"))
         {
-            Graphical.ErrorPopup("Invalid Year",String.format("The year '%s' is invalid.",year));
+            Graphical.ErrorPopup("Text in Album Year Input",
+                    "Non-numeric text was detected in release year input box. " +
+                            "Please delete any white space or characters.");
+            return false;
+        }
+        else if (Integer.parseInt(tf_year.getText()) < 1887 || Integer.parseInt(tf_year.getText()) > Year.now().getValue())
+        {
+            Graphical.ErrorPopup("Invalid Year",String.format(
+                    "The year '%s' is invalid.",Integer.parseInt(tf_year.getText()))
+            );
             return false;
         }
 

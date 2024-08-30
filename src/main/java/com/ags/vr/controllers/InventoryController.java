@@ -3,7 +3,7 @@ package com.ags.vr.controllers;
 import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
-import com.ags.vr.utils.database.DBBands;
+import com.ags.vr.utils.database.DBBand;
 import com.ags.vr.utils.database.DBInventory;
 import com.ags.vr.utils.database.DBMedia;
 import javafx.event.ActionEvent;
@@ -109,9 +109,9 @@ public class InventoryController {
                 Media oldMedia = DBMedia.getMedia(input.getText());
                 Media newMedia = createUpdatedMedia();
 
-                if (!DBBands.Contains(newMedia.getBand()))
+                if (!DBBand.Contains(newMedia.getBand()))
                 {
-                    DBBands.Insert(newMedia.getBand());
+                    DBBand.Insert(newMedia.getBand());
                 }
 
                 DBMedia.Update(newMedia, oldMedia.getID());

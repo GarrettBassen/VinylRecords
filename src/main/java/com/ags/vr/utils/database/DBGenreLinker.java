@@ -3,6 +3,7 @@ package com.ags.vr.utils.database;
 import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
+import javafx.collections.ObservableList;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -11,6 +12,26 @@ import static com.ags.vr.utils.Connector.con;
 
 public class DBGenreLinker
 {
+    public static boolean Insert(int mediaID, int genreID)
+    {
+        try
+        {
+            PreparedStatement statement = con.prepareStatement("INSERT INTO genre_linker VALUE (?,?)");
+            statement.setInt(1,mediaID);
+            statement.setInt(2,genreID);
+            statement.execute();
+            return true;
+        }
+        catch (SQLException e)
+        {
+            // TODO FIX ERROR
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+
+
     /**
      * Creates the connection between the media table and the genres table through an
      * intermediary table genre_linker. Uses the IDs of media and genres to create the connection.

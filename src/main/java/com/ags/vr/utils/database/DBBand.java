@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 import static com.ags.vr.utils.Connector.con;
 
-public class DBBands
+public class DBBand
 {
     /**
      * Insets a band into the database by name.

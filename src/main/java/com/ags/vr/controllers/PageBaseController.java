@@ -3,6 +3,8 @@ package com.ags.vr.controllers;
 import com.ags.vr.utils.Connector;
 import com.ags.vr.utils.Graphical;
 
+import com.ags.vr.utils.database.DBGenre;
+import com.ags.vr.utils.database.DBMedia;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;

@@ -1,6 +1,6 @@
 package com.ags.vr.objects;
 
-import com.ags.vr.utils.database.DBBands;
+import com.ags.vr.utils.database.DBBand;
 import com.ags.vr.utils.Hash;
 
 import java.sql.ResultSet;
@@ -58,7 +58,7 @@ public class Media
             this.medium = media.getString("medium");
             this.format = media.getString("album_format");
             this.year = media.getShort("year");
-            this.band = DBBands.GetName(media.getInt("band_id"));
+            this.band = DBBand.GetName(media.getInt("band_id"));
         }
         catch (SQLException e)
         {
