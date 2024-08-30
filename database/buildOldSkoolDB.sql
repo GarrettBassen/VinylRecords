@@ -67,7 +67,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `oldSkoolDB`.`genre_linker` (
   `media_id` INT NOT NULL,
   `genre_id` INT NOT NULL,
-  PRIMARY KEY (`media_id`),
+  PRIMARY KEY (`media_id`, `genre_id`),
   INDEX `GENRE_LINKER_TO_GENRE_idx` (`genre_id` ASC) VISIBLE,
   CONSTRAINT `GENRE_LINKER_TO_GENRE`
     FOREIGN KEY (`genre_id`)
@@ -109,6 +109,7 @@ CREATE TABLE IF NOT EXISTS `oldSkoolDB`.`request` (
   `customer` VARCHAR(63) NOT NULL,
   `phone_number` BIGINT NULL DEFAULT NULL,
   `email` VARCHAR(63) NULL DEFAULT NULL,
+  `date` SMALLINT NOT NULL,
   `request` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`request_id`))
 ENGINE = InnoDB
