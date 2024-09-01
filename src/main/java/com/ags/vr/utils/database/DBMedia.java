@@ -4,6 +4,7 @@ import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -195,7 +196,9 @@ public class DBMedia
         try
         {
             //TODO COMPRESS IF POSSIBLE
-            PreparedStatement stmt = con.prepareStatement("UPDATE media, SET media_id=(?), title=(?), medium=(?), album_format=(?), year=(?),band_id=(?), WHERE media_id=(?)");
+            PreparedStatement stmt = con.prepareStatement("UPDATE media SET media_id=(?), title=(?), medium=(?), " +
+                    "album_format=(?), year=(?), band_id=(?) WHERE media_id=(?)" +
+                    " AND UPDATE genre_linker SET media_id=(?) WHERE media_id=(?)");
             //updating media values
             stmt.setInt(1,newMedia.getID());
             stmt.setString(2,newMedia.getTitle());
@@ -205,6 +208,8 @@ public class DBMedia
             stmt.setInt(6,newMedia.getBandID());
             //old ID from the old media object
             stmt.setInt(7,oldID);
+            stmt.setInt(8,newMedia.getID());
+            stmt.setInt(9,oldID);
             stmt.execute();
 
         }
@@ -212,5 +217,45 @@ public class DBMedia
         {
             Graphical.ErrorPopup("Database Error", e.toString());
         }
+    }
+
+    /**
+     * Returns the all the genres associated with the media entry as a string array.
+     * @param media Media entry.
+     * @return All associated genres.
+     */
+    public static String[] getGenres(Media media)
+    {
+        try
+        {
+            //statement to get all genre media links
+            PreparedStatement stmt = con.prepareStatement("SELECT genre_id FROM genre_linker WHERE media_id=?");
+            stmt.setInt(1,media.getID());
+            ResultSet rs = stmt.executeQuery();
+
+            //TODO TEST WITH MORE GENRES
+            String[] genres = new String[rs.getMetaData().getColumnCount()];
+
+            //fill the genres array
+            int count = 0;
+            while(rs.next())
+            {
+                //getting the names from the genreIDs
+                stmt = con.prepareStatement("SELECT name FROM genre WHERE genre_id=?");
+                stmt.setInt(1,rs.getInt("genre_id"));
+                ResultSet nameRs = stmt.executeQuery();
+                nameRs.next();
+
+                //filling the list
+                genres[count] = nameRs.getString("name");
+                count++;
+                return genres;}
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Database Error", e.toString());
+        }
+
+        return null;
     }
 }

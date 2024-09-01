@@ -142,41 +142,49 @@ public class InventoryController {
             //setting the media display text fields
             nameDisplay.setText(name);
             bandDisplay.setText(m.getBand());
-            genresDisplay.setText("work in progress");
             yearDisplay.setText(String.valueOf(m.getYear()));
             String dbMedium = m.getMedium();
             String dbFormat = m.getFormat();
 
-            //for displaying correct media
-            if(dbMedium.equals("vinyl"))
-            {
-                vinylRB.setSelected(true);
-            }
-            else if(dbMedium.equals("CD"))
-            {
-                cdRB.setSelected(true);
-            }
-            else if(dbMedium.equals("cassette"))
-            {
-                cassetteRB.setSelected(true);
-            }
 
             //for displaying correct format
             if(dbFormat.equals("Single"))
             {
+                format = "Single";
                 singleRB.setSelected(true);
             }
             else if(dbFormat.equals("EP"))
             {
+                format = "EP";
                 epRB.setSelected(true);
             }
             else if(dbFormat.equals("LP"))
             {
+                format = "LP";
                 lpRB.setSelected(true);
             }
             else if(dbFormat.equals("DLP"))
             {
+                format = "DLP";
                 dlpRB.setSelected(true);
+            }
+
+            //displaying genre
+            String[] genresAr = DBMedia.getGenres(m);
+            if(genresAr.length > 1)
+            {
+
+                String genres = "";
+                for (String genre : genresAr)
+                {
+                    genres += genre + ", ";
+                }
+                genresDisplay.setText(genres);
+            }
+            //in the case there is only one genre
+            else
+            {
+                genresDisplay.setText(genresAr[0]);
             }
 
             //clear the spinners for update
