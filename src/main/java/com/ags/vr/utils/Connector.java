@@ -1,5 +1,6 @@
 package com.ags.vr.utils;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +18,7 @@ public class Connector
     public static Connection con;
 
     // WARNING Do NOT push with your unique username and password
-    private static String url =  "jdbc:mysql://localhost:3306";
+    private static String url =  "jdbc:mysql://localhost:3306/oldSkoolDB";
     private static String usr =  "";
     private static String pass = "";
 
@@ -35,13 +36,6 @@ public class Connector
         // Try to connect if database is not connected
         try
         {
-            con = DriverManager.getConnection(url, usr, pass);
-
-            //try to install sql schema
-            sqlInstall();
-            con.close();
-            //connect to new database
-            url += "/oldSkoolDB";
             con = DriverManager.getConnection(url, usr, pass);
         }
         catch (SQLException e)
@@ -78,6 +72,7 @@ public class Connector
         }
     }
 
+    // TODO CALL IN SETUP WIZARD
     /**
      * Installs the database schema oldSkoolDB.
      */
@@ -85,15 +80,30 @@ public class Connector
     {
         try
         {
+            // Connect and install sql schema
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306", usr, pass);
+
             //Initialize the script runner
             ScriptRunner sr = new ScriptRunner(con);
             //Creating a reader object
             Reader reader = new BufferedReader(new FileReader("database/buildOldSkoolDB.sql"));
             //Running the script
             sr.runScript(reader);
+
+            con.close();
         }
-        catch (Exception e)
+        catch (SQLException e)
         {
+            Graphical.ErrorPopup("ERROR INSTALLING DATABASE",String.format(
+                    "ERROR INSTALLING DATABASE sqlInstall() | Connector.java\n\nCode: %s\n%s",
+                    e.getErrorCode(), e.getMessage()
+            ));
+        }
+        catch (FileNotFoundException e)
+        {
+            Graphical.ErrorPopup("ERROR INSTALLING DATABASE",String.format(
+                    "File not found error\n\n%s", e.getMessage()
+            ));
         }
     }
 
