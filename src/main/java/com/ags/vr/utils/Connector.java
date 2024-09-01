@@ -19,8 +19,8 @@ public class Connector
 
     // WARNING Do NOT push with your unique username and password
     private static String url =  "jdbc:mysql://localhost:3306/oldSkoolDB";
-    private static String usr =  "";
-    private static String pass = "";
+    private static String usr =  "admin";
+    private static String pass = "Recordk33per";
 
     /**
      * Attempts to connect to database and assigns 'con' Connection object.
@@ -40,15 +40,23 @@ public class Connector
         }
         catch (SQLException e)
         {
-            Graphical.ErrorPopup("Database Connection Error",
-                    String.format(
-                            "Error connecting to database. Please ensure username, password, and url are " +
-                            "valid and that the database is running on the device.\n\nCODE: %s\n%s",
-                            e.getErrorCode(), e.getMessage()
-                    )
-            );
+            try
+            {
+                sqlInstall();
+            }
+            //TODO MAKE SAFE
+            catch (Exception e1)
+            {
+                Graphical.ErrorPopup("Database Connection Error",
+                        String.format("Error connecting to database. Please ensure username, password, and url are " +
+                                        "valid and that the database is running on the device.\n\nCODE: %s\n%s",
+                                e.getErrorCode(), e.getMessage()));
+            }
         }
     }
+
+
+
 
     /**
      * Safely disconnects from the database.

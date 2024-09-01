@@ -194,10 +194,16 @@ public class DBMedia
     {
         try
         {
-            //TODO COMPRESS IF POSSIBLE
-            PreparedStatement stmt = con.prepareStatement("UPDATE media SET media_id=(?), title=(?), medium=(?), " +
-                    "album_format=(?), year=(?), band_id=(?) WHERE media_id=(?)" +
-                    " AND UPDATE genre_linker SET media_id=(?) WHERE media_id=(?)");
+            //change the genre linker
+            PreparedStatement stmt =  con.prepareStatement("UPDATE genre_linker SET media_id=(?)" +
+                    "WHERE media_id=(?)");
+            stmt.setInt(1,newMedia.getID());
+            stmt.setInt(2,oldID);
+            stmt.execute();
+
+
+            stmt = con.prepareStatement("UPDATE media SET media_id=(?), title=(?), medium=(?), " +
+                    "album_format=(?), year=(?), band_id=(?) WHERE media_id=(?)");
             //updating media values
             stmt.setInt(1,newMedia.getID());
             stmt.setString(2,newMedia.getTitle());
@@ -205,10 +211,7 @@ public class DBMedia
             stmt.setString(4,newMedia.getFormat());
             stmt.setShort(5,newMedia.getYear());
             stmt.setInt(6,newMedia.getBandID());
-            //old ID from the old media object
             stmt.setInt(7,oldID);
-            stmt.setInt(8,newMedia.getID());
-            stmt.setInt(9,oldID);
             stmt.execute();
 
         }
