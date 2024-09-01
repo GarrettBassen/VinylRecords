@@ -3,13 +3,13 @@ package com.ags.vr.controllers;
 import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
-import com.ags.vr.utils.database.DBBand;
-import com.ags.vr.utils.database.DBGenre;
-import com.ags.vr.utils.database.DBInventory;
-import com.ags.vr.utils.database.DBMedia;
+import com.ags.vr.utils.Hash;
+import com.ags.vr.utils.database.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import java.util.Stack;
 
 public class InventoryController {
 
@@ -93,7 +93,10 @@ public class InventoryController {
         SpinnerInitialize();
     }
 
-    //TODO FIX
+    /**
+     * Updates a media entry based on the current inputted values.
+     * @param event Update button push.
+     */
     @FXML
     void applyUpdate(ActionEvent event)
     {
@@ -101,15 +104,40 @@ public class InventoryController {
         {
             if (!invalidInput(event))
             {
+                //getting old media object
                 Media oldMedia = DBMedia.getMedia(input.getText(), medium);
+                //creating new media object
                 Media newMedia = createUpdatedMedia();
 
+                //insert the band if its not in the db
                 if (!DBBand.Contains(newMedia.getBand()))
                 {
                     DBBand.Insert(newMedia.getBand());
                 }
 
-                DBMedia.Update(newMedia, oldMedia.getID());
+
+                //update the media object
+                DBMedia.Update(newMedia, oldMedia);
+
+                //connect with genre linker
+                String genres = genresDisplay.getText();
+                String[] genresAr = genres.split(", ");
+
+                for(String genre : genresAr)
+                {
+                    //insert genres if theyre not in the db
+                    if(!DBGenre.Contains(genre))
+                    {
+                        DBGenre.Insert(genre);
+                    }
+                    DBGenreLinker.Insert(newMedia.getID(), Hash.StringHash(genre));
+                }
+
+                //connect media and stock
+                Stock stk = createUpdatedStock();
+                DBInventory.Insert(stk);
+
+                Graphical.InfoPopup("Update", "Updated successfully");
             }
         }
         catch (Exception e)
@@ -144,7 +172,6 @@ public class InventoryController {
             nameDisplay.setText(name);
             bandDisplay.setText(m.getBand());
             yearDisplay.setText(String.valueOf(m.getYear()));
-            String dbMedium = m.getMedium();
             String dbFormat = m.getFormat();
 
 
@@ -173,21 +200,14 @@ public class InventoryController {
             //displaying genre
             int[] genreIDs = DBMedia.getGenres(m);
             String[] genresAr = DBGenre.getName(genreIDs);
-            if(genresAr.length > 1)
-            {
+            String display = "";
 
-                String genres = "";
-                for (String genre : genresAr)
-                {
-                    genres += genre + ", ";
-                }
-                genresDisplay.setText(genres);
-            }
-            //in the case there is only one genre
-            else
+            for(int i = 0; i < genresAr.length-1; i++)
             {
-                genresDisplay.setText(genresAr[0]);
+                display += genresAr[i] + ", ";
             }
+            display += genresAr[genresAr.length-1];
+            genresDisplay.setText(display);
 
             //clear the spinners for update
             gfSpinner.decrement((int) gfSpinner.getValue());
@@ -346,8 +366,9 @@ public class InventoryController {
         else if(medium.equals(""))
         {
             Graphical.InfoPopup("Invalid Input", "Please select a medium.");
+            return true;
         }
-        else if(event.getSource().equals(searchButton) && !DBMedia.Contains(input.getText(), medium))
+        else if((event.getSource().equals(searchButton) || event.getSource().equals(stockSave)) && !DBMedia.Contains(input.getText(), medium))
         {
             boolean GotoPage = Graphical.ConfirmationPopup("Media Does not exist",String.format(
                     "'%s'is not in your system. Would you like to go to the add page to " +
@@ -368,18 +389,22 @@ public class InventoryController {
                     "text field for update.");
             return true;
         }
-        else if(event.getSource().equals(stockSave) && !DBMedia.Contains(input.getText(), medium))
+        else if(event.getSource().equals(update) && nameDisplay.getText().isEmpty())
         {
-            boolean GotoPage = Graphical.ConfirmationPopup("Media Does not exist",String.format(
-                    "'%s'is not in your system. Would you like to go to the add page to " +
-                            "insert this item?",input.getText())
-            );
-
-            if (GotoPage)
-            {
-                // TODO BRING USER TO ADD PAGE FOR THE MEDIA ENTRY
-                System.out.println("Media Search InventoryController.java");
-            }
+            Graphical.InfoPopup("Invalid Name Entry", "Please enter a valid name in the \"Name\" " +
+                    "text field for update.");
+            return true;
+        }
+        else if(event.getSource().equals(update) && bandDisplay.getText().isEmpty())
+        {
+            Graphical.InfoPopup("Invalid Band Entry", "Please enter a valid band name in the " +
+                    "\"Band\" text field for update.");
+            return true;
+        }
+        else if(event.getSource().equals(update) && yearDisplay.getText().isEmpty())
+        {
+            Graphical.InfoPopup("Invalid Year Entry", "Please enter a valid year in the \"Year\" " +
+                    "text field for update.");
             return true;
         }
         return false;

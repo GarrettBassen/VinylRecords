@@ -177,9 +177,22 @@ public class DBMedia
         // TODO TEST
         try
         {
-            PreparedStatement statement = con.prepareStatement("DELETE FROM media WHERE media_id=?");
-            statement.setInt(1,media.getID());
-            statement.execute();
+            //delete the associated stock table
+            PreparedStatement stmt = con.prepareStatement("DELETE FROM inventory WHERE media_id=?");
+            stmt.setInt(1,media.getID());
+            stmt.execute();
+            stmt.close();
+
+            //delete the associated genre linker
+            stmt = con.prepareStatement("DELETE FROM genre_linker WHERE media_id=?");
+            stmt.setInt(1,media.getID());
+            stmt.execute();
+            stmt.close();
+
+            //delete the media object
+            stmt = con.prepareStatement("DELETE FROM media WHERE media_id=?");
+            stmt.setInt(1,media.getID());
+            stmt.execute();
             return true;
         }
         catch (SQLException e)
@@ -189,36 +202,13 @@ public class DBMedia
         }
     }
 
-
-    public static void Update(Media newMedia, int oldID)
+//TODO WRITE HERE
+    public static void Update(Media newMedia, Media oldMedia)
     {
-        try
-        {
-            //change the genre linker
-            PreparedStatement stmt =  con.prepareStatement("UPDATE genre_linker SET media_id=(?)" +
-                    "WHERE media_id=(?)");
-            stmt.setInt(1,newMedia.getID());
-            stmt.setInt(2,oldID);
-            stmt.execute();
-
-
-            stmt = con.prepareStatement("UPDATE media SET media_id=(?), title=(?), medium=(?), " +
-                    "album_format=(?), year=(?), band_id=(?) WHERE media_id=(?)");
-            //updating media values
-            stmt.setInt(1,newMedia.getID());
-            stmt.setString(2,newMedia.getTitle());
-            stmt.setString(3,newMedia.getMedium());
-            stmt.setString(4,newMedia.getFormat());
-            stmt.setShort(5,newMedia.getYear());
-            stmt.setInt(6,newMedia.getBandID());
-            stmt.setInt(7,oldID);
-            stmt.execute();
-
-        }
-        catch (SQLException e)
-        {
-            Graphical.ErrorPopup("Database Error", e.toString());
-        }
+        //delete the old media
+        Delete(oldMedia);
+        //create new media
+        Insert(newMedia);
     }
 
     /**
