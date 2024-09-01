@@ -105,6 +105,7 @@ public class Media
     public void setMedium(String medium)
     {
         this.medium = medium;
+        setID();
     }
 
     /**
