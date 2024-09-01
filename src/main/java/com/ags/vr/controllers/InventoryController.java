@@ -4,6 +4,7 @@ import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.database.DBBand;
+import com.ags.vr.utils.database.DBGenre;
 import com.ags.vr.utils.database.DBInventory;
 import com.ags.vr.utils.database.DBMedia;
 import javafx.event.ActionEvent;
@@ -170,7 +171,8 @@ public class InventoryController {
             }
 
             //displaying genre
-            String[] genresAr = DBMedia.getGenres(m);
+            int[] genreIDs = DBMedia.getGenres(m);
+            String[] genresAr = DBGenre.getName(genreIDs);
             if(genresAr.length > 1)
             {
 

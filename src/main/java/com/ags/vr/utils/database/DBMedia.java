@@ -2,12 +2,11 @@ package com.ags.vr.utils.database;
 
 import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
-import com.ags.vr.utils.Hash;
 
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Stack;
 
 import static com.ags.vr.utils.Connector.con;
 
@@ -224,38 +223,37 @@ public class DBMedia
      * @param media Media entry.
      * @return All associated genres.
      */
-    public static String[] getGenres(Media media)
+    public static int[] getGenres(Media media)
     {
-        try
-        {
+        try {
             //statement to get all genre media links
-            PreparedStatement stmt = con.prepareStatement("SELECT genre_id FROM genre_linker WHERE media_id=?");
-            stmt.setInt(1,media.getID());
-            ResultSet rs = stmt.executeQuery();
+            PreparedStatement statement = con.prepareStatement("SELECT genre_id FROM genre_linker WHERE media_id=?");
+            statement.setInt(1, media.getID());
+            ResultSet result = statement.executeQuery();
 
-            //TODO TEST WITH MORE GENRES
-            String[] genres = new String[rs.getMetaData().getColumnCount()];
-
-            //fill the genres array
-            int count = 0;
-            while(rs.next())
+            // Gets all genre IDs
+            Stack<Integer> stack = new Stack<>();
+            while (result.next())
             {
-                //getting the names from the genreIDs
-                stmt = con.prepareStatement("SELECT name FROM genre WHERE genre_id=?");
-                stmt.setInt(1,rs.getInt("genre_id"));
-                ResultSet nameRs = stmt.executeQuery();
-                nameRs.next();
+                stack.push(result.getInt(1));
+            }
 
-                //filling the list
-                genres[count] = nameRs.getString("name");
-                count++;
-                return genres;}
+            // Adds genres to int array
+            int[] genres = new int[stack.size()];
+            for (int i = 0; i < genres.length; ++i)
+            {
+                genres[i] = stack.pop();
+            }
+
+            return genres;
         }
         catch (SQLException e)
         {
-            Graphical.ErrorPopup("Database Error", e.toString());
+            Graphical.ErrorPopup("Database Error", String.format(
+                    "Could not get genres for '%s' in getGenres(Media) | DBMedia.java\n\nCode: %s\n%s",
+                    media.getTitle(), e.getErrorCode(), e.getMessage()
+            ));
+            return null;
         }
-
-        return null;
     }
 }

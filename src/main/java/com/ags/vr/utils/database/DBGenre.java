@@ -4,6 +4,7 @@ import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static com.ags.vr.utils.Connector.con;
@@ -67,6 +68,39 @@ public class DBGenre
                     genre,e.getErrorCode(),e.getMessage()
             ));
             return false;
+        }
+    }
+
+    /**
+     * Gets name of n genre IDs returned in string array.
+     * @param genreID n genre IDs
+     * @return Genre string array
+     */
+    public static String[] getName(int... genreID)
+    {
+        try
+        {
+            String[] names = new String[genreID.length];
+
+            // Get string name for all genres
+            for (int i = 0; i < genreID.length; ++i)
+            {
+                PreparedStatement statement = con.prepareStatement("SELECT name FROM genre WHERE genre_id=?");
+                statement.setInt(1,genreID[i]);
+                ResultSet result = statement.executeQuery();
+                result.next();
+                names[i] = result.getString(1);
+            }
+
+            return names;
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Database Error", String.format(
+                    "Could not get genre name(s) in getName(int...) | DBGenre.java\n\nCode: %s\n%s",
+                    e.getErrorCode(), e.getMessage()
+            ));
+            return null;
         }
     }
 }
