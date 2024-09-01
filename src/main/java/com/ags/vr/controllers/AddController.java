@@ -11,6 +11,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.time.Year;
 
+/**
+ * Manages the add page where the user inputs all data for the media object and then may add it to the database where
+ * an inventory is created and all associated data such as genres and bands are linked to the media. Proper error
+ * checking and error displays are utilized to ensure the user may not insert improperly formatted data and that they
+ * know when an error occurs and how to fix it.
+ */
 public class AddController
 {
     // Medium variables
@@ -80,7 +86,9 @@ public class AddController
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
-     * Adds media when button is pressed.
+     * Upon button press, validates all inputs and adds media if no errors are found. If the band or genres are not
+     * found in the database, they are added in their respective tables. An inventory is created for the media using
+     * its media ID, and the genres are linked to the media in the genre linker.
      */
     @FXML
     private void AddMedia()
@@ -94,7 +102,10 @@ public class AddController
         Media media = CreateMedia();
         if (DBMedia.Contains(media))
         {
-            DuplicateMediaWarning();
+            Graphical.InfoPopup("Media Already Exists",String.format(
+                    "'%s' by '%s' is already in your system. To modify this album, please go to browse " +
+                            "and select the 'Edit' button.",tf_title.getText(),tf_band.getText())
+            );
             return;
         }
 
@@ -116,7 +127,7 @@ public class AddController
 
     /**
      * Ensures that one and only one of the checkboxes in the given array are activated. If an error is found,
-     * a False boolean is returned and the error is displayed to the user in an error popup.
+     * a False boolean is returned and the issue is displayed to the user in an error popup.
      * @param array Checkbox array to validate
      * @param section Section title for error message
      * @return True for valid inputs; false otherwise.
@@ -148,8 +159,8 @@ public class AddController
     }
 
     /**
-     * Validates all text input fields. If an error is found, a False boolean is returned and the error is
-     * displayed to the user in an error popup.
+     * Validates all text input fields. If an error is found with any input, a False boolean is returned and the
+     * specific issue is displayed to the user in an error popup.
      * @return True for valid inputs; false otherwise
      */
     private boolean TextInputValidation()
@@ -203,7 +214,7 @@ public class AddController
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
-     * Creates media object from inputs.
+     * Creates media object from validated inputs and returns for further use.
      * @return Media object
      */
     private Media CreateMedia()
@@ -229,7 +240,8 @@ public class AddController
     }
 
     /**
-     * Links all given genres to mediaID using genres text area.
+     * Links all given genres from the genre text are to mediaID in the genre_linker table. Adds hashed genres to
+     * genre table if they do not already exist; else, their ID is grabbed and used.
      * @param mediaID Media ID
      */
     private void LinkGenres(int mediaID)
@@ -269,16 +281,5 @@ public class AddController
                         sp_back_fair.getValue().byteValue(),
                         sp_back_poor.getValue().byteValue()
                 };
-    }
-
-    /**
-     * Warns user the media is a duplicate and informs them how to modify media data.
-     */
-    private void DuplicateMediaWarning()
-    {
-        Graphical.InfoPopup("Media Already Exists",String.format(
-                "'%s' by '%s' is already in your system. To modify this album, please go to browse " +
-                        "and select the 'Edit' button.",tf_title.getText(),tf_band.getText())
-        );
     }
 }
