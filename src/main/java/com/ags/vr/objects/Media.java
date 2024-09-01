@@ -77,7 +77,7 @@ public class Media
     private void setID()
     {
         // Do nothing if one or more hash input is null
-        if (this.title.isBlank() || this.band.isBlank()) { return; }
+        if (this.title.isBlank() || this.band.isBlank() || this.medium.isBlank()) { return; }
 
         // Save ID for database safety if media
         if (this.media_id != Integer.MIN_VALUE)
@@ -85,7 +85,7 @@ public class Media
             this.old_id = this.media_id;
         }
 
-        this.media_id = Hash.StringHash(this.title,this.band);
+        this.media_id = Hash.StringHash(this.title,this.band,this.medium);
     }
 
     /**
