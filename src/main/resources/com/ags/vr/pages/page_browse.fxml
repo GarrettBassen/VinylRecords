@@ -96,19 +96,19 @@
                 <RowConstraints maxHeight="1.7976931348623157E308" vgrow="ALWAYS" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btn_search" mnemonicParsing="false" onAction="#SearchButton" prefHeight="79.0" prefWidth="75.0" style="-fx-background-color: transparent;" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
-                     <GridPane.margin>
-                        <Insets left="30.0" top="1.0" />
-                     </GridPane.margin>
-                  </Button>
-                  <TextField id="browse-input" fx:id="txt_search" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" minWidth="200.0" onKeyReleased="#CreateSpace" onKeyTyped="#InputValidation" onMousePressed="#CreateSpace" prefHeight="60.0" promptText="    Search" stylesheets="@../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+                  <TextField id="browse-input" fx:id="txt_search" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" minWidth="200.0" onKeyPressed="#InputAction" prefHeight="60.0" promptText="Search" stylesheets="@../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
                      <font>
                         <Font size="28.0" />
                      </font>
                      <GridPane.margin>
-                        <Insets bottom="5.0" left="20.0" right="20.0" />
+                        <Insets bottom="5.0" left="74.0" right="20.0" />
                      </GridPane.margin>
                   </TextField>
+                  <Button id="browse-button" mnemonicParsing="false" onAction="#SearchButton" prefHeight="65.0" prefWidth="72.0" stylesheets="@../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+                     <GridPane.margin>
+                        <Insets bottom="3.0" left="5.0" top="1.0" />
+                     </GridPane.margin>
+                  </Button>
                   <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                      <children>
                         <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #242424;" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />

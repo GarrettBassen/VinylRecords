@@ -1,16 +1,19 @@
 /* Browse bar */
 #browse-input
 {
-    -fx-background-image: url('../artwork/icons/search.png');
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: 10 center;
-
-    -fx-border-width: 3;
-    -fx-border-color: black;
-    -fx-border-radius: 18 18 18 18;
-    -fx-background-radius: 18 18 18 18;
+    -fx-border-width: 4;
+    -fx-border-color: #242424;
+    -fx-border-radius: 0 18 18 0;
+    -fx-background-radius: 0 20 20 0;
 }
 
+#browse-button
+{
+    -fx-background-color: transparent;
+    -fx-background-image: url("../artwork/UI/searchButton.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 70 66;
+}
 
 /* FILTERS SECTIONS */
 .accordion
