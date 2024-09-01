@@ -104,13 +104,14 @@ public class DBMedia
     }
 
     // TODO TEST
-    public static boolean Contains(String title)
+    public static boolean Contains(String title, String medium)
     {
         try
         {
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE title=?");
-            statement.setString(1,title);
-            ResultSet result = statement.executeQuery();
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM media WHERE title=? AND medium=?");
+            stmt.setString(1,title);
+            stmt.setString(2,medium);
+            ResultSet result = stmt.executeQuery();
             return result.next();
         }
         catch (SQLException e)
@@ -144,15 +145,15 @@ public class DBMedia
         }
     }
 
-    // TODO TEST
-    public static Media getMedia(String title)
+    public static Media getMedia(String title, String medium)
     {
         try
         {
             //get the media from the database based on its name
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE title=?");
-            statement.setString(1,title);
-            ResultSet result = statement.executeQuery();
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM media WHERE title=? AND medium=?");
+            stmt.setString(1,title);
+            stmt.setString(2,medium);
+            ResultSet result = stmt.executeQuery();
             return new Media(result);
         }
         catch (SQLException e)

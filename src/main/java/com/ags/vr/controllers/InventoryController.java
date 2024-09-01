@@ -36,8 +36,6 @@ public class InventoryController {
     @FXML
     private Spinner<?> ffSpinner;
 
-    @FXML
-    private TextField formatDisplay;
 
     @FXML
     private TextField genresDisplay;
@@ -50,9 +48,6 @@ public class InventoryController {
 
     @FXML
     private TextField invTotal;
-
-    @FXML
-    private TextField mediumDisplay;
 
     @FXML
     private TextField nameDisplay;
@@ -88,9 +83,8 @@ public class InventoryController {
     @FXML private RadioButton dlpRB;
 
     //used with radio buttons
-    private int medNum;
-
-    private int formatNum;
+    private String medium = "";
+    private String format = "";
 
 
     public void initialize()
@@ -106,7 +100,7 @@ public class InventoryController {
         {
             if (!invalidInput(event))
             {
-                Media oldMedia = DBMedia.getMedia(input.getText());
+                Media oldMedia = DBMedia.getMedia(input.getText(), medium);
                 Media newMedia = createUpdatedMedia();
 
                 if (!DBBand.Contains(newMedia.getBand()))
@@ -144,14 +138,46 @@ public class InventoryController {
         if(!invalidInput(event))
         {
             //getting the media from the db
-            Media m = DBMedia.getMedia(name);
+            Media m = DBMedia.getMedia(name, medium);
             //setting the media display text fields
             nameDisplay.setText(name);
             bandDisplay.setText(m.getBand());
             genresDisplay.setText("work in progress");
             yearDisplay.setText(String.valueOf(m.getYear()));
-            mediumDisplay.setText(m.getMedium());
-            formatDisplay.setText(m.getFormat());
+            String dbMedium = m.getMedium();
+            String dbFormat = m.getFormat();
+
+            //for displaying correct media
+            if(dbMedium.equals("vinyl"))
+            {
+                vinylRB.setSelected(true);
+            }
+            else if(dbMedium.equals("CD"))
+            {
+                cdRB.setSelected(true);
+            }
+            else if(dbMedium.equals("cassette"))
+            {
+                cassetteRB.setSelected(true);
+            }
+
+            //for displaying correct format
+            if(dbFormat.equals("Single"))
+            {
+                singleRB.setSelected(true);
+            }
+            else if(dbFormat.equals("EP"))
+            {
+                epRB.setSelected(true);
+            }
+            else if(dbFormat.equals("LP"))
+            {
+                lpRB.setSelected(true);
+            }
+            else if(dbFormat.equals("DLP"))
+            {
+                dlpRB.setSelected(true);
+            }
 
             //clear the spinners for update
             gfSpinner.decrement((int) gfSpinner.getValue());
@@ -199,6 +225,9 @@ public class InventoryController {
     }
 
     @FXML
+    /**
+     * Indicates which medium is selected.
+     */
     private void mediumControl(ActionEvent event)
     {
         //deselct all at buttons
@@ -211,26 +240,28 @@ public class InventoryController {
             //select vinyl button
             vinylRB.setSelected(true);
             //update number for switch
-            medNum = 1;
+            medium = "vinyl";
         }
         else if(event.getSource().equals(cdRB))
         {
             //select cd button
             cdRB.setSelected(true);
             //update number for switch
-            medNum = 2;
+            medium = "CD";
         }
         else
         {
             //select cassett button
             cassetteRB.setSelected(true);
             //update number for switch
-            medNum = 3;
+            medium = "cassette";
         }
     }
 
-    //TODO FIX
     @FXML
+    /**
+     * Indicates which fromat is selected.
+     */
     private void formatControl(ActionEvent event)
     {
         //deselcting all buttons
@@ -243,28 +274,28 @@ public class InventoryController {
             //select single button
             singleRB.setSelected(true);
             //update number for switch
-            formatNum = 1;
+            format = "Single";
         }
         else if(event.getSource().equals(epRB))
         {
             //select ep button
             epRB.setSelected(true);
             //update number for switch
-            formatNum = 2;
+            format = "EP";
         }
         else if(event.getSource().equals(lpRB))
         {
             //select lp button
             lpRB.setSelected(true);
             //update number for switch
-            formatNum = 3;
+            format = "LP";
         }
         else
         {
             //select dlp button
             dlpRB.setSelected(true);
             //update number for switch
-            formatNum = 4;
+            format = "DLP";
         }
     }
 
@@ -296,12 +327,17 @@ public class InventoryController {
      */
     public boolean invalidInput(ActionEvent event)
     {
+        //Search scenarios
         if(event.getSource().equals(searchButton) && input.getText().isEmpty())
         {
             Graphical.InfoPopup("Invalid Input", "Please enter a valid name in the \"Media Name\" text field.");
             return true;
         }
-        else if(event.getSource().equals(searchButton) && !DBMedia.Contains(input.getText()))
+        else if(medium.equals(""))
+        {
+            Graphical.InfoPopup("Invalid Input", "Please select a medium.");
+        }
+        else if(event.getSource().equals(searchButton) && !DBMedia.Contains(input.getText(), medium))
         {
             boolean GotoPage = Graphical.ConfirmationPopup("Media Does not exist",String.format(
                     "'%s'is not in your system. Would you like to go to the add page to " +
@@ -315,13 +351,14 @@ public class InventoryController {
             }
             return true;
         }
+        //stock update scenarios
         else if((event.getSource().equals(stockSave) || event.getSource().equals(update) ) && input.getText().isEmpty())
         {
             Graphical.InfoPopup("No Media Selected", "Please enter a valid name in the \"Media Name\" " +
                     "text field for update.");
             return true;
         }
-        else if(event.getSource().equals(stockSave) && !DBMedia.Contains(input.getText()))
+        else if(event.getSource().equals(stockSave) && !DBMedia.Contains(input.getText(), medium))
         {
             boolean GotoPage = Graphical.ConfirmationPopup("Media Does not exist",String.format(
                     "'%s'is not in your system. Would you like to go to the add page to " +
@@ -353,45 +390,16 @@ public class InventoryController {
                 Byte.valueOf(bfSpinner.getValue().toString()),
                 Byte.valueOf(bpSpinner.getValue().toString()),
         };
-        return new Stock(DBMedia.getMedia(input.getText()).getID(), ar);
+
+        return new Stock(DBMedia.getMedia(input.getText(), medium).getID(), ar);
     }
 
     /**
      * Creates a new media object based off the current values in the display fields.
-     * @return
+     * @return updated media object based on user input.
      */
     public Media createUpdatedMedia()
     {
-        String medium = "";
-        String format = "";
-
-        switch(medNum)
-        {
-            case 1:
-                medium = "vinyl";
-                break;
-            case 2:
-                medium = "CD";
-                break;
-            case 3:
-                medium = "cassette";
-        }
-
-        switch(formatNum)
-        {
-            case 1:
-                format = "Single";
-                break;
-            case 2:
-                format = "EP";
-                break;
-            case 3:
-                format = "LP";
-                break;
-            case 4:
-                format = "DLP";
-        }
-
         return new Media(
                 nameDisplay.getText(),
                 medium,
