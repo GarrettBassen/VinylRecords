@@ -212,4 +212,19 @@ public class Media
     {
         return Hash.StringHash(this.band);
     }
+
+
+    /**
+     * Compares the ID numbers and the format of two media objects to determine uniqueness.
+     * @param media Media that will be compared to the calling media.
+     * @return True if the IDs and format match; false if they do not.
+     */
+    public boolean equals(Media media)
+    {
+        if(this.media_id == media.media_id && this.format.equals(media.format))
+        {
+            return true;
+        }
+        else return false;
+    }
 }

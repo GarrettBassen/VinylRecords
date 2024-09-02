@@ -14,9 +14,6 @@ import java.util.Stack;
 public class InventoryController {
 
     @FXML
-    private TextField addGenre;
-
-    @FXML
     private TextField bandDisplay;
 
     @FXML
@@ -39,7 +36,7 @@ public class InventoryController {
 
 
     @FXML
-    private TextField genresDisplay;
+    private TextArea genresDisplay;
 
     @FXML
     private Spinner<?> gfSpinner;
@@ -55,12 +52,6 @@ public class InventoryController {
 
     @FXML
     private Spinner<?> pfSpinner;
-
-    @FXML
-    private TextField removeGenre;
-
-    @FXML
-    private Button stockSave;
 
     @FXML
     private Button update;
@@ -100,8 +91,7 @@ public class InventoryController {
     @FXML
     void applyUpdate(ActionEvent event)
     {
-        try
-        {
+        try {
             if (!invalidInput(event))
             {
                 //getting old media object
@@ -109,41 +99,39 @@ public class InventoryController {
                 //creating new media object
                 Media newMedia = createUpdatedMedia();
 
-                //insert the band if its not in the db
-                if (!DBBand.Contains(newMedia.getBand()))
-                {
-                    DBBand.Insert(newMedia.getBand());
-                }
-
-
-                //update the media object
-                DBMedia.Update(newMedia, oldMedia);
-
-                //connect with genre linker
-                String genres = genresDisplay.getText();
-                String[] genresAr = genres.split(", ");
-
-                for(String genre : genresAr)
-                {
-                    //insert genres if theyre not in the db
-                    if(!DBGenre.Contains(genre))
+                    //insert the band if its not in the db
+                    if (!DBBand.Contains(newMedia.getBand()))
                     {
-                        DBGenre.Insert(genre);
+                        DBBand.Insert(newMedia.getBand());
                     }
-                    DBGenreLinker.Insert(newMedia.getID(), Hash.StringHash(genre));
+
+                    //update the media object
+                    DBMedia.Update(newMedia, oldMedia);
+
+                    //connect with genre linker
+                    String genres = genresDisplay.getText();
+                    String[] genresAr = genres.split("\n");
+
+                    for (String genre : genresAr) {
+                        //insert genres if theyre not in the db
+                        if (!DBGenre.Contains(genre))
+                        {
+                            DBGenre.Insert(genre);
+                        }
+                        DBGenreLinker.Insert(newMedia.getID(), Hash.StringHash(genre));
+                    }
+
+                    //connect media and stock
+                    stockSave();
+
+                    Graphical.InfoPopup("Update", "Updated successfully");
                 }
-
-                //connect media and stock
-                Stock stk = createUpdatedStock();
-                DBInventory.Insert(stk);
-
-                Graphical.InfoPopup("Update", "Updated successfully");
-            }
         }
         catch (Exception e)
         {
             Graphical.ErrorPopup("Failed band update", e.getMessage());
         }
+
     }
 
     @FXML
@@ -204,7 +192,7 @@ public class InventoryController {
 
             for(int i = 0; i < genresAr.length-1; i++)
             {
-                display += genresAr[i] + ", ";
+                display += genresAr[i] + "\n";
             }
             display += genresAr[genresAr.length-1];
             genresDisplay.setText(display);
@@ -232,25 +220,21 @@ public class InventoryController {
     }
 
     /**
-     * Updates the current media object with new stock values gathered from spinner objects.
-     * @param event Update save button press.
+     * Replaces the current stock entry with a new updated entry.
      */
     @FXML
-    void stockSave(ActionEvent event)
+    void stockSave()
     {
-        if(!invalidInput(event))
+        try
         {
-            try
-            {
-                //creating new stock object
-                Stock st = createUpdatedStock();
-                DBInventory.Modify(st);
-                invTotal.setText(String.valueOf(st.getStockTotal()));
-            }
-            catch(Exception e)
-            {
-                Graphical.ErrorPopup("Failed inventory update" ,e.getMessage());
-            }
+            //creating new stock object
+            Stock st = createUpdatedStock();
+            DBInventory.Insert(st);
+            invTotal.setText(String.valueOf(st.getStockTotal()));
+        }
+        catch (Exception e)
+        {
+            Graphical.ErrorPopup("Failed inventory update", e.getMessage());
         }
     }
 
@@ -368,7 +352,7 @@ public class InventoryController {
             Graphical.InfoPopup("Invalid Input", "Please select a medium.");
             return true;
         }
-        else if((event.getSource().equals(searchButton) || event.getSource().equals(stockSave)) && !DBMedia.Contains(input.getText(), medium))
+        else if(event.getSource().equals(searchButton) && !DBMedia.Contains(input.getText(), medium))
         {
             boolean GotoPage = Graphical.ConfirmationPopup("Media Does not exist",String.format(
                     "'%s'is not in your system. Would you like to go to the add page to " +
@@ -383,7 +367,7 @@ public class InventoryController {
             return true;
         }
         //stock update scenarios
-        else if((event.getSource().equals(stockSave) || event.getSource().equals(update) ) && input.getText().isEmpty())
+        else if(event.getSource().equals(update) && input.getText().isEmpty())
         {
             Graphical.InfoPopup("No Media Selected", "Please enter a valid name in the \"Media Name\" " +
                     "text field for update.");
