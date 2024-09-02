@@ -134,9 +134,31 @@ public class InventoryController {
 
     }
 
+    /**
+     * Deletes a media entry.
+     * @param event Delete button press.
+     */
     @FXML
-    void deleteEntry(ActionEvent event) {
+    void deleteEntry(ActionEvent event)
+    {
+        if(!invalidInput(event))
+        {
+            //ask the user for deletion conformation
+            boolean delete = Graphical.ConfirmationPopup("Deletion", "Are you sure" +
+                    " you want to delete this item?");
 
+            //deletion confermend
+            if(delete)
+            {
+                DBMedia.Delete(DBMedia.getMedia(input.getText(), medium));
+                Graphical.InfoPopup("Delete", "Deleted successfully");
+            }
+            //deletion averted
+            else
+            {
+                Graphical.InfoPopup("Deletion", "Deletion Averted");
+            }
+        }
     }
 
 
@@ -332,8 +354,6 @@ public class InventoryController {
         }
     }
 
-    //TODO UPDATE WITH MORE INPUT SCENARIOS AS THEY COME UP
-    //TODO ADD REMOVE GENRE AND ADD GENRE INPUT SCENARIOS
     /**
      * Deals with all possible invalid input cases.
      * @param event action event of current method being run.
@@ -389,6 +409,18 @@ public class InventoryController {
         {
             Graphical.InfoPopup("Invalid Year Entry", "Please enter a valid year in the \"Year\" " +
                     "text field for update.");
+            return true;
+        }
+        else if(event.getSource().equals(update) && genresDisplay.getText().isEmpty())
+        {
+            Graphical.InfoPopup("Invalid Genre Entry", "Please enter a valid Genre in the \"Genres\" " +
+                    "text field for update.");
+            return true;
+        }
+        else if(event.getSource().equals(delete) && input.getText().isEmpty())
+        {
+            Graphical.InfoPopup("Invalid Input", "Please enter a valid media in the \"Media name\"" +
+                    "text field for deletion");
             return true;
         }
         return false;

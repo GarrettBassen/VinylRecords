@@ -35,13 +35,13 @@
       <Text layoutX="375.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Stock" wrappingWidth="81.529296875" />
       <TextField fx:id="invTotal" editable="false" layoutX="466.0" layoutY="312.0" />
       <Button fx:id="update" layoutX="711.0" layoutY="312.0" mnemonicParsing="false" onAction="#applyUpdate" prefHeight="24.0" prefWidth="171.0" text="Update" />
-      <Button fx:id="delete" layoutX="199.0" layoutY="108.0" mnemonicParsing="false" onAction="#deleteEntry" text="Delete" />
+      <Button fx:id="delete" layoutX="200.0" layoutY="104.0" mnemonicParsing="false" onAction="#deleteEntry" text="Delete" />
       <RadioButton fx:id="vinylRB" layoutX="22.0" layoutY="65.0" mnemonicParsing="false" onAction="#mediumControl" text="Vinyl" />
       <RadioButton fx:id="cdRB" layoutX="106.0" layoutY="65.0" mnemonicParsing="false" onAction="#mediumControl" text="CD" />
       <RadioButton fx:id="cassetteRB" layoutX="173.0" layoutY="65.0" mnemonicParsing="false" onAction="#mediumControl" text="Cassette" />
       <RadioButton fx:id="singleRB" layoutX="370.0" layoutY="166.0" mnemonicParsing="false" onAction="#formatControl" text="Signle" />
       <RadioButton fx:id="epRB" layoutX="531.0" layoutY="166.0" mnemonicParsing="false" onAction="#formatControl" text="EP" />
-      <RadioButton fx:id="lpRB" layoutX="664.0" layoutY="166.0" mnemonicParsing="false" onAction="#formatControl" text="LP" />
+      <RadioButton fx:id="lpRB" layoutX="672.0" layoutY="166.0" mnemonicParsing="false" onAction="#formatControl" text="LP" />
       <RadioButton fx:id="dlpRB" layoutX="857.0" layoutY="166.0" mnemonicParsing="false" onAction="#formatControl" text="DLP" />
       <TextArea fx:id="genresDisplay" layoutX="692.0" layoutY="28.0" prefHeight="116.0" prefWidth="246.0" />
    </children>
