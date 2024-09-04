@@ -1,5 +1,6 @@
 package com.ags.vr.objects;
 
+import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.database.DBBand;
 import com.ags.vr.utils.Hash;
 
@@ -12,13 +13,18 @@ import java.sql.SQLException;
 public class Media
 {
     // Variables
-    private int media_id = Integer.MIN_VALUE;
     private int old_id = Integer.MIN_VALUE;
-    private short year = Short.MIN_VALUE;
-    private String title = "";
-    private String medium = "";
-    private String format = "";
-    private String band = "";
+    private int media_id;
+    private short year;
+    private String title;
+    private String medium;
+    private String format;
+    private String band;
+
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                              CONSTRUCTORS                                                 */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
      * Default constructor.
@@ -49,7 +55,6 @@ public class Media
      */
     public Media(ResultSet media)
     {
-        // TODO TEST
         try
         {
             this.media_id = media.getInt("media_id");
@@ -61,8 +66,10 @@ public class Media
         }
         catch (SQLException e)
         {
-            System.out.println("ERROR IN Media(ResultSet) | Media.java");
-            // TODO DISPLAY ERROR
+            Graphical.ErrorPopup("Error creating media", String.format(
+                    "Error creating media in Media(ResultSet) | Media.java\n\nCode: %s\n%s",
+                    e.getErrorCode(), e.getMessage()
+            ));
         }
     }
 
@@ -77,7 +84,7 @@ public class Media
     private void setID()
     {
         // Do nothing if one or more hash input is null
-        if (this.title.isBlank() || this.band.isBlank() || this.medium.isBlank()) { return; }
+        if (this.title == null || this.band == null || this.medium == null) { return; }
 
         // Save ID for database safety if media
         if (this.media_id != Integer.MIN_VALUE)
@@ -213,7 +220,6 @@ public class Media
         return Hash.StringHash(this.band);
     }
 
-
     /**
      * Compares the ID numbers and the format of two media objects to determine uniqueness.
      * @param media Media that will be compared to the calling media.
@@ -221,10 +227,6 @@ public class Media
      */
     public boolean equals(Media media)
     {
-        if(this.media_id == media.media_id && this.format.equals(media.format))
-        {
-            return true;
-        }
-        else return false;
+        return (this.media_id == media.media_id && this.format.equals(media.format));
     }
 }

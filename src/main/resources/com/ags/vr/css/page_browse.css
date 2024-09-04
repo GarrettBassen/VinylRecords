@@ -53,7 +53,21 @@
 }
 
 
+/* Spinner year inputs */
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button
+{
+    -fx-padding: 2 6 2 6;
+}
+
+.spinner .increment-arrow-button .increment-arrow,
+.spinner .decrement-arrow-button .decrement-arrow
+{
+    -fx-padding: 2 3 2 3;
+}
+
+
 /* VBox Content */
 .vbox {
-    -fx-background-color: #EDEDED;
+    -fx-background-color: #ededed;
 }

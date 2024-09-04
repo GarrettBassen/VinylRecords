@@ -4,13 +4,11 @@ import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 
-import javafx.event.ActionEvent;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -21,56 +19,62 @@ import java.sql.SQLException;
 
 import java.io.IOException;
 import java.time.Year;
+import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Stack;
 
 import static com.ags.vr.utils.Connector.con;
 
 public class BrowseController
 {
     // Variables
-    @FXML
-    private TextField txt_search;
-
-    @FXML
-    private VBox pane_content;
+    @FXML private TextField txt_search;
+    @FXML private VBox pane_content;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                      SEARCH FILTER VARIABLES                                                  */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // Medium
-    @FXML private RadioButton vinylRB;
-    @FXML private RadioButton cdRB;
-    @FXML private RadioButton cassetteRB;
+    @FXML private RadioButton rb_vinyl;
+    @FXML private RadioButton rb_CD;
+    @FXML private RadioButton rb_cassette;
 
     // Genre
-    @FXML private TextArea genreInput;
+    @FXML private TextArea ta_genres;
 
     // Band
-    @FXML private TextArea bandInput;
+    @FXML private TextArea ta_bands;
 
     // Format
-    @FXML private RadioButton singleRB;
-    @FXML private RadioButton epRB;
-    @FXML private RadioButton lpRB;
-    @FXML private RadioButton dlpRB;
+    @FXML private RadioButton rb_single;
+    @FXML private RadioButton rb_EP;
+    @FXML private RadioButton rb_LP;
+    @FXML private RadioButton rb_DLP;
 
     // Year
-    @FXML private TextField minYear;
-    @FXML private TextField maxYear;
+    @FXML private Spinner<Integer> sp_year_min;
+    @FXML private Spinner<Integer> sp_year_max;
 
-    //the selected medium
-    private String medium = "";
+    private String[] medium = new String[4];
+    private String[] format = new String[5];
 
-    //the selected format
-    private String format = "";
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                       INITIALIZATION METHODS                                                  */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     @FXML
     void initialize()
     {
-        pane_content.getChildren().clear();
+        sp_year_min.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1400,Year.now().getValue()));
+        sp_year_max.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1400,Year.now().getValue()));
+        ClearYearInput();
     }
+
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                            EVENT METHODS                                                      */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
      * Executes when key is typed with text field activated.
@@ -91,314 +95,367 @@ public class BrowseController
     @FXML
     void Search()
     {
+        // Clear current data, get new data, and display
         pane_content.getChildren().clear();
-        AddContentPane(sqlSearch());
+        Media[] media = sqlSearch();
+        //media = slimResults(media); TODO IMPLEMENT AND UNCOMMENT
+        AddContentPane(media);
     }
 
+    /**
+     * Clears values of spinner year input boxes.
+     */
+    @FXML
+    void ClearYearInput()
+    {
+        sp_year_min.getValueFactory().setValue(Integer.MIN_VALUE);
+        sp_year_max.getValueFactory().setValue(Integer.MAX_VALUE);
+    }
+
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                            DATABASE METHODS                                                   */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Searches the database based on a hierarchy of inputs.
+     * The title attribute is considered the most important followed by
+     * band, genre, medium, format, and years.
+     *
+     * Should be used with slim() to get correct user input.
+     * @return Media[] data
+     */
+    private Media[] sqlSearch()
+    {
+        // Order of importance
+        // Title, band, genre, medium, format, year range
+
+        try
+        {
+            if (!txt_search.getText().isBlank())
+            {
+                return TitleQuery();
+            }
+            else if (!ta_bands.getText().isBlank())
+            {
+                return BandQuery();
+            }
+            else if (!ta_genres.getText().isBlank())
+            {
+                return GenreQuery();
+            }
+            else if (medium[0] != null)
+            {
+                return MediumQuery();
+            }
+            else if (format[0] != null)
+            {
+                return FormatQuery();
+            }
+            else if (YearInputsChanged())
+            {
+                return YearQuery();
+            }
+            else
+            {
+                // All inputs left blank. Grab all data
+                PreparedStatement statement = con.prepareStatement("SELECT * FROM media");
+                ResultSet result = statement.executeQuery();
+                return rsToMedia(result);
+            }
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Search Error", e.getMessage());
+        }
+        return null;
+    }
+
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                            DATABASE METHODS                                                   */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Returns Media objects with titles closely matching the input String.
+     * @return Media[] data
+     * @throws SQLException Exception
+     */
+    private Media[] TitleQuery() throws SQLException
+    {
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE title LIKE ?");
+        statement.setString(1, "%" + txt_search.getText() + "%");
+        ResultSet result = statement.executeQuery();
+
+        Media[] media = rsToMedia(result);
+
+        statement.close();
+        return media;
+    }
+
+    /**
+     * Returns Media objects from specified bands.
+     * @return Media[] data
+     * @throws SQLException Exception
+     */
+    private Media[] BandQuery() throws SQLException
+    {
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE band_id = ?");
+        ObservableList<CharSequence> bands = ta_bands.getParagraphs();
+        LinkedList<Media> mediaList = new LinkedList<>();
+
+        // Get all media objects for bands given
+        for (CharSequence band : bands)
+        {
+            if (band.isEmpty()) { continue; }
+
+            statement.setInt(1, Hash.StringHash(band.toString()));
+            ResultSet result = statement.executeQuery();
+
+            while (result.next())
+            {
+                mediaList.addLast(new Media(result));
+            }
+        }
+
+        statement.close();
+        return mediaList.toArray(new Media[0]);
+    }
+
+    // TODO FIX
+    private Media[] GenreQuery() throws SQLException
+    {
+        PreparedStatement statement = con.prepareStatement(
+                "SELECT * FROM media LEFT (OUTER) JOIN genre_linker ON media.media_id " +
+                        "= genre_linker.media_id WHERE genre_linker.genre_id = ?"
+        );
+        ObservableList<CharSequence> genres = ta_genres.getParagraphs();
+        LinkedList<Media> mediaList = new LinkedList<>();
+
+        // Get all media objects for genres given
+        for (CharSequence genre : genres)
+        {
+            if (genre.isEmpty()) { continue; }
+
+            statement.setInt(1, Hash.StringHash(genre.toString()));
+            ResultSet result = statement.executeQuery();
+
+            while (result.next())
+            {
+                mediaList.addLast(new Media(result));
+            }
+        }
+
+        statement.close();
+        return mediaList.toArray(new Media[0]);
+    }
+
+    /**
+     * Returns Media objects of the selected medium format.
+     * @return Media[] data
+     * @throws SQLException Exception
+     */
+    private Media[] MediumQuery() throws SQLException
+    {
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE medium = ?");
+        LinkedList<Media> mediaList = new LinkedList<>();
+
+        // Get all media with selected medium
+        for (int i = 1; i < medium.length; ++i)
+        {
+            if (!medium[i].isBlank())
+            {
+                statement.setString(1, medium[i]);
+                ResultSet result = statement.executeQuery();
+
+                // Add media object
+                while (result.next())
+                {
+                    mediaList.addLast(new Media(result));
+                }
+            }
+        }
+
+        statement.close();
+        return mediaList.toArray(new Media[0]);
+    }
+
+    /**
+     * Returns Media objects of the selected album format.
+     * @return Media[] data
+     * @throws SQLException Exception
+     */
+    private Media[] FormatQuery() throws SQLException
+    {
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE album_format = ?");
+        LinkedList<Media> mediaList = new LinkedList<>();
+
+        // Get all media with selected format
+        for (int i = 1; i < format.length; ++i)
+        {
+            if (!format[i].isBlank())
+            {
+                statement.setString(1, format[i]);
+                ResultSet result = statement.executeQuery();
+
+                // Add media object
+                while (result.next())
+                {
+                    mediaList.addLast(new Media(result));
+                }
+            }
+        }
+
+        statement.close();
+        return mediaList.toArray(new Media[0]);
+    }
+
+    /**
+     * Returns all media within the given year range.
+     * @return Media[] data
+     * @throws SQLException Exception
+     */
+    private Media[] YearQuery() throws SQLException
+    {
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE (year >= ?) AND (year <= ?)");
+        statement.setInt(1, sp_year_min.getValue() != null ? sp_year_min.getValue() : Integer.MIN_VALUE);
+        statement.setInt(2, sp_year_max.getValue() != null ? sp_year_max.getValue() : Integer.MAX_VALUE);
+        ResultSet result = statement.executeQuery();
+
+        Media[] media = rsToMedia(result);
+
+        statement.close();
+        return media;
+    }
+
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                            HELPER METHODS                                                     */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
     // TODO FINISH AND COMMENT
+    private Media[] slimResults(Media[] media)
+    {
+        return null;
+    }
+
+    /**
+     * Creates content panes from media object(s) which is then added to the vbox display region.
+     * @param media Media object(s)
+     */
     private void AddContentPane(Media... media)
     {
         for (Media m : media) {
             try
             {
-                FXMLLoader loader = new FXMLLoader();
-                pane_content.getChildren().add(loader.load(getClass().getResource("/com/ags/vr/pages/pane_content.fxml").openStream()));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ags/vr/pages/pane_content.fxml"));
+                pane_content.getChildren().add(loader.load());
                 ContentPaneController controller = loader.getController();
                 controller.setData(m);
             }
             catch (IOException e)
             {
-                // TODO FIX ERROR
-                System.out.printf("ERROR LOADING PANE AddContentPane(Media...) | BrowseController.java\n\n%s", e.getMessage());
+                Graphical.ErrorPopup("Error displaying content", String.format(
+                        "Could not display media in AddContentPane(Media...) | BrowseController.java\n\n%s",
+                        e.getMessage()
+                ));
             }
         }
     }
 
-    @FXML
     /**
-     * Indicates which medium is selected.
+     * Gets all media objects from n many result sets.
+     * @param sets n many result sets
+     * @return Media[] data
      */
-    private void mediumControl(ActionEvent event) {
+    private Media[] rsToMedia(ResultSet... sets) throws SQLException
+    {
+        LinkedList<Media> mediaList = new LinkedList<>();
 
-        //deselct all at buttons
-        vinylRB.setSelected(false);
-        cdRB.setSelected(false);
-        cassetteRB.setSelected(false);
+        for (ResultSet set : sets)
+        {
+            while (set != null && set.next())
+            {
+                mediaList.addLast(new Media(set));
+            }
+        }
 
-        if (event.getSource().equals(vinylRB))
+        return mediaList.toArray(new Media[0]);
+    }
+
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                           VALIDATION METHODS                                                  */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Assigns valid medium name to respective medium array indices for later use in SQL query.
+     */
+    @FXML
+    private void mediumControl()
+    {
+        // Clear medium
+        Arrays.fill(medium,"");
+
+        // Assign each selected value with valid medium string
+        if (rb_vinyl.isSelected())
         {
-            //select vinyl button
-            vinylRB.setSelected(true);
-            //update number for switch
-            medium = "vinyl";
+            medium[0] = "True";
+            medium[1] = "vinyl";
         }
-        else if (event.getSource().equals(cdRB))
+        if (rb_CD.isSelected())
         {
-            //select cd button
-            cdRB.setSelected(true);
-            //update number for switch
-            medium = "CD";
+            medium[0] = "True";
+            medium[2] = "CD";
         }
-        else
+        if (rb_cassette.isSelected())
         {
-            //select cassett button
-            cassetteRB.setSelected(true);
-            //update number for switch
-            medium = "cassette";
+            medium[0] = "True";
+            medium[3] = "cassette";
         }
     }
 
-    @FXML
     /**
      * Indicates which format is selected.
      */
-    private void formatControl(ActionEvent event) {
+    @FXML
+    private void formatControl() {
 
-        //deselcting all buttons
-        singleRB.setSelected(false);
-        epRB.setSelected(false);
-        lpRB.setSelected(false);
-        dlpRB.setSelected(false);
-        if (event.getSource().equals(singleRB))
-        {
-            //select single button
-            singleRB.setSelected(true);
-            //update number for switch
-            format = "Single";
-        }
-        else if (event.getSource().equals(epRB))
-        {
-            //select ep button
-            epRB.setSelected(true);
-            //update number for switch
-            format = "EP";
-        }
-        else if (event.getSource().equals(lpRB))
-        {
-            //select lp button
-            lpRB.setSelected(true);
-            //update number for switch
-            format = "LP";
-        }
-        else
-        {
-            //select dlp button
-            dlpRB.setSelected(true);
-            //update number for switch
-            format = "DLP";
-        }
+        // Clear format
+        Arrays.fill(format,"");
 
+        // Assign each selected value with valid format string
+        if (rb_single.isSelected())
+        {
+            format[0] = "True";
+            format[1] = "Single";
+        }
+        if (rb_EP.isSelected())
+        {
+            format[0] = "True";
+            format[2] = "EP";
+        }
+        if (rb_LP.isSelected())
+        {
+            format[0] = "True";
+            format[3] = "LP";
+        }
+        if (rb_DLP.isSelected())
+        {
+            format[0] = "True";
+            format[4] = "DLP";
+        }
     }
 
-    //TODO TEST
     /**
-     * Searches the database based on a higherarchy of inputs.
-     * The title attribute is considered the most important followed by
-     * band, genre, medium, format, and years.
-     *
-     * Should be used with slim() to get correct user input.
-     * @return
+     * Checks if year inputs are modified by user.
+     * @return True if modified; false otherwise
      */
-    private Media[] sqlSearch()
+    private boolean YearInputsChanged()
     {
-        //order of importance
-        //title, band, genre, medium, format, year range
-
-        try {
-            //prepared statement
-            PreparedStatement stmt;
-            ResultSet rs;
-
-            //text entry is not empty
-            if (!txt_search.getText().isBlank())
-            {
-                stmt = con.prepareStatement("SELECT * FROM media WHERE title LIKE ?");
-                stmt.setString(1, "%" + txt_search.getText() + "%");
-                rs = stmt.executeQuery();
-                //create media objects
-                return rsToMedia(rs);
-            }
-            //band entry is not empty
-            else if (!bandInput.getText().isBlank())
-            {
-                //get band entries in a string array
-                String allBands = bandInput.getText();
-                String[] bands = allBands.split("\n");
-
-                //get a result set for all bands
-                //array of result sets
-                ResultSet[] rsArr = new ResultSet[bands.length];
-
-                for(int i = 0; i < bands.length; i++)
-                {
-                    stmt = con.prepareStatement("SELECT * FROM media WHERE band_id = ?");
-                    stmt.setInt(1, Hash.StringHash(bands[i]));
-                    rsArr[i] = stmt.executeQuery();
-                }
-
-                //turn the rs array to a single media array and return
-                return rsToMedia(rsArr);
-
-            }
-            //genre input is not empty
-            else if (!genreInput.getText().isBlank())
-            {
-                //get genres in a signle array
-                String allGenres = genreInput.getText();
-                String[] genres = allGenres.split("\n");
-
-                //all result sets saved here
-                ResultSet[] rsArr = new ResultSet[genres.length];
-
-                //loop for each genre
-                for(int i = 0; i < genres.length; i++)
-                {
-                    stmt = con.prepareStatement("SELECT * FROM media LEFT (OUTER) JOIN genre_linker ON" +
-                            "media.media_id = genre_linker.media_id WHERE genre_linker.genre_id = ?");
-                    stmt.setInt(1, Hash.StringHash(genres[i]));
-                    rsArr[i] = stmt.executeQuery();
-                }
-
-                return rsToMedia(rsArr);
-            }
-            //medium entry is not empty
-            else if (!medium.isBlank())
-            {
-                stmt = con.prepareStatement("SELECT * FROM media WHERE medium = ?");
-                stmt.setString(1, medium);
-                rs = stmt.executeQuery();
-                return rsToMedia(rs);
-            }
-            //format entry is not empty
-            else if (!format.isBlank())
-            {
-                stmt = con.prepareStatement("SELECT * FROM media WHERE format = ?");
-                stmt.setString(1, format);
-                rs = stmt.executeQuery();
-                return rsToMedia(rs);
-            }
-            //year entries are not empty
-            else if (!minYear.getText().isBlank() || !maxYear.getText().isBlank())
-            {
-                //get time frame being searched in
-                short min, max;
-                if(minYear.getText().isBlank() && !maxYear.getText().isBlank())
-                {
-                    min = 1400;
-                    max = Short.parseShort(maxYear.getText());
-                }
-                else if(maxYear.getText().isBlank())
-                {
-                    min = Short.parseShort(minYear.getText());
-                    max = (short) Year.now().getValue();
-                }
-                else
-                {
-                    min = Short.parseShort(minYear.getText());
-                    max = Short.parseShort(maxYear.getText());
-                }
-
-                stmt = con.prepareStatement("SELECT * FROM media WHERE (year >= ?) AND (year <= ?)");
-                stmt.setInt(1, min);
-                stmt.setInt(2, max);
-                rs = stmt.executeQuery();
-                return rsToMedia(rs);
-            }
-            //everything is empty
-            else
-            {
-                stmt = con.prepareStatement("SELECT * FROM media");
-                rs = stmt.executeQuery();
-                return rsToMedia(rs);
-            }
-        }
-        catch (SQLException e)
-        {
-            Graphical.ErrorPopup("Search Error", e.getMessage());
-        }
-        return null;
-    }
-
-    private Media[] slimResults()
-    {
-        return null;
-    }
-
-    //TODO test
-    /**
-     * Turns a result set into an array of media objects.
-     * @param rs Result set of a search query
-     * @return Array of media objects
-     */
-    public Media[] rsToMedia(ResultSet rs)
-    {
-        try
-        {
-            //get media out of rs and put all in a stack
-            Stack<Media> st = new Stack<>();
-            int count = 0;
-            while(rs.next())
-            {
-                ++count;
-                st.push(new Media(rs));
-            }
-            //media array of correct size
-            Media[] media = new Media[count];
-
-            //fill media array
-            for(int i = 0; i < media.length; i++)
-            {
-                media[i] = st.pop();
-            }
-
-            //return the reveresed media array
-            for(int i = 0; i < media.length; i++)
-            {
-                Media temp = media[i];
-                media[i] = media[media.length-i-1];
-                media[media.length-i-1] = temp;
-            }
-            return media;
-
-        }
-        catch (SQLException e)
-        {
-            Graphical.ErrorPopup("Search Error", e.getMessage());
-        }
-        return null;
-    }
-
-    //TODO TEST
-    /**
-     * Takes an array of result sets and makes them into a single Media array.
-     * @param rsArr Result set array.
-     * @return Media array.
-     */
-    public Media[] rsToMedia(ResultSet[] rsArr)
-    {
-        try
-        {
-            LinkedList<Media> mediaList = new LinkedList<>();
-
-            //get all media data from rsArr into the linked list
-            for (int i = 0; i < rsArr.length; i++)
-            {
-                while (rsArr[i].next())
-                {
-                    mediaList.add(new Media(rsArr[i]));
-                }
-            }
-
-            //get all data from linked list into an array
-            Media[] media = new Media[mediaList.size()];
-            //TODO TEST
-            mediaList.toArray(media);
-            return media;
-        }
-        catch (SQLException e)
-        {
-            Graphical.ErrorPopup("Search Error", e.getMessage());
-        }
-        return null;
+        return (
+                (sp_year_min.getValue() != null && sp_year_min.getValue() != 1400) ||
+                (sp_year_max.getValue() != null && sp_year_max.getValue() != Year.now().getValue())
+        );
     }
 }

@@ -8,6 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+/**
+ * Content display panes for the browse page
+ */
 public class ContentPaneController
 {
     @FXML private AnchorPane pane_content;
@@ -23,11 +26,18 @@ public class ContentPaneController
      */
     public void setData(Media media)
     {
-        pane_content.setPrefWidth(9999);
+        this.pane_content.setPrefWidth(Integer.MAX_VALUE);
         this.txt_title.setText(media.getTitle());
         this.txt_band.setText(media.getBand());
         this.txt_format.setText(media.getFormat());
         this.txt_year.setText(String.valueOf(media.getYear()));
         this.img_medium.setImage(new Image(getClass().getResourceAsStream(String.format("/com/ags/vr/artwork/icons/%s.png", media.getMedium()))));
+    }
+
+    @FXML
+    void OpenDisplay()
+    {
+        // TODO OPEN DISPLAY CARD
+        System.out.printf("Clicked '%s' by '%s'\n", this.txt_title.getText(), this.txt_band.getText());
     }
 }
