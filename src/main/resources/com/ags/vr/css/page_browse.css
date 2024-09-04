@@ -67,7 +67,57 @@
 }
 
 
+/* Scroll bar */
+.scroll-pane
+{
+    -fx-background-color: #3c3c46;
+    -fx-background-radius: 3;
+    -fx-border-color: #242424;
+    -fx-border-width: 2;
+    -fx-border-radius: 2;
+}
+
+.scroll-pane .scroll-bar:vertical
+{
+    -fx-background-color: #3c3c46;
+    -fx-padding: 1 1 1 2;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb
+{
+    -fx-background-color: #898991;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb:hover
+{
+    -fx-background-color: #95959c;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb:pressed
+{
+    -fx-background-color: #9c9ca1;
+}
+
+.scroll-pane .scroll-bar:vertical .track
+{
+    -fx-background-color: #45454f;
+    -fx-border-radius: 18;
+}
+
+.scroll-pane .increment-button,
+.scroll-pane .decrement-button
+{
+    -fx-padding: 4 1 5 1;
+}
+
+.scroll-pane .increment-button:hover,
+.scroll-pane .decrement-button:hover
+{
+    -fx-background-color: #52525c;
+}
+
 /* VBox Content */
-.vbox {
+.vbox
+{
     -fx-background-color: #ededed;
 }

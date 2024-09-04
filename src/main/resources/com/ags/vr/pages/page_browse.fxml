@@ -18,9 +18,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="600.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.BrowseController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.BrowseController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <VBox maxHeight="1.7976931348623157E308" prefWidth="350.0" style="-fx-background-color: #525252;" BorderPane.alignment="CENTER">
                <children>
@@ -120,7 +120,7 @@
                                              </font>
                                           </Text>
                                           <Spinner fx:id="sp_year_min" editable="true" stylesheets="@../css/page_browse.css" />
-                                          <Spinner fx:id="sp_year_max" editable="true" style="-fx-background-position: right;" stylesheets="@../css/page_browse.css" GridPane.columnIndex="2" />
+                                          <Spinner fx:id="sp_year_max" editable="true" stylesheets="@../css/page_browse.css" GridPane.columnIndex="2" />
                                        </children>
                                     </GridPane>
                                     <Button mnemonicParsing="false" onAction="#ClearYearInput" prefHeight="3.0" prefWidth="70.0" text="clear" AnchorPane.bottomAnchor="-10.0" AnchorPane.rightAnchor="0.0">
@@ -144,7 +144,7 @@
             </VBox>
          </left>
          <center>
-            <GridPane style="-fx-background-color: #525252;" BorderPane.alignment="BOTTOM_CENTER">
+            <GridPane style="-fx-background-color: #525252;" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
@@ -168,7 +168,7 @@
                   </Button>
                   <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                      <children>
-                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" stylesheets="@../css/page_browse.css" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
                            <content>
                               <VBox fx:id="pane_content" stylesheets="@../css/page_browse.css" />
                            </content>

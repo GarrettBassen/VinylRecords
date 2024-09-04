@@ -9,30 +9,30 @@
 
 <AnchorPane fx:id="pane_content" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="100.0" prefWidth="600.0" style="-fx-background-color: #f0f0f0;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.ContentPaneController">
    <children>
-      <Text fx:id="txt_title" layoutX="10.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TITLE" wrappingWidth="491.0" AnchorPane.bottomAnchor="56.40625" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="11.0">
+      <Text fx:id="txt_title" layoutX="10.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TITLE" wrappingWidth="491.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="99.0" AnchorPane.topAnchor="8.0">
          <font>
             <Font size="28.0" />
          </font>
       </Text>
-      <Text layoutX="14.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By: " AnchorPane.bottomAnchor="15.390625" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="59.0">
+      <Text layoutX="14.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By: " AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="14.0">
          <font>
-            <Font name="System Italic" size="22.0" />
+            <Font name="System Italic" size="18.0" />
          </font>
       </Text>
-      <Text fx:id="txt_band" layoutX="55.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BAND" wrappingWidth="448.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="55.0" AnchorPane.topAnchor="55.0">
+      <Text fx:id="txt_band" layoutX="55.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BAND" wrappingWidth="448.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="99.0">
          <font>
             <Font size="26.0" />
          </font>
       </Text>
-      <ImageView fx:id="img_medium" fitHeight="64.0" fitWidth="64.0" layoutX="522.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="30.0" />
+      <ImageView fx:id="img_medium" fitHeight="64.0" fitWidth="64.0" layoutX="522.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="14.0" />
       <Separator layoutX="505.0" orientation="VERTICAL" prefHeight="100.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="89.0" AnchorPane.topAnchor="0.0" />
-      <Text fx:id="txt_format" layoutX="511.0" layoutY="24.1337890625" strokeType="OUTSIDE" strokeWidth="0.0" text="Single" textAlignment="CENTER" wrappingWidth="85.0" AnchorPane.bottomAnchor="69.734375" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
+      <Text fx:id="txt_format" layoutX="511.0" layoutY="24.1337890625" strokeType="OUTSIDE" strokeWidth="0.0" text="Single" textAlignment="CENTER" wrappingWidth="85.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
-      <Text fx:id="txt_year" layoutX="455.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YEAR" textAlignment="RIGHT" wrappingWidth="42.517578125" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="102.482421875" />
-      <Separator layoutY="10.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Text fx:id="txt_year" layoutX="455.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YEAR" textAlignment="RIGHT" wrappingWidth="42.517578125" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="100.0" />
+      <Separator layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       <Pane onMouseClicked="#OpenDisplay" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>
