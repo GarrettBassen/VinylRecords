@@ -15,6 +15,7 @@
     -fx-background-size: 70 66;
 }
 
+
 /* FILTERS SECTIONS */
 .accordion
 {
@@ -49,4 +50,10 @@
 {
     -fx-background-radius: 0 0 18 18;
     -fx-border-radius: 0 0 18 18;
+}
+
+
+/* VBox Content */
+.vbox {
+    -fx-background-color: #EDEDED;
 }

@@ -1,24 +1,25 @@
 package com.ags.vr.controllers;
 
 import com.ags.vr.objects.Media;
-import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
-import com.ags.vr.utils.database.DBGenre;
-import com.ags.vr.utils.database.DBGenreLinker;
-import com.ags.vr.utils.database.DBMedia;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import java.io.IOException;
 import java.time.Year;
 import java.util.LinkedList;
 import java.util.Stack;
@@ -31,48 +32,45 @@ public class BrowseController
     @FXML
     private TextField txt_search;
 
-    //radio buttons
     @FXML
-    private RadioButton vinylRB;
+    private VBox pane_content;
 
-    @FXML
-    private RadioButton cdRB;
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                      SEARCH FILTER VARIABLES                                                  */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    @FXML
-    private RadioButton cassetteRB;
+    // Medium
+    @FXML private RadioButton vinylRB;
+    @FXML private RadioButton cdRB;
+    @FXML private RadioButton cassetteRB;
 
-    @FXML
-    private TextArea genreInput;
+    // Genre
+    @FXML private TextArea genreInput;
 
-    @FXML
-    private TextArea bandInput;
+    // Band
+    @FXML private TextArea bandInput;
 
-    @FXML
-    private RadioButton singleRB;
+    // Format
+    @FXML private RadioButton singleRB;
+    @FXML private RadioButton epRB;
+    @FXML private RadioButton lpRB;
+    @FXML private RadioButton dlpRB;
 
-    @FXML
-    private RadioButton epRB;
-
-    @FXML
-    private RadioButton lpRB;
-
-    @FXML
-    private RadioButton dlpRB;
-
-    @FXML
-    private TextField minYear;
-
-    @FXML
-    private TextField maxYear;
-
-    @FXML
-    private Button search;
+    // Year
+    @FXML private TextField minYear;
+    @FXML private TextField maxYear;
 
     //the selected medium
     private String medium = "";
 
     //the selected format
     private String format = "";
+
+    @FXML
+    void initialize()
+    {
+        pane_content.getChildren().clear();
+    }
 
     /**
      * Executes when key is typed with text field activated.
@@ -83,7 +81,7 @@ public class BrowseController
     {
         if (event.getCode().equals(KeyCode.ENTER))
         {
-            Media[] m = sqlSearch();
+            Search();
         }
     }
 
@@ -91,9 +89,29 @@ public class BrowseController
      * Executes when search button is pressed.
      */
     @FXML
-    void SearchButton()
+    void Search()
     {
-        Media[] m = sqlSearch();
+        pane_content.getChildren().clear();
+        AddContentPane(sqlSearch());
+    }
+
+    // TODO FINISH AND COMMENT
+    private void AddContentPane(Media... media)
+    {
+        for (Media m : media) {
+            try
+            {
+                FXMLLoader loader = new FXMLLoader();
+                pane_content.getChildren().add(loader.load(getClass().getResource("/com/ags/vr/pages/pane_content.fxml").openStream()));
+                ContentPaneController controller = loader.getController();
+                controller.setData(m);
+            }
+            catch (IOException e)
+            {
+                // TODO FIX ERROR
+                System.out.printf("ERROR LOADING PANE AddContentPane(Media...) | BrowseController.java\n\n%s", e.getMessage());
+            }
+        }
     }
 
     @FXML
@@ -192,7 +210,7 @@ public class BrowseController
             ResultSet rs;
 
             //text entry is not empty
-            if (!txt_search.getText().equals(""))
+            if (!txt_search.getText().isBlank())
             {
                 stmt = con.prepareStatement("SELECT * FROM media WHERE title LIKE ?");
                 stmt.setString(1, "%" + txt_search.getText() + "%");
@@ -201,7 +219,7 @@ public class BrowseController
                 return rsToMedia(rs);
             }
             //band entry is not empty
-            else if (!bandInput.getText().equals(""))
+            else if (!bandInput.getText().isBlank())
             {
                 //get band entries in a string array
                 String allBands = bandInput.getText();
@@ -216,7 +234,6 @@ public class BrowseController
                     stmt = con.prepareStatement("SELECT * FROM media WHERE band_id = ?");
                     stmt.setInt(1, Hash.StringHash(bands[i]));
                     rsArr[i] = stmt.executeQuery();
-                    stmt.close();
                 }
 
                 //turn the rs array to a single media array and return
@@ -224,7 +241,7 @@ public class BrowseController
 
             }
             //genre input is not empty
-            else if (!genreInput.getText().equals(""))
+            else if (!genreInput.getText().isBlank())
             {
                 //get genres in a signle array
                 String allGenres = genreInput.getText();
@@ -240,13 +257,12 @@ public class BrowseController
                             "media.media_id = genre_linker.media_id WHERE genre_linker.genre_id = ?");
                     stmt.setInt(1, Hash.StringHash(genres[i]));
                     rsArr[i] = stmt.executeQuery();
-                    stmt.close();
                 }
 
                 return rsToMedia(rsArr);
             }
             //medium entry is not empty
-            else if (!medium.equals(""))
+            else if (!medium.isBlank())
             {
                 stmt = con.prepareStatement("SELECT * FROM media WHERE medium = ?");
                 stmt.setString(1, medium);
@@ -254,7 +270,7 @@ public class BrowseController
                 return rsToMedia(rs);
             }
             //format entry is not empty
-            else if (!format.equals(""))
+            else if (!format.isBlank())
             {
                 stmt = con.prepareStatement("SELECT * FROM media WHERE format = ?");
                 stmt.setString(1, format);
@@ -262,16 +278,16 @@ public class BrowseController
                 return rsToMedia(rs);
             }
             //year entries are not empty
-            else if (!minYear.getText().equals("") || !maxYear.getText().equals(""))
+            else if (!minYear.getText().isBlank() || !maxYear.getText().isBlank())
             {
                 //get time frame being searched in
                 short min, max;
-                if(minYear.getText().equals("") && !maxYear.getText().equals(""))
+                if(minYear.getText().isBlank() && !maxYear.getText().isBlank())
                 {
                     min = 1400;
                     max = Short.parseShort(maxYear.getText());
                 }
-                else if(maxYear.getText().equals(""))
+                else if(maxYear.getText().isBlank())
                 {
                     min = Short.parseShort(minYear.getText());
                     max = (short) Year.now().getValue();

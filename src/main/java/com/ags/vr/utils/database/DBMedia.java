@@ -133,6 +133,7 @@ public class DBMedia
             PreparedStatement statement = con.prepareStatement("SELECT * FROM media WHERE media_id=?");
             statement.setInt(1, hash);
             ResultSet result = statement.executeQuery();
+            result.next();
             return new Media(result);
         }
         catch (SQLException e)
@@ -154,6 +155,7 @@ public class DBMedia
             stmt.setString(1,title);
             stmt.setString(2,medium);
             ResultSet result = stmt.executeQuery();
+            result.next();
             return new Media(result);
         }
         catch (SQLException e)

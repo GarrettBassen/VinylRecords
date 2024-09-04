@@ -45,6 +45,7 @@ public class AddController
     @FXML private Spinner<Integer> sp_back_poor;
 
     // Input validation arrays
+    private Spinner<Integer>[] array_inventory;
     private CheckBox[] array_medium;
     private CheckBox[] array_format;
 
@@ -69,13 +70,13 @@ public class AddController
      */
     private void SpinnerInitialize()
     {
-        Spinner<Integer>[] spinners = new Spinner[] {
+        array_inventory = new Spinner[] {
                 sp_front_good, sp_front_fair, sp_front_poor,
                 sp_back_good, sp_back_fair, sp_back_poor
         };
 
         // Initialize spinners
-        for (Spinner<Integer> sp : spinners)
+        for (Spinner<Integer> sp : array_inventory)
         {
             sp.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0,127));
         }
@@ -119,6 +120,13 @@ public class AddController
         DBMedia.Insert(media);
         DBInventory.Insert(new Stock(media.getID(),getStockData()));
         LinkGenres(media.getID());
+
+        // Clear inputs and inform user about success
+        ClearInputs();
+        Graphical.ConfirmationPopup("Success Adding Media",String.format(
+                "'%s' by '%s' was successfully added to your inventory",
+                media.getTitle(), media.getBand()
+        ));
     }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -281,5 +289,30 @@ public class AddController
                         sp_back_fair.getValue().byteValue(),
                         sp_back_poor.getValue().byteValue()
                 };
+    }
+
+    private void ClearInputs()
+    {
+        // Clear checkboxes
+        for (CheckBox cb : array_medium)
+        {
+            cb.setSelected(false);
+        }
+        for (CheckBox cb : array_format)
+        {
+            cb.setSelected(false);
+        }
+
+        // Clear inventory spinners
+        for (Spinner<Integer> s : array_inventory)
+        {
+            s.getValueFactory().setValue(0);
+        }
+
+        // Clear text inputs
+        tf_title.clear();
+        tf_band.clear();
+        tf_year.clear();
+        ta_genres.clear();
     }
 }

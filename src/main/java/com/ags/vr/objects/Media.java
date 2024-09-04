@@ -44,7 +44,7 @@ public class Media
     }
 
     /**
-     * Creates media object from database.
+     * Creates media object from database. WARNING you must supply a valid result set (example result.next()).
      * @param media Media ResultSet
      */
     public Media(ResultSet media)
@@ -52,7 +52,6 @@ public class Media
         // TODO TEST
         try
         {
-            media.next();
             this.media_id = media.getInt("media_id");
             this.title = media.getString("title");
             this.medium = media.getString("medium");
@@ -62,6 +61,7 @@ public class Media
         }
         catch (SQLException e)
         {
+            System.out.println("ERROR IN Media(ResultSet) | Media.java");
             // TODO DISPLAY ERROR
         }
     }
