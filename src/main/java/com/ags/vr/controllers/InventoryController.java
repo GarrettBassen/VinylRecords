@@ -296,7 +296,7 @@ public class InventoryController {
 
     @FXML
     /**
-     * Indicates which fromat is selected.
+     * Indicates which format is selected.
      */
     private void formatControl(ActionEvent event)
     {

@@ -198,7 +198,7 @@ public class AddController
                             "Please delete any white space or characters.");
             return false;
         }
-        else if (Integer.parseInt(year) < 1887 || Integer.parseInt(year) > Year.now().getValue())
+        else if (Integer.parseInt(year) < 1400 || Integer.parseInt(year) > Year.now().getValue())
         {
             Graphical.ErrorPopup("Invalid Year",String.format(
                     "The year '%s' is invalid.",Integer.parseInt(year))
