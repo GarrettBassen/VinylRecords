@@ -4,6 +4,8 @@ import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 
+import com.ags.vr.utils.database.DBGenre;
+import com.ags.vr.utils.database.DBMedia;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +21,7 @@ import java.sql.SQLException;
 
 import java.io.IOException;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -58,6 +61,8 @@ public class BrowseController
     private String[] medium = new String[4];
     private String[] format = new String[5];
 
+    //used with slim Results to avoid unnecessary slimming
+    private int searchCase = 0;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                       INITIALIZATION METHODS                                                  */
@@ -95,11 +100,18 @@ public class BrowseController
     @FXML
     void Search()
     {
-        // Clear current data, get new data, and display
-        pane_content.getChildren().clear();
-        Media[] media = sqlSearch();
-        //media = slimResults(media); TODO IMPLEMENT AND UNCOMMENT
-        AddContentPane(media);
+        try
+        {
+            // Clear current data, get new data, and display
+            pane_content.getChildren().clear();
+            Media[] media = sqlSearch();
+            media = slimResults(media);
+            AddContentPane(media);
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Search Error", e.getMessage());
+        }
     }
 
     /**
@@ -134,30 +146,37 @@ public class BrowseController
         {
             if (!txt_search.getText().isBlank())
             {
+                searchCase = 0;
                 return TitleQuery();
             }
             else if (!ta_bands.getText().isBlank())
             {
+                searchCase = 1;
                 return BandQuery();
             }
             else if (!ta_genres.getText().isBlank())
             {
+                searchCase = 2;
                 return GenreQuery();
             }
             else if (medium[0] != null)
             {
+                searchCase = 3;
                 return MediumQuery();
             }
             else if (format[0] != null)
             {
+                searchCase = 4;
                 return FormatQuery();
             }
             else if (YearInputsChanged())
             {
+                searchCase = 5;
                 return YearQuery();
             }
             else
             {
+                searchCase = 6;
                 // All inputs left blank. Grab all data
                 PreparedStatement statement = con.prepareStatement("SELECT * FROM media");
                 ResultSet result = statement.executeQuery();
@@ -222,11 +241,15 @@ public class BrowseController
         return mediaList.toArray(new Media[0]);
     }
 
-    // TODO FIX
+    /**
+     * Returns Media objects from specified genres
+     * @return Media[] data
+     * @throws SQLException Exception
+     */
     private Media[] GenreQuery() throws SQLException
     {
         PreparedStatement statement = con.prepareStatement(
-                "SELECT * FROM media LEFT (OUTER) JOIN genre_linker ON media.media_id " +
+                "SELECT * FROM media LEFT OUTER JOIN genre_linker ON media.media_id " +
                         "= genre_linker.media_id WHERE genre_linker.genre_id = ?"
         );
         ObservableList<CharSequence> genres = ta_genres.getParagraphs();
@@ -334,10 +357,162 @@ public class BrowseController
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // TODO FINISH AND COMMENT
-    private Media[] slimResults(Media[] media)
+    //TODO TEST
+    private Media[] slimResults(Media[] media) throws SQLException
     {
-        return null;
+
+        //TODO MAKE FASTER
+        if(!ta_bands.getText().isBlank() && searchCase != 1)
+        {
+            Media[] search = BandQuery();
+
+            //compare the band search to the current media list
+            //if the titles mach, keep the media
+            //otherwise set the media to null
+
+            for(int i = 0; i < media.length; i++)
+            {
+                boolean found = false;
+                for(int j = 0; j < search.length; j++)
+                {
+                    if(search[j].getTitle().equals(media[i].getTitle()))
+                    {
+                        found = true;
+                    }
+                }
+                if(!found)
+                {
+                    media[i] = null;
+                }
+            }
+
+            //list of correct size
+            LinkedList<Media> slimMedia = new LinkedList<>();
+
+            //fill list
+            for(int i = 0; i < media.length; i++)
+            {
+                if(media[i] != null)
+                {
+                    slimMedia.addLast(media[i]);
+                }
+            }
+            media = slimMedia.toArray(new Media[0]);
+        }
+
+        //TODO MAKE FASTER
+        if(!ta_genres.getText().isBlank() && searchCase != 2)
+        {
+            Media[] search = GenreQuery();
+
+            //compare the genre search to the current media list
+            //if the titles mach, keep the media
+            //otherwise drop the media to null
+            for(int i = 0; i < media.length; ++i)
+            {
+                boolean found = false;
+                for(int j = 0; j < search.length; ++j)
+                {
+                    //check
+                    if(media[i].getTitle().equals(search[j].getTitle()))
+                    {
+                        found = true;
+                    }
+                }
+
+                if(!found)
+                {
+                    media[i] = null;
+                }
+            }
+
+            //list of correct size
+            LinkedList<Media> slimMedia = new LinkedList<>();
+
+            //fill list
+            for(int i = 0; i < media.length; i++)
+            {
+                if(media[i] != null)
+                {
+                    slimMedia.addLast(media[i]);
+                }
+            }
+            media = slimMedia.toArray(new Media[0]);
+        }
+
+        if(medium[0] != null && searchCase != 3)
+        {
+            //filter for each type of medium
+            LinkedList<Media> mediaList = new LinkedList<>();
+            for(int i = 0; i < medium.length; i++)
+            {
+                //slim the current medium
+                if(!medium[i].isBlank())
+                {
+                    for(int j = 0; j < media.length; j++)
+                    {
+                        if(media[j].getMedium().equals(medium[i]))
+                        {
+                            mediaList.addLast(media[j]);
+                        }
+                    }
+                }
+            }
+
+            //slimed media array
+            media = mediaList.toArray(new Media[0]);
+        }
+
+        if(format[0] != null && searchCase != 4)
+        {
+            LinkedList<Media> mediaList = new LinkedList<>();
+            for(int i = 0; i < format.length; i++)
+            {
+                if(!format[i].isBlank())
+                {
+                    for(int j = 0; j < media.length; j++)
+                    {
+                        if(media[j].getFormat().equals(format[i]))
+                        {
+                            mediaList.addLast(media[j]);
+                        }
+                    }
+                }
+            }
+
+            //slimmed media list
+            media = mediaList.toArray(new Media[0]);
+        }
+
+        if(YearInputsChanged() && searchCase != 5)
+        {
+            //for each media object
+            //if the media does not fall within the date range, set the object to null
+            for(int i = 0; i < media.length; i++)
+            {
+                if(media[i].getYear() < sp_year_min.getValue() || media[i].getYear() > sp_year_max.getValue())
+                {
+                    media[i] = null;
+                }
+            }
+
+            //list of correct size
+            LinkedList<Media> slimMedia = new LinkedList<>();
+
+            //fill list
+            for(int i = 0; i < media.length; i++)
+            {
+                if(media[i] != null)
+                {
+                    slimMedia.addLast(media[i]);
+                }
+            }
+            media = slimMedia.toArray(new Media[0]);
+        }
+
+        return media;
     }
+
 
     /**
      * Creates content panes from media object(s) which is then added to the vbox display region.
