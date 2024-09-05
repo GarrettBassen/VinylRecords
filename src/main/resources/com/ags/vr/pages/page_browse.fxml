@@ -18,133 +18,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.BrowseController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="700.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.BrowseController">
    <children>
-      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <left>
-            <VBox maxHeight="1.7976931348623157E308" prefWidth="350.0" style="-fx-background-color: #525252;" BorderPane.alignment="CENTER">
-               <children>
-                  <Accordion stylesheets="@../css/page_browse.css">
-                    <panes>
-                        <TitledPane id="top-title-pane" animated="false" stylesheets="@../css/page_browse.css" text="Band">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <TextArea fx:id="ta_bands" layoutX="19.0" layoutY="14.0" promptText="List Bands Here" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                 </children></AnchorPane>
-                           </content>
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </TitledPane>
-                      <TitledPane animated="false" stylesheets="@../css/page_browse.css" text="Genre">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <TextArea fx:id="ta_genres" layoutX="19.0" layoutY="14.0" promptText="List Genres Here" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                 </children></AnchorPane>
-                        </content>
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                      </TitledPane>
-                      <TitledPane animated="false" stylesheets="@../css/page_browse.css" text="Medium">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <GridPane AnchorPane.bottomAnchor="-12.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-12.0">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                       <children>
-                                          <RadioButton fx:id="rb_vinyl" mnemonicParsing="false" onAction="#mediumControl" text="Vinyl" />
-                                          <RadioButton fx:id="rb_CD" mnemonicParsing="false" onAction="#mediumControl" text="CD" GridPane.rowIndex="1" />
-                                          <RadioButton fx:id="rb_cassette" mnemonicParsing="false" onAction="#mediumControl" text="Cassette" GridPane.rowIndex="2" />
-                                       </children>
-                                    </GridPane>
-                                 </children></AnchorPane>
-                        </content>
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                      </TitledPane>
-                      <TitledPane animated="false" stylesheets="@../css/page_browse.css" text="Album Format">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <GridPane AnchorPane.bottomAnchor="-12.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-12.0">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                       <children>
-                                          <RadioButton fx:id="rb_single" mnemonicParsing="false" onAction="#formatControl" text="Single" />
-                                          <RadioButton fx:id="rb_EP" mnemonicParsing="false" onAction="#formatControl" text="EP" GridPane.rowIndex="1" />
-                                          <RadioButton fx:id="rb_LP" mnemonicParsing="false" onAction="#formatControl" text="LP" GridPane.rowIndex="2" />
-                                          <RadioButton fx:id="rb_DLP" mnemonicParsing="false" onAction="#formatControl" text="DLP" GridPane.rowIndex="3" />
-                                       </children>
-                                    </GridPane>
-                                 </children></AnchorPane>
-                        </content>
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                      </TitledPane>
-                        <TitledPane id="bottom-title-pane" animated="false" stylesheets="@../css/page_browse.css" text="Year Range">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="130.0">
-                                 <children>
-                                    <GridPane AnchorPane.bottomAnchor="-12.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-12.0">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                                          <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="40.0" />
-                                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="to" GridPane.columnIndex="1" GridPane.halignment="CENTER">
-                                             <font>
-                                                <Font size="18.0" />
-                                             </font>
-                                          </Text>
-                                          <Spinner fx:id="sp_year_min" editable="true" stylesheets="@../css/page_browse.css" />
-                                          <Spinner fx:id="sp_year_max" editable="true" stylesheets="@../css/page_browse.css" GridPane.columnIndex="2" />
-                                       </children>
-                                    </GridPane>
-                                    <Button mnemonicParsing="false" onAction="#ClearYearInput" prefHeight="3.0" prefWidth="70.0" text="clear" AnchorPane.bottomAnchor="-10.0" AnchorPane.rightAnchor="0.0">
-                                       <font>
-                                          <Font size="12.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </TitledPane>
-                    </panes>
-                     <VBox.margin>
-                        <Insets bottom="30.0" left="15.0" right="5.0" top="37.0" />
-                     </VBox.margin>
-                  </Accordion>
-               </children>
-            </VBox>
-         </left>
+      <BorderPane style="-fx-background-color: #525252;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <GridPane style="-fx-background-color: #525252;" BorderPane.alignment="CENTER">
+            <GridPane BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
@@ -178,6 +56,142 @@
                </children>
             </GridPane>
          </center>
+         <left>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <GridPane id="filter-base" layoutX="10.0" layoutY="10.0" maxWidth="300.0" minWidth="300.0" stylesheets="@../css/page_browse.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="70.0" minHeight="70.0" vgrow="NEVER" />
+                        <RowConstraints maxHeight="130.0" minHeight="130.0" vgrow="NEVER" />
+                        <RowConstraints maxHeight="130.0" minHeight="130.0" vgrow="NEVER" />
+                        <RowConstraints maxHeight="130.0" minHeight="130.0" vgrow="NEVER" />
+                        <RowConstraints fillHeight="false" maxHeight="200.0" minHeight="95.0" valignment="TOP" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Text fill="#a1a09e" strokeType="OUTSIDE" strokeWidth="0.0" text="Filters" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                           <font>
+                              <Font name="System Bold" size="48.0" />
+                           </font>
+                        </Text>
+                        <AnchorPane id="filter-pane" minHeight="0.0" minWidth="0.0" prefHeight="150.0" prefWidth="200.0" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Medium" textAlignment="CENTER" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="6.0">
+                                 <font>
+                                    <Font name="System Bold" size="32.0" />
+                                 </font>
+                              </Text>
+                              <GridPane maxHeight="100.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <RadioButton fx:id="rb_vinyl" mnemonicParsing="false" onAction="#mediumControl" text="Vinyls" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+                                    <RadioButton fx:id="rb_CD" mnemonicParsing="false" onAction="#mediumControl" text="CDs" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+                                    <RadioButton fx:id="rb_cassette" mnemonicParsing="false" onAction="#mediumControl" text="Cassettes" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane id="filter-pane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Album Format" textAlignment="CENTER" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="6.0">
+                                 <font>
+                                    <Font name="System Bold" size="32.0" />
+                                 </font>
+                              </Text>
+                              <GridPane AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <RadioButton fx:id="rb_single" mnemonicParsing="false" onAction="#formatControl" text="Single" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                                    <RadioButton fx:id="rb_EP" mnemonicParsing="false" onAction="#formatControl" text="EP" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                                    <RadioButton fx:id="rb_LP" mnemonicParsing="false" onAction="#formatControl" text="LP" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                                    <RadioButton fx:id="rb_DLP" mnemonicParsing="false" onAction="#formatControl" text="DLP" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane id="filter-pane" minHeight="0.0" minWidth="0.0" prefHeight="130.0" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Year Range" textAlignment="CENTER" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="6.0">
+                                 <font>
+                                    <Font name="System Bold" size="32.0" />
+                                 </font>
+                              </Text>
+                              <GridPane AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="40.0" />
+                                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="to" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <Spinner fx:id="sp_year_min" editable="true" stylesheets="@../css/page_browse.css" />
+                                    <Spinner fx:id="sp_year_max" editable="true" stylesheets="@../css/page_browse.css" GridPane.columnIndex="2" />
+                                 </children>
+                              </GridPane>
+                              <Button mnemonicParsing="false" onAction="#ClearYearInput" prefHeight="3.0" prefWidth="70.0" text="clear" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                        <Accordion stylesheets="@../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="SOMETIMES">
+                           <panes>
+                              <TitledPane id="top-title-pane" animated="false" stylesheets="@../css/page_browse.css" text="Band">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TextArea fx:id="ta_bands" layoutX="19.0" layoutY="14.0" promptText="List Bands Here" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </TitledPane>
+                              <TitledPane id="bottom-title-pane" animated="false" stylesheets="@../css/page_browse.css" text="Genre">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TextArea fx:id="ta_genres" layoutX="19.0" layoutY="14.0" promptText="List Genres Here" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </TitledPane>
+                           </panes>
+                        </Accordion>
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+         </left>
       </BorderPane>
    </children>
 </AnchorPane>

@@ -20,11 +20,11 @@ public class App extends Application
         stage.getIcons().add(new Image(getClass().getResourceAsStream("artwork/icons/appIcon.png")));
         stage.setTitle("Old Skool's Inventory Management System");
         stage.setMinWidth(1000);
-        stage.setMinHeight(800);
+        stage.setMinHeight(900);
 
         // Page setup
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("pages/page_base.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 900);
         stage.setScene(scene);
         stage.show();
     }
