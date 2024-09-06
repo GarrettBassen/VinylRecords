@@ -83,6 +83,11 @@
     -fx-padding: 2 3 2 3;
 }
 
+.spinner .text-field
+{
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
 
 /* Scroll bar */
 .scroll-pane

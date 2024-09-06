@@ -21,6 +21,16 @@ public class RequestController {
     @FXML private Button addBtn; //calls the launchAddPopUp method
     @FXML private ImageView refreshBtn; //calls the refreshRequests method
 
+
+    //todo!
+    /**
+     * Method used to initialize the page with possible data from the database
+     */
+    @FXML void initialize() {
+
+    }
+
+
     //todo!
     /**
      * Method used to launch a popup that will contain text fields that when entered will be stored

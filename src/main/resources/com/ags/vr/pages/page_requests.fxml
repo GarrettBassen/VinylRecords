@@ -14,11 +14,11 @@
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="423.0">
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="458.0">
                <children>
                   <Label alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" text="Current Requests" textFill="WHITE">
                      <font>
-                        <Font size="36.0" />
+                        <Font name="Arial Rounded MT Bold" size="36.0" />
                      </font>
                      <opaqueInsets>
                         <Insets />
@@ -52,7 +52,7 @@
    <center>
       <TextArea editable="false" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" promptText="No Current Requests..." BorderPane.alignment="CENTER">
          <font>
-            <Font size="18.0" />
+            <Font name="Arial Rounded MT Bold" size="18.0" />
          </font></TextArea>
    </center>
    <bottom>
@@ -70,7 +70,7 @@
                         <Insets top="20.0" />
                      </HBox.margin>
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Arial Rounded MT Bold" size="18.0" />
                      </font>
                   </Button>
                </children>
