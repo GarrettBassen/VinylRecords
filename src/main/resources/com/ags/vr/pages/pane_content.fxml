@@ -16,7 +16,7 @@
       </Text>
       <Text layoutX="14.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By: " AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="14.0">
          <font>
-            <Font name="System Italic" size="18.0" />
+            <Font name="Arial Rounded MT Bold" size="18.0" />
          </font>
       </Text>
       <Text fx:id="txt_band" layoutX="55.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BAND" wrappingWidth="448.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="99.0">
@@ -28,7 +28,7 @@
       <Separator layoutX="505.0" orientation="VERTICAL" prefHeight="100.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="89.0" AnchorPane.topAnchor="0.0" />
       <Text fx:id="txt_format" layoutX="511.0" layoutY="24.1337890625" strokeType="OUTSIDE" strokeWidth="0.0" text="Single" textAlignment="CENTER" wrappingWidth="85.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
          <font>
-            <Font size="24.0" />
+            <Font name="Arial Rounded MT Bold" size="24.0" />
          </font>
       </Text>
       <Text fx:id="txt_year" layoutX="455.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YEAR" textAlignment="RIGHT" wrappingWidth="42.517578125" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="100.0">
