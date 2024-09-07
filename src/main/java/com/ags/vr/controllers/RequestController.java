@@ -1,9 +1,11 @@
 package com.ags.vr.controllers;
 
 //imports
+import com.ags.vr.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
 
@@ -17,10 +19,16 @@ import javafx.scene.image.ImageView;
  */
 public class RequestController {
 
-    //declaring FXML variables
+    //declaring FXML variables for the Request Page
     @FXML private Button addBtn; //calls the launchAddPopUp method
     @FXML private ImageView refreshBtn; //calls the refreshRequests method
 
+    //declaring FXML variables for the Add Request pop-up
+    @FXML private TextField customerField;
+    @FXML private TextField dateField;
+    @FXML private TextField emailField;
+    @FXML private TextField phoneField;
+    @FXML private TextField requestField;
 
     //todo!
     /**
