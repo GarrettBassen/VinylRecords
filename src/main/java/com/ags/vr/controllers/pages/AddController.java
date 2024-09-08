@@ -1,4 +1,4 @@
-package com.ags.vr.controllers;
+package com.ags.vr.controllers.pages;
 
 import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;

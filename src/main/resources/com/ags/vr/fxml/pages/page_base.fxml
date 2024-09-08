@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="600.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.PageBaseController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="600.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.pages.PageBaseController">
    <children>
       <BorderPane fx:id="content_pane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -22,7 +22,7 @@
                      <center>
                         <ImageView fitHeight="125.0" fitWidth="586.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                            <image>
-                              <Image url="@../artwork/UI/header.png" />
+                              <Image url="@../../artwork/UI/header.png" />
                            </image>
                         </ImageView>
                      </center>
@@ -34,7 +34,6 @@
                           <columnConstraints>
                             <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="100.0" />
                             <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="100.0" />
-                              <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="100.0" />
                               <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
@@ -51,12 +50,7 @@
                                     <Font name="Arial Rounded MT Bold" size="16.0" />
                                  </font>
                               </Button>
-                              <Button alignment="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#PageAccessInventory" style="-fx-background-color: #383845;" text="Inventory" textFill="#b2b2b2" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
-                                 <font>
-                                    <Font name="Arial Rounded MT Bold" size="16.0" />
-                                 </font>
-                              </Button>
-                              <Button alignment="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#PageAccessRequests" style="-fx-background-color: #383845;" text="Requests" textFill="#b2b2b2" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                              <Button alignment="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#PageAccessRequests" style="-fx-background-color: #383845;" text="Requests" textFill="#b2b2b2" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                                  <font>
                                     <Font name="Arial Rounded MT Bold" size="16.0" />
                                  </font>

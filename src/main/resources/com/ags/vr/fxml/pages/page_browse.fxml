@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="700.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.BrowseController">
+<AnchorPane fx:id="pane_base" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="700.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.pages.BrowseController">
    <children>
       <BorderPane style="-fx-background-color: #525252;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -31,7 +31,7 @@
                 <RowConstraints maxHeight="1.7976931348623157E308" vgrow="ALWAYS" />
               </rowConstraints>
                <children>
-                  <TextField id="browse-input" fx:id="txt_search" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" minWidth="200.0" onKeyPressed="#InputAction" prefHeight="60.0" promptText="Search" stylesheets="@../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+                  <TextField id="browse-input" fx:id="txt_search" maxHeight="60.0" maxWidth="1.7976931348623157E308" minHeight="60.0" minWidth="200.0" onKeyPressed="#InputAction" prefHeight="60.0" promptText="Search" stylesheets="@../../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="28.0" />
                      </font>
@@ -39,16 +39,16 @@
                         <Insets bottom="5.0" left="74.0" right="20.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Button id="browse-button" mnemonicParsing="false" onAction="#Search" prefHeight="65.0" prefWidth="72.0" stylesheets="@../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+                  <Button id="browse-button" mnemonicParsing="false" onAction="#Search" prefHeight="65.0" prefWidth="72.0" stylesheets="@../../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
                      <GridPane.margin>
                         <Insets bottom="3.0" left="5.0" top="1.0" />
                      </GridPane.margin>
                   </Button>
                   <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
                      <children>
-                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" stylesheets="@../css/page_browse.css" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" stylesheets="@../../css/page_browse.css" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
                            <content>
-                              <VBox fx:id="pane_content" stylesheets="@../css/page_browse.css" />
+                              <VBox fx:id="pane_content" stylesheets="@../../css/page_browse.css" />
                            </content>
                         </ScrollPane>
                      </children>
@@ -59,7 +59,7 @@
          <left>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane id="filter-base" layoutX="10.0" layoutY="10.0" maxWidth="300.0" minWidth="300.0" stylesheets="@../css/page_browse.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0">
+                  <GridPane id="filter-base" layoutX="10.0" layoutY="10.0" maxWidth="300.0" minWidth="300.0" stylesheets="@../../css/page_browse.css" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
@@ -169,8 +169,8 @@
                                           <Font name="Arial Rounded MT Bold" size="18.0" />
                                        </font>
                                     </Text>
-                                    <Spinner fx:id="sp_year_min" editable="true" stylesheets="@../css/page_browse.css" />
-                                    <Spinner fx:id="sp_year_max" editable="true" stylesheets="@../css/page_browse.css" GridPane.columnIndex="2" />
+                                    <Spinner fx:id="sp_year_min" editable="true" stylesheets="@../../css/page_browse.css" />
+                                    <Spinner fx:id="sp_year_max" editable="true" stylesheets="@../../css/page_browse.css" GridPane.columnIndex="2" />
                                  </children>
                               </GridPane>
                               <Button mnemonicParsing="false" onAction="#ClearYearInput" prefHeight="3.0" prefWidth="70.0" text="clear" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
@@ -180,9 +180,9 @@
                               </Button>
                            </children>
                         </AnchorPane>
-                        <Accordion stylesheets="@../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="SOMETIMES">
+                        <Accordion stylesheets="@../../css/page_browse.css" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="SOMETIMES">
                            <panes>
-                              <TitledPane id="top-title-pane" animated="false" stylesheets="@../css/page_browse.css" text="Band">
+                              <TitledPane id="top-title-pane" animated="false" stylesheets="@../../css/page_browse.css" text="Band">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
@@ -197,7 +197,7 @@
                                     <Font name="Arial Rounded MT Bold" size="24.0" />
                                  </font>
                               </TitledPane>
-                              <TitledPane id="bottom-title-pane" animated="false" stylesheets="@../css/page_browse.css" text="Genre">
+                              <TitledPane id="bottom-title-pane" animated="false" stylesheets="@../../css/page_browse.css" text="Genre">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>

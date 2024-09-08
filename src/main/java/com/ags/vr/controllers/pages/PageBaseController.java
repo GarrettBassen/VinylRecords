@@ -1,10 +1,8 @@
-package com.ags.vr.controllers;
+package com.ags.vr.controllers.pages;
 
 import com.ags.vr.utils.Connector;
 import com.ags.vr.utils.Graphical;
 
-import com.ags.vr.utils.database.DBGenre;
-import com.ags.vr.utils.database.DBMedia;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class PageBaseController
 {
@@ -33,13 +32,13 @@ public class PageBaseController
     {
         try
         {
-            Node page = FXMLLoader.load(getClass().getResource("/com/ags/vr/pages/" + pageName));
+            Node page = FXMLLoader.load(getClass().getResource("/com/ags/vr/fxml/pages/" + pageName));
             content_pane.setCenter(page);
         }
         catch (IOException e)
         {
             Graphical.ErrorPopup("Error Opening Page",String.format(
-                    "Failed to open %s\n\nError:%s",pageName,e.getMessage()
+                    "Failed to open %s in LoadPage | PageBaseController.java\n\nError:%s",pageName,e.getMessage()
             ));
         }
     }
@@ -62,16 +61,6 @@ public class PageBaseController
     private void PageAccessBrowse(ActionEvent event)
     {
         LoadPage("page_browse.fxml");
-    }
-
-    /**
-     * Opens "Inventory" page to edit media in inventory when button is pressed.
-     * @param event Event handler
-     */
-    @FXML
-    private void PageAccessInventory(ActionEvent event)
-    {
-        LoadPage("page_inventory.fxml");
     }
 
     /**

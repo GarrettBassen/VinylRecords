@@ -1,11 +1,14 @@
-package com.ags.vr.controllers;
+package com.ags.vr.controllers.pages;
 
+import com.ags.vr.controllers.cards.BandEditController;
+import com.ags.vr.controllers.cards.GenreEditController;
+import com.ags.vr.controllers.cards.MediaEditController;
+import com.ags.vr.controllers.utils.ContentPaneController;
+import com.ags.vr.controllers.cards.MediaCardController;
 import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 
-import com.ags.vr.utils.database.DBGenre;
-import com.ags.vr.utils.database.DBMedia;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.sql.PreparedStatement;
@@ -21,7 +25,6 @@ import java.sql.SQLException;
 
 import java.io.IOException;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -30,12 +33,31 @@ import static com.ags.vr.utils.Connector.con;
 public class BrowseController
 {
     // Variables
-    @FXML private TextField txt_search;
+    @FXML private AnchorPane pane_base;
     @FXML private VBox pane_content;
+
+    // Popup card
+    private FXMLLoader card_media;
+    private MediaCardController card_mediaController;
+
+    // Edit media card
+    private FXMLLoader card_editMedia;
+    private MediaEditController card_editMediaController;
+
+    // Edit genre card
+    private FXMLLoader card_editGenre;
+    private GenreEditController card_editGenreController;
+
+    // Edit band card
+    private FXMLLoader card_editBand;
+    private BandEditController card_editBandController;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                      SEARCH FILTER VARIABLES                                                  */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    // Title
+    @FXML private TextField txt_search;
 
     // Medium
     @FXML private RadioButton rb_vinyl;
@@ -71,11 +93,54 @@ public class BrowseController
     @FXML
     void initialize()
     {
+        pane_content.getChildren().clear();
         sp_year_min.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1400,Year.now().getValue()));
         sp_year_max.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1400,Year.now().getValue()));
         ClearYearInput();
+
+        InitializePages();
     }
 
+    private void InitializePages()
+    {
+        // Initialize card popup
+        try
+        {
+            // Get cards
+            card_media = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media.fxml"));
+            card_editMedia = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media_edit.fxml"));
+            card_editGenre = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_genre_edit.fxml"));
+            card_editBand = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_band_edit.fxml"));
+
+            // Set cards in scene
+            pane_base.getChildren().add(card_media.load());
+            pane_base.getChildren().add(card_editMedia.load());
+            pane_base.getChildren().add(card_editGenre.load());
+            pane_base.getChildren().add(card_editBand.load());
+
+            // Get card controllers
+            card_mediaController = card_media.getController();
+            card_editMediaController = card_editMedia.getController();
+            card_editGenreController = card_editGenre.getController();
+            card_editBandController = card_editBand.getController();
+
+            // Make cards invisible
+            card_mediaController.setVisible(false);
+            card_editMediaController.setVisible(false);
+            card_editGenreController.setVisible(false);
+            card_editBandController.setVisible(false);
+        }
+        catch (IOException e)
+        {
+            Graphical.ErrorPopup("Initialization Error",
+                    "Error loading popup card in InitializePages() | BrowseController.java");
+        }
+
+        // Set edit controller to open edit screen
+        card_mediaController.setMediaEditController(card_editMediaController);
+        card_mediaController.setGenreEditController(card_editGenreController);
+        card_mediaController.setBandEditController(card_editBandController);
+    }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                            EVENT METHODS                                                      */
@@ -106,7 +171,7 @@ public class BrowseController
             pane_content.getChildren().clear();
             Media[] media = sqlSearch();
             media = slimResults(media);
-            AddContentPane(media);
+            AddContentPane(card_mediaController, media);
         }
         catch (SQLException e)
         {
@@ -518,15 +583,15 @@ public class BrowseController
      * Creates content panes from media object(s) which is then added to the vbox display region.
      * @param media Media object(s)
      */
-    private void AddContentPane(Media... media)
+    private void AddContentPane(MediaCardController cardPopup, Media... media)
     {
         for (Media m : media) {
             try
             {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ags/vr/pages/pane_content.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/utils/pane_content.fxml"));
                 pane_content.getChildren().add(loader.load());
                 ContentPaneController controller = loader.getController();
-                controller.setData(m);
+                controller.setData(cardPopup, m);
             }
             catch (IOException e)
             {

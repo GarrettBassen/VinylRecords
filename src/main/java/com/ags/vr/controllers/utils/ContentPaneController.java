@@ -1,5 +1,6 @@
-package com.ags.vr.controllers;
+package com.ags.vr.controllers.utils;
 
+import com.ags.vr.controllers.cards.MediaCardController;
 import com.ags.vr.objects.Media;
 
 import javafx.fxml.FXML;
@@ -20,24 +21,37 @@ public class ContentPaneController
     @FXML private Text txt_title;
     @FXML private Text txt_year;
 
+    // Popup reference
+    private MediaCardController cardPopup;
+    private Media media;
+
+
+    /**
+     * Opens card popup to display data of given Media object.
+     */
+    @FXML
+    void OpenDisplay()
+    {
+        cardPopup.setMedia(this.media);
+        cardPopup.setVisible(true);
+    }
+
     /**
      * Sets data in content pane with given Media object.
      * @param media Media object
      */
-    public void setData(Media media)
+    public void setData(MediaCardController cardPopup, Media media)
     {
+        // Reference variables
+        this.media = media;
+        this.cardPopup = cardPopup;
+
+        // Display variables
         this.pane_content.setPrefWidth(Integer.MAX_VALUE);
         this.txt_title.setText(media.getTitle());
         this.txt_band.setText(media.getBand());
         this.txt_format.setText(media.getFormat());
         this.txt_year.setText(String.valueOf(media.getYear()));
         this.img_medium.setImage(new Image(getClass().getResourceAsStream(String.format("/com/ags/vr/artwork/icons/%s.png", media.getMedium()))));
-    }
-
-    @FXML
-    void OpenDisplay()
-    {
-        // TODO OPEN DISPLAY CARD
-        System.out.printf("Clicked '%s' by '%s'\n", this.txt_title.getText(), this.txt_band.getText());
     }
 }

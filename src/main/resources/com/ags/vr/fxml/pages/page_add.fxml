@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="600.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.AddController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="600.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.pages.AddController">
    <children>
       <Text layoutX="45.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Album Name" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="14.0">
          <font>
@@ -87,12 +87,12 @@
          <font>
             <Font name="Arial Rounded MT Bold" size="13.0" />
          </font></Button>
-      <Spinner fx:id="sp_front_good" editable="true" layoutX="297.0" layoutY="299.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../css/spinner_text.css" AnchorPane.leftAnchor="297.0" AnchorPane.topAnchor="299.0" />
-      <Spinner fx:id="sp_front_fair" editable="true" layoutX="401.0" layoutY="299.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../css/spinner_text.css" AnchorPane.leftAnchor="401.0" AnchorPane.topAnchor="299.0" />
-      <Spinner fx:id="sp_front_poor" editable="true" layoutX="504.0" layoutY="299.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../css/spinner_text.css" AnchorPane.leftAnchor="504.0" AnchorPane.topAnchor="299.0" />
-      <Spinner fx:id="sp_back_good" editable="true" layoutX="297.0" layoutY="360.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../css/spinner_text.css" AnchorPane.leftAnchor="297.0" AnchorPane.topAnchor="360.0" />
-      <Spinner fx:id="sp_back_fair" editable="true" layoutX="400.0" layoutY="360.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../css/spinner_text.css" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="360.0" />
-      <Spinner fx:id="sp_back_poor" editable="true" layoutX="504.0" layoutY="360.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../css/spinner_text.css" AnchorPane.leftAnchor="504.0" AnchorPane.topAnchor="360.0" />
+      <Spinner fx:id="sp_front_good" editable="true" layoutX="297.0" layoutY="299.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../../css/spinner_text.css" AnchorPane.leftAnchor="297.0" AnchorPane.topAnchor="299.0" />
+      <Spinner fx:id="sp_front_fair" editable="true" layoutX="401.0" layoutY="299.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../../css/spinner_text.css" AnchorPane.leftAnchor="401.0" AnchorPane.topAnchor="299.0" />
+      <Spinner fx:id="sp_front_poor" editable="true" layoutX="504.0" layoutY="299.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../../css/spinner_text.css" AnchorPane.leftAnchor="504.0" AnchorPane.topAnchor="299.0" />
+      <Spinner fx:id="sp_back_good" editable="true" layoutX="297.0" layoutY="360.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../../css/spinner_text.css" AnchorPane.leftAnchor="297.0" AnchorPane.topAnchor="360.0" />
+      <Spinner fx:id="sp_back_fair" editable="true" layoutX="400.0" layoutY="360.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../../css/spinner_text.css" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="360.0" />
+      <Spinner fx:id="sp_back_poor" editable="true" layoutX="504.0" layoutY="360.0" prefHeight="24.0" prefWidth="92.0" stylesheets="@../../css/spinner_text.css" AnchorPane.leftAnchor="504.0" AnchorPane.topAnchor="360.0" />
       <Text layoutX="297.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Front Good" AnchorPane.leftAnchor="297.0" AnchorPane.topAnchor="273.0">
          <font>
             <Font name="Arial Rounded MT Bold" size="13.0" />

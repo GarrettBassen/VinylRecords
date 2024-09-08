@@ -1,4 +1,4 @@
-package com.ags.vr.controllers;
+package com.ags.vr.controllers.cards;
 
 import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
@@ -8,10 +8,9 @@ import com.ags.vr.utils.database.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 
-import java.util.Stack;
-
-public class InventoryController {
+public class MediaEditController {
 
     @FXML
     private TextField bandDisplay;
@@ -34,6 +33,8 @@ public class InventoryController {
     @FXML
     private Spinner<?> ffSpinner;
 
+    @FXML
+    private AnchorPane pane_base;
 
     @FXML
     private TextArea genresDisplay;
@@ -78,10 +79,31 @@ public class InventoryController {
     private String medium = "";
     private String format = "";
 
+    private Media media;
 
+    @FXML
     public void initialize()
     {
         SpinnerInitialize();
+    }
+
+    /**
+     * Closes page by setting invisible.
+     */
+    @FXML
+    void Close()
+    {
+        setVisible(false);
+    }
+
+    public void setVisible(boolean condition)
+    {
+        pane_base.setVisible(condition);
+    }
+
+    public void setMedia(Media media)
+    {
+        this.media = media;
     }
 
     /**

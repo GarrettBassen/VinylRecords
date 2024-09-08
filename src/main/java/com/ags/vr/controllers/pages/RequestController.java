@@ -1,7 +1,6 @@
-package com.ags.vr.controllers;
+package com.ags.vr.controllers.pages;
 
 //imports
-import com.ags.vr.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
