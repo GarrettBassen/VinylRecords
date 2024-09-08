@@ -9,6 +9,7 @@ import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 
+import com.ags.vr.utils.database.DBGenreLinker;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,31 +26,20 @@ import java.sql.SQLException;
 
 import java.io.IOException;
 import java.time.Year;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 
 import static com.ags.vr.utils.Connector.con;
 
 public class BrowseController
 {
-    // Variables
+    // Panes
     @FXML private AnchorPane pane_base;
     @FXML private VBox pane_content;
 
-    // Popup card
-    private FXMLLoader card_media;
+    // Popup card controllers
     private MediaCardController card_mediaController;
-
-    // Edit media card
-    private FXMLLoader card_editMedia;
     private MediaEditController card_editMediaController;
-
-    // Edit genre card
-    private FXMLLoader card_editGenre;
     private GenreEditController card_editGenreController;
-
-    // Edit band card
-    private FXMLLoader card_editBand;
     private BandEditController card_editBandController;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -80,10 +70,11 @@ public class BrowseController
     @FXML private Spinner<Integer> sp_year_min;
     @FXML private Spinner<Integer> sp_year_max;
 
+    // Filter helper variables
     private String[] medium = new String[4];
     private String[] format = new String[5];
 
-    //used with slim Results to avoid unnecessary slimming
+    // Used with slim Results to avoid unnecessary slimming
     private int searchCase = 0;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -101,16 +92,19 @@ public class BrowseController
         InitializePages();
     }
 
+    /**
+     * Initializes card popups.
+     */
     private void InitializePages()
     {
         // Initialize card popup
         try
         {
             // Get cards
-            card_media = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media.fxml"));
-            card_editMedia = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media_edit.fxml"));
-            card_editGenre = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_genre_edit.fxml"));
-            card_editBand = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_band_edit.fxml"));
+            FXMLLoader card_media = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media.fxml"));
+            FXMLLoader card_editMedia = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media_edit.fxml"));
+            FXMLLoader card_editGenre = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_genre_edit.fxml"));
+            FXMLLoader card_editBand = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_band_edit.fxml"));
 
             // Set cards in scene
             pane_base.getChildren().add(card_media.load());
@@ -167,6 +161,9 @@ public class BrowseController
     {
         try
         {
+            // Do nothing if year inputs are invalid
+            if (!YearValidation()) { return; }
+
             // Clear current data, get new data, and display
             pane_content.getChildren().clear();
             Media[] media = sqlSearch();
@@ -191,22 +188,20 @@ public class BrowseController
 
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    /*                                            DATABASE METHODS                                                   */
+    /*                                            SEARCH METHODS                                                     */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     /**
      * Searches the database based on a hierarchy of inputs.
      * The title attribute is considered the most important followed by
-     * band, genre, medium, format, and years.
-     *
-     * Should be used with slim() to get correct user input.
-     * @return Media[] data
+     * band, genre, medium, format, and years.<br \><br \>
+     * WARNING: Should be used with slim() to get correct user input.
+     * @return Media[] filtered Media[] list
      */
     private Media[] sqlSearch()
     {
         // Order of importance
         // Title, band, genre, medium, format, year range
-
         try
         {
             if (!txt_search.getText().isBlank())
@@ -241,8 +236,8 @@ public class BrowseController
             }
             else
             {
-                searchCase = 6;
                 // All inputs left blank. Grab all data
+                searchCase = 6;
                 PreparedStatement statement = con.prepareStatement("SELECT * FROM media");
                 ResultSet result = statement.executeQuery();
                 return rsToMedia(result);
@@ -251,10 +246,193 @@ public class BrowseController
         catch (SQLException e)
         {
             Graphical.ErrorPopup("Search Error", e.getMessage());
+            return null;
         }
-        return null;
     }
 
+    /**
+     * Slims Media[] to only contain Media objects with specified filter parameters.
+     * @param mediaList Media[] list
+     * @return Filtered Media[] list
+     * @throws SQLException Exception
+     */
+    private Media[] slimResults(Media[] mediaList) throws SQLException
+    {
+        // Slim media to only specified bands
+        if(!ta_bands.getText().isBlank() && searchCase != 1)
+        {
+            mediaList = FilterBands(mediaList);
+        }
+
+        // Slim media to only specified genres
+        if(!ta_genres.getText().isBlank() && searchCase != 2)
+        {
+            mediaList = FilterGenres(mediaList);
+        }
+
+        // Slim down to specified mediums
+        if(medium[0] != null && searchCase != 3)
+        {
+            mediaList = FilterMedium(mediaList);
+        }
+
+        // Slim media to only specified formats
+        if(format[0] != null && searchCase != 4)
+        {
+            mediaList = FilterFormat(mediaList);
+        }
+
+        // Slim media to only specified year range
+        if(YearInputsChanged() && searchCase != 5)
+        {
+            mediaList = FilterYearRange(mediaList);
+        }
+
+        return mediaList;
+    }
+
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                            FILTER METHODS                                                     */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Filters media list to contain only Media objects with specified bands.
+     * @param mediaList Media[] list
+     * @return Filtered Media[] list
+     */
+    private Media[] FilterBands(Media[] mediaList)
+    {
+        // Setup hashed band filter HashSet for slimming medias
+        HashSet<Integer> bands = new HashSet<>();
+        for (CharSequence bandInput : ta_bands.getParagraphs())
+        {
+            bands.add(Hash.StringHash(bandInput.toString()));
+        }
+
+        // If media band exists in filter set, add media to slimmed media array
+        LinkedList<Media> slimmedMedia = new LinkedList<>();
+        for (Media media : mediaList)
+        {
+            if (bands.contains(Hash.StringHash(media.getBand())))
+            {
+                slimmedMedia.addLast(media);
+            }
+        }
+
+        return slimmedMedia.toArray(new Media[0]);
+    }
+
+    /**
+     * Filters media list to contain only Media objects that contain at least one of the specified genre.
+     * @param mediaList Media[] list
+     * @return Filtered Media[] list
+     */
+    private Media[] FilterGenres(Media[] mediaList)
+    {
+        // Setup hashed genre filter HashSet for slimming medias
+        HashSet<Integer> genres = new HashSet<>();
+        for (CharSequence genre : ta_genres.getParagraphs())
+        {
+            genres.add(Hash.StringHash(genre.toString()));
+        }
+
+        // If media contains a genre in the filter set, add media to slimmed media array
+        LinkedList<Media> slimmedMedia = new LinkedList<>();
+        for (Media media : mediaList)
+        {
+            for (int mediaGenre : DBGenreLinker.getGenres(media))
+            {
+                if (genres.contains(mediaGenre))
+                {
+                    slimmedMedia.addLast(media);
+                }
+            }
+        }
+
+        return slimmedMedia.toArray(new Media[0]);
+    }
+
+    /**
+     * Filters media list to contain only Media objects of the specified medium types.
+     * @param mediaList Media[] list
+     * @return Filtered Media[] list
+     */
+    private Media[] FilterMedium(Media[] mediaList)
+    {
+        // Setup medium filter HashSet for slimming medias
+        HashSet<String> mediums = new HashSet<>();
+        for (int i = 1; i < medium.length; ++i)
+        {
+            if (!medium[i].isBlank())
+            {
+                mediums.add(medium[i]);
+            }
+        }
+
+        // Slim media to only specified mediums
+        LinkedList<Media> slimmedMedia = new LinkedList<>();
+        for (Media media : mediaList)
+        {
+            if (mediums.contains(media.getMedium()))
+            {
+                slimmedMedia.addLast(media);
+            }
+        }
+
+        return slimmedMedia.toArray(new Media[0]);
+    }
+
+    /**
+     * Filters media list to contain only Media objects of the specified format.
+     * @param mediaList Media[] list
+     * @return Filtered Media[] list
+     */
+    private Media[] FilterFormat(Media[] mediaList)
+    {
+        // Setup format filter HashSet for slimming medias
+        HashSet<String> formats = new HashSet<>();
+        for (int i = 1; i < format.length; ++i)
+        {
+            if (!format[i].isBlank())
+            {
+                formats.add(format[i]);
+            }
+        }
+
+        // Slim media to only specified formats
+        LinkedList<Media> slimmedMedia = new LinkedList<>();
+        for (Media media : mediaList)
+        {
+            if (formats.contains(media.getFormat()))
+            {
+                slimmedMedia.addLast(media);
+            }
+        }
+
+        //slimmed media list
+        return slimmedMedia.toArray(new Media[0]);
+    }
+
+    /**
+     * Filters media list to contain only Media objects within specified year range.
+     * @param mediaList Media[] list
+     * @return Filtered Media[] list
+     */
+    private Media[] FilterYearRange(Media[] mediaList)
+    {
+        // Slim media to specified year range
+        LinkedList<Media> slimmedMedia = new LinkedList<>();
+        for (Media media : mediaList)
+        {
+            if(media.getYear() <= sp_year_max.getValue() && media.getYear() >= sp_year_min.getValue())
+            {
+                slimmedMedia.addLast(media);
+            }
+        }
+
+        return slimmedMedia.toArray(new Media[0]);
+    }
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                            DATABASE METHODS                                                   */
@@ -421,164 +599,6 @@ public class BrowseController
     /*                                            HELPER METHODS                                                     */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    // TODO FINISH AND COMMENT
-    //TODO TEST
-    private Media[] slimResults(Media[] media) throws SQLException
-    {
-
-        //TODO MAKE FASTER
-        if(!ta_bands.getText().isBlank() && searchCase != 1)
-        {
-            Media[] search = BandQuery();
-
-            //compare the band search to the current media list
-            //if the titles mach, keep the media
-            //otherwise set the media to null
-
-            for(int i = 0; i < media.length; i++)
-            {
-                boolean found = false;
-                for(int j = 0; j < search.length; j++)
-                {
-                    if(search[j].getTitle().equals(media[i].getTitle()))
-                    {
-                        found = true;
-                    }
-                }
-                if(!found)
-                {
-                    media[i] = null;
-                }
-            }
-
-            //list of correct size
-            LinkedList<Media> slimMedia = new LinkedList<>();
-
-            //fill list
-            for(int i = 0; i < media.length; i++)
-            {
-                if(media[i] != null)
-                {
-                    slimMedia.addLast(media[i]);
-                }
-            }
-            media = slimMedia.toArray(new Media[0]);
-        }
-
-        //TODO MAKE FASTER
-        if(!ta_genres.getText().isBlank() && searchCase != 2)
-        {
-            Media[] search = GenreQuery();
-
-            //compare the genre search to the current media list
-            //if the titles mach, keep the media
-            //otherwise drop the media to null
-            for(int i = 0; i < media.length; ++i)
-            {
-                boolean found = false;
-                for(int j = 0; j < search.length; ++j)
-                {
-                    //check
-                    if(media[i].getTitle().equals(search[j].getTitle()))
-                    {
-                        found = true;
-                    }
-                }
-
-                if(!found)
-                {
-                    media[i] = null;
-                }
-            }
-
-            //list of correct size
-            LinkedList<Media> slimMedia = new LinkedList<>();
-
-            //fill list
-            for(int i = 0; i < media.length; i++)
-            {
-                if(media[i] != null)
-                {
-                    slimMedia.addLast(media[i]);
-                }
-            }
-            media = slimMedia.toArray(new Media[0]);
-        }
-
-        if(medium[0] != null && searchCase != 3)
-        {
-            //filter for each type of medium
-            LinkedList<Media> mediaList = new LinkedList<>();
-            for(int i = 0; i < medium.length; i++)
-            {
-                //slim the current medium
-                if(!medium[i].isBlank())
-                {
-                    for(int j = 0; j < media.length; j++)
-                    {
-                        if(media[j].getMedium().equals(medium[i]))
-                        {
-                            mediaList.addLast(media[j]);
-                        }
-                    }
-                }
-            }
-
-            //slimed media array
-            media = mediaList.toArray(new Media[0]);
-        }
-
-        if(format[0] != null && searchCase != 4)
-        {
-            LinkedList<Media> mediaList = new LinkedList<>();
-            for(int i = 0; i < format.length; i++)
-            {
-                if(!format[i].isBlank())
-                {
-                    for(int j = 0; j < media.length; j++)
-                    {
-                        if(media[j].getFormat().equals(format[i]))
-                        {
-                            mediaList.addLast(media[j]);
-                        }
-                    }
-                }
-            }
-
-            //slimmed media list
-            media = mediaList.toArray(new Media[0]);
-        }
-
-        if(YearInputsChanged() && searchCase != 5)
-        {
-            //for each media object
-            //if the media does not fall within the date range, set the object to null
-            for(int i = 0; i < media.length; i++)
-            {
-                if(media[i].getYear() < sp_year_min.getValue() || media[i].getYear() > sp_year_max.getValue())
-                {
-                    media[i] = null;
-                }
-            }
-
-            //list of correct size
-            LinkedList<Media> slimMedia = new LinkedList<>();
-
-            //fill list
-            for(int i = 0; i < media.length; i++)
-            {
-                if(media[i] != null)
-                {
-                    slimMedia.addLast(media[i]);
-                }
-            }
-            media = slimMedia.toArray(new Media[0]);
-        }
-
-        return media;
-    }
-
-
     /**
      * Creates content panes from media object(s) which is then added to the vbox display region.
      * @param media Media object(s)
@@ -697,5 +717,24 @@ public class BrowseController
                 (sp_year_min.getValue() != null && sp_year_min.getValue() != 1400) ||
                 (sp_year_max.getValue() != null && sp_year_max.getValue() != Year.now().getValue())
         );
+    }
+
+    /**
+     * Ensures the year range is searchable and that the minimum range is less than or equal to the maximum range.
+     * @return True if range is valid; false otherwise
+     */
+    private boolean YearValidation()
+    {
+        if ((sp_year_min.getValue() != null && sp_year_max.getValue() != null)
+                && (sp_year_min.getValue() > sp_year_max.getValue()))
+        {
+            Graphical.ErrorPopup("Invalid Year Input", String.format(
+                    "Please check the year input boxes. Your current year range is unsearchable '%s to %s'",
+                    sp_year_min.getValue(), sp_year_max.getValue()
+            ));
+            return false;
+        }
+
+        return true;
     }
 }
