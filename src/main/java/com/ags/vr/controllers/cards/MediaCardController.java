@@ -9,6 +9,8 @@ import com.ags.vr.utils.database.DBGenreLinker;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -19,6 +21,7 @@ public class MediaCardController
     @FXML private TextArea ta_genres;
     @FXML private Text txt_band;
     @FXML private Text txt_title;
+    @FXML private ImageView img_medium;
 
     // Reference variables
     private Media media;
@@ -143,6 +146,9 @@ public class MediaCardController
         {
             ta_genres.appendText(String.format("%s\n", genre));
         }
+
+        // Set medium image
+        this.img_medium.setImage(new Image(getClass().getResourceAsStream(String.format("/com/ags/vr/artwork/icons/%s.png", media.getMedium()))));
     }
 
     /**
