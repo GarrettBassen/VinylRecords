@@ -1,5 +1,6 @@
 package com.ags.vr.controllers.cards;
 
+import com.ags.vr.controllers.utils.CardBase;
 import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
@@ -8,102 +9,50 @@ import com.ags.vr.utils.database.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
-public class MediaEditController {
+public class MediaEditController implements CardBase
+{
+    // Text display
+    @FXML private TextField nameDisplay;
+    @FXML private TextField bandDisplay;
+    @FXML private TextArea genresDisplay;
+    @FXML private TextField yearDisplay;
+    @FXML private TextField invTotal;
 
-    @FXML
-    private TextField bandDisplay;
+    // Inventory variables
+    @FXML private Spinner<Integer> bgSpinner;
+    @FXML private Spinner<Integer> bfSpinner;
+    @FXML private Spinner<Integer> bpSpinner;
+    @FXML private Spinner<Integer> gfSpinner;
+    @FXML private Spinner<Integer> ffSpinner;
+    @FXML private Spinner<Integer> pfSpinner;
 
-    @FXML
-    private Spinner<?> bfSpinner;
+    // Format display
+    @FXML private RadioButton singleRB;
+    @FXML private RadioButton epRB;
+    @FXML private RadioButton lpRB;
+    @FXML private RadioButton dlpRB;
 
-    @FXML
-    private Spinner<?> bgSpinner;
-
-    @FXML
-    private Spinner<?> bpSpinner;
-
-    @FXML
-    private Button searchButton;
-
-    @FXML
-    private Button delete;
-
-    @FXML
-    private Spinner<?> ffSpinner;
-
-    @FXML
-    private AnchorPane pane_base;
-
-    @FXML
-    private TextArea genresDisplay;
-
-    @FXML
-    private Spinner<?> gfSpinner;
-
-    @FXML
-    private TextField input;
-
-    @FXML
-    private TextField invTotal;
-
-    @FXML
-    private TextField nameDisplay;
-
-    @FXML
-    private Spinner<?> pfSpinner;
-
-    @FXML
-    private Button update;
-
-    @FXML
-    private TextField yearDisplay;
-
-    @FXML
-    private RadioButton vinylRB;
-
+    // Medium display
+    @FXML private RadioButton vinylRB;
     @FXML private RadioButton cdRB;
-
     @FXML private RadioButton cassetteRB;
 
-    @FXML private RadioButton singleRB;
-
-    @FXML private RadioButton epRB;
-
-    @FXML private RadioButton lpRB;
-
-    @FXML private RadioButton dlpRB;
+    @FXML private Button update;
 
     //used with radio buttons
     private String medium = "";
     private String format = "";
 
+    @FXML private HBox pane_base;
+    private MediaCardController card_base;
     private Media media;
 
     @FXML
     public void initialize()
     {
         SpinnerInitialize();
-    }
-
-    /**
-     * Closes page by setting invisible.
-     */
-    @FXML
-    void Close()
-    {
-        setVisible(false);
-    }
-
-    public void setVisible(boolean condition)
-    {
-        pane_base.setVisible(condition);
-    }
-
-    public void setMedia(Media media)
-    {
-        this.media = media;
     }
 
     /**
@@ -114,46 +63,45 @@ public class MediaEditController {
     void applyUpdate(ActionEvent event)
     {
         try {
-            if (!invalidInput(event))
+            // Do nothing if media is null
+            if (this.media == null) { return; }
+
+            //getting old media object
+            Media oldMedia = this.media;
+            //creating new media object
+            Media newMedia = createUpdatedMedia();
+
+            //insert the band if it's not in the db
+            if (!DBBand.Contains(newMedia.getBand()))
             {
-                //getting old media object
-                Media oldMedia = DBMedia.getMedia(input.getText(), medium);
-                //creating new media object
-                Media newMedia = createUpdatedMedia();
+                DBBand.Insert(newMedia.getBand());
+            }
 
-                    //insert the band if its not in the db
-                    if (!DBBand.Contains(newMedia.getBand()))
-                    {
-                        DBBand.Insert(newMedia.getBand());
-                    }
+            //update the media object
+            DBMedia.Update(newMedia, oldMedia);
 
-                    //update the media object
-                    DBMedia.Update(newMedia, oldMedia);
+            //connect with genre linker
+            String genres = genresDisplay.getText();
+            String[] genresAr = genres.split("\n");
 
-                    //connect with genre linker
-                    String genres = genresDisplay.getText();
-                    String[] genresAr = genres.split("\n");
-
-                    for (String genre : genresAr) {
-                        //insert genres if theyre not in the db
-                        if (!DBGenre.Contains(genre))
-                        {
-                            DBGenre.Insert(genre);
-                        }
-                        DBGenreLinker.Insert(newMedia.getID(), Hash.StringHash(genre));
-                    }
-
-                    //connect media and stock
-                    stockSave();
-
-                    Graphical.InfoPopup("Update", "Updated successfully");
+            for (String genre : genresAr) {
+                //insert genres if they're not in the db
+                if (!DBGenre.Contains(genre))
+                {
+                    DBGenre.Insert(genre);
                 }
+                DBGenreLinker.Insert(newMedia.getID(), Hash.StringHash(genre));
+            }
+
+            //connect media and stock
+            stockSave();
+
+            Graphical.InfoPopup("Update", "Updated successfully");
         }
         catch (Exception e)
         {
             Graphical.ErrorPopup("Failed band update", e.getMessage());
         }
-
     }
 
     /**
@@ -163,104 +111,93 @@ public class MediaEditController {
     @FXML
     void deleteEntry(ActionEvent event)
     {
-        if(!invalidInput(event))
-        {
-            //ask the user for deletion conformation
-            boolean delete = Graphical.ConfirmationPopup("Deletion", "Are you sure" +
-                    " you want to delete this item?");
+        // Do nothing if media is null
+        if (this.media == null) { return; }
 
-            //deletion confermend
-            if(delete)
-            {
-                DBMedia.Delete(DBMedia.getMedia(input.getText(), medium));
-                Graphical.InfoPopup("Delete", "Deleted successfully");
-            }
-            //deletion averted
-            else
-            {
-                Graphical.InfoPopup("Deletion", "Deletion Averted");
-            }
+        //ask the user for deletion conformation
+        boolean delete = Graphical.ConfirmationPopup("Deletion", "Are you sure" +
+                " you want to delete this item?");
+
+        //deletion confermend
+        if(delete)
+        {
+            DBMedia.Delete(this.media);
+            Graphical.InfoPopup("Delete", "Deleted successfully");
+        }
+        //deletion averted
+        else
+        {
+            Graphical.InfoPopup("Deletion", "Deletion Averted");
         }
     }
 
 
-    /**
-     * Takes the title of a media and searches the database for it. The results are
-     * displayed in their corresponding text fields. If the media does not exist
-     * the user is prompted to the add page. If the input box is empty, the user
-     * is prompted to enter a valid input.
-     * @param event action event from button press.
-     */
-    @FXML
-    void mediaSearch(ActionEvent event)
+    // TODO COMMENT
+    void setDisplay()
     {
-        String name = input.getText();
+        // Do nothing if media is null
+        if (this.media == null) { return; }
 
-        if(!invalidInput(event))
+        //setting the media display text fields
+        nameDisplay.setText(this.media.getTitle());
+        bandDisplay.setText(this.media.getBand());
+        yearDisplay.setText(String.valueOf(this.media.getYear()));
+
+        // Display correct format
+        if(this.media.getFormat().equals("Single"))
         {
-            //getting the media from the db
-            Media m = DBMedia.getMedia(name, medium);
-            //setting the media display text fields
-            nameDisplay.setText(name);
-            bandDisplay.setText(m.getBand());
-            yearDisplay.setText(String.valueOf(m.getYear()));
-            String dbFormat = m.getFormat();
-
-
-            //for displaying correct format
-            if(dbFormat.equals("Single"))
-            {
-                format = "Single";
-                singleRB.setSelected(true);
-            }
-            else if(dbFormat.equals("EP"))
-            {
-                format = "EP";
-                epRB.setSelected(true);
-            }
-            else if(dbFormat.equals("LP"))
-            {
-                format = "LP";
-                lpRB.setSelected(true);
-            }
-            else if(dbFormat.equals("DLP"))
-            {
-                format = "DLP";
-                dlpRB.setSelected(true);
-            }
-
-            //displaying genre
-            int[] genreIDs = DBMedia.getGenres(m);
-            String[] genresAr = DBGenre.getName(genreIDs);
-            String display = "";
-
-            for(int i = 0; i < genresAr.length-1; i++)
-            {
-                display += genresAr[i] + "\n";
-            }
-            display += genresAr[genresAr.length-1];
-            genresDisplay.setText(display);
-
-            //clear the spinners for update
-            gfSpinner.decrement((int) gfSpinner.getValue());
-            ffSpinner.decrement((int) ffSpinner.getValue());
-            pfSpinner.decrement((int) pfSpinner.getValue());
-            bgSpinner.decrement((int) bgSpinner.getValue());
-            bfSpinner.decrement((int) bfSpinner.getValue());
-            bgSpinner.decrement((int) bgSpinner.getValue());
-            //stock object
-            Stock st = new Stock(m);
-            int[] data = st.getData();
-            //setting the stock spinners
-            gfSpinner.increment(data[1]);
-            ffSpinner.increment(data[2]);
-            pfSpinner.increment(data[3]);
-            bgSpinner.increment(data[4]);
-            bfSpinner.increment(data[5]);
-            bpSpinner.increment(data[6]);
-            //setting total stock value
-            invTotal.setText(String.valueOf(st.getStockTotal()));
+            format = "Single";
+            singleRB.setSelected(true);
         }
+        else if(this.media.getFormat().equals("EP"))
+        {
+            format = "EP";
+            epRB.setSelected(true);
+        }
+        else if(this.media.getFormat().equals("LP"))
+        {
+            format = "LP";
+            lpRB.setSelected(true);
+        }
+        else if(this.media.getFormat().equals("DLP"))
+        {
+            format = "DLP";
+            dlpRB.setSelected(true);
+        }
+
+        //displaying genre
+        int[] genreIDs = DBMedia.getGenres(this.media);
+        String[] genresAr = DBGenre.getName(genreIDs);
+        String display = "";
+
+        for(int i = 0; i < genresAr.length-1; i++)
+        {
+            display += genresAr[i] + "\n";
+        }
+        display += genresAr[genresAr.length-1];
+        genresDisplay.setText(display);
+
+        //clear the spinners for update
+        gfSpinner.decrement((int) gfSpinner.getValue());
+        ffSpinner.decrement((int) ffSpinner.getValue());
+        pfSpinner.decrement((int) pfSpinner.getValue());
+        bgSpinner.decrement((int) bgSpinner.getValue());
+        bfSpinner.decrement((int) bfSpinner.getValue());
+        bgSpinner.decrement((int) bgSpinner.getValue());
+
+        //stock object
+        Stock st = new Stock(this.media);
+        int[] data = st.getData();
+        //setting the stock spinners
+        gfSpinner.increment(data[1]);
+        ffSpinner.increment(data[2]);
+        pfSpinner.increment(data[3]);
+        bgSpinner.increment(data[4]);
+        bfSpinner.increment(data[5]);
+        bpSpinner.increment(data[6]);
+
+        //setting total stock value
+        invTotal.setText(String.valueOf(st.getStockTotal()));
     }
 
     /**
@@ -381,6 +318,7 @@ public class MediaEditController {
      * @param event action event of current method being run.
      * @return Returns true if an invalid input is detected. Returns false if there is no invalid input.
      */
+    /* TODO CHECK IF NEEDED
     public boolean invalidInput(ActionEvent event)
     {
         //Search scenarios
@@ -447,24 +385,24 @@ public class MediaEditController {
         }
         return false;
     }
-
+     */
 
     /**
      * Creates a stock object based off the current stock data in the spinners and the current input name.
-     * @return
+     * @return Stock object
      */
     public Stock createUpdatedStock()
     {
         byte[] ar = {
-                Byte.valueOf(gfSpinner.getValue().toString()),
-                Byte.valueOf(ffSpinner.getValue().toString()),
-                Byte.valueOf(pfSpinner.getValue().toString()),
-                Byte.valueOf(bgSpinner.getValue().toString()),
-                Byte.valueOf(bfSpinner.getValue().toString()),
-                Byte.valueOf(bpSpinner.getValue().toString()),
+                (byte) gfSpinner.getValue().intValue(),
+                (byte) ffSpinner.getValue().intValue(),
+                (byte) pfSpinner.getValue().intValue(),
+                (byte) bgSpinner.getValue().intValue(),
+                (byte) bfSpinner.getValue().intValue(),
+                (byte) bpSpinner.getValue().intValue(),
         };
 
-        return new Stock(DBMedia.getMedia(input.getText(), medium).getID(), ar);
+        return new Stock(this.media.getID(), ar);
     }
 
     /**
@@ -480,5 +418,37 @@ public class MediaEditController {
                 Short.parseShort(yearDisplay.getText()),
                 bandDisplay.getText()
         );
+    }
+
+    @Override
+    public void Close()
+    {
+        this.setVisible(false);
+    }
+
+    @Override
+    public void Back()
+    {
+        this.Close();
+        this.card_base.setVisible(true);
+    }
+
+    @Override
+    public void setMediaCard(MediaCardController controller)
+    {
+        this.card_base = controller;
+    }
+
+    @Override
+    public void setVisible(boolean condition)
+    {
+        this.pane_base.setVisible(condition);
+    }
+
+    @Override
+    public void setMedia(Media media)
+    {
+        this.media = media;
+        setDisplay();
     }
 }

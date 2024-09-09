@@ -118,6 +118,11 @@ public class BrowseController
             card_editGenreController = card_editGenre.getController();
             card_editBandController = card_editBand.getController();
 
+            // Set base card controller reference for 'Previous Page' functionality
+            card_editMediaController.setMediaCard(card_mediaController);
+            card_editGenreController.setMediaCard(card_mediaController);
+            card_editBandController.setMediaCard(card_mediaController);
+
             // Make cards invisible
             card_mediaController.setVisible(false);
             card_editMediaController.setVisible(false);
