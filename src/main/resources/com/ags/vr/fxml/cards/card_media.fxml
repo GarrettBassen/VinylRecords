@@ -42,7 +42,7 @@
                   <RowConstraints maxHeight="60.0" minHeight="60.0" vgrow="NEVER" />
                </rowConstraints>
                <children>
-                  <TextArea fx:id="ta_genres" GridPane.rowIndex="1">
+                  <TextArea fx:id="ta_genres" editable="false" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets top="40.0" />
                      </GridPane.margin>

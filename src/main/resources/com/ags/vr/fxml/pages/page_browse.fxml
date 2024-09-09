@@ -173,7 +173,7 @@
                                     <Spinner fx:id="sp_year_max" editable="true" stylesheets="@../../css/page_browse.css" GridPane.columnIndex="2" />
                                  </children>
                               </GridPane>
-                              <Button mnemonicParsing="false" onAction="#ClearYearInput" prefHeight="3.0" prefWidth="70.0" text="clear" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                              <Button mnemonicParsing="false" onAction="#ClearYearInput" prefHeight="3.0" prefWidth="70.0" text="Reset" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                  <font>
                                     <Font name="Arial Rounded MT Bold" size="12.0" />
                                  </font>

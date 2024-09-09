@@ -11,6 +11,7 @@
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BAND EDIT PAGE" />
             <Button mnemonicParsing="false" onAction="#Close" text="Close" />
+            <Button mnemonicParsing="false" onAction="#Back" text="Back" />
          </children>
       </HBox>
    </children>

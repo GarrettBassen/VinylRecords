@@ -424,6 +424,7 @@ public class MediaEditController implements CardBase
     public void Close()
     {
         this.setVisible(false);
+        card_base.setPageBlockVisibility(false);
     }
 
     @Override
@@ -443,6 +444,7 @@ public class MediaEditController implements CardBase
     public void setVisible(boolean condition)
     {
         this.pane_base.setVisible(condition);
+        if (condition) { card_base.setPageBlockVisibility(true); }
     }
 
     @Override

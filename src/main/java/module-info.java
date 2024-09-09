@@ -3,6 +3,7 @@ module com.ags.vr {
     requires javafx.fxml;
     requires java.sql;
     requires org.mybatis;
+    requires java.desktop;
 
 
     opens com.ags.vr to javafx.fxml;

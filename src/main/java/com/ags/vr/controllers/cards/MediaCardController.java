@@ -1,5 +1,6 @@
 package com.ags.vr.controllers.cards;
 
+import com.ags.vr.controllers.utils.PageBlockController;
 import com.ags.vr.objects.Media;
 
 import com.ags.vr.utils.database.DBGenre;
@@ -21,6 +22,7 @@ public class MediaCardController
 
     // Reference variables
     private Media media;
+    private PageBlockController pageBlockController;
     private MediaEditController mediaEditController;
     private GenreEditController genreEditController;
     private BandEditController bandEditController;
@@ -32,6 +34,7 @@ public class MediaCardController
     void Close()
     {
         this.setVisible(false);
+        this.setPageBlockVisibility(false);
     }
 
     // Opens page to edit media
@@ -93,6 +96,16 @@ public class MediaCardController
     public void setVisible(boolean condition)
     {
         this.pane_base.setVisible(condition);
+        if (condition) { this.setPageBlockVisibility(true); }
+    }
+
+    /**
+     * Sets page blocker visibility.
+     * @param condition True make page blocker visible; False make page blocker invisible
+     */
+    public void setPageBlockVisibility(boolean condition)
+    {
+        this.pageBlockController.setVisibility(condition);
     }
 
     /**
@@ -104,6 +117,15 @@ public class MediaCardController
         ClearDisplay();
         this.media = media;
         setDisplay();
+    }
+
+    /**
+     * Sets page block controller.
+     * @param controller PageBlockController
+     */
+    public void setPageBlock(PageBlockController controller)
+    {
+        this.pageBlockController = controller;
     }
 
     /**

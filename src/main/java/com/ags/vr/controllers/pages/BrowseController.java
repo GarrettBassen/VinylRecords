@@ -5,6 +5,7 @@ import com.ags.vr.controllers.cards.GenreEditController;
 import com.ags.vr.controllers.cards.MediaEditController;
 import com.ags.vr.controllers.utils.ContentPaneController;
 import com.ags.vr.controllers.cards.MediaCardController;
+import com.ags.vr.controllers.utils.PageBlockController;
 import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
@@ -97,22 +98,25 @@ public class BrowseController
      */
     private void InitializePages()
     {
-        // Initialize card popup
+        // Initialize all cards
         try
         {
             // Get cards
+            FXMLLoader card_block = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/utils/page_block.fxml"));
             FXMLLoader card_media = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media.fxml"));
             FXMLLoader card_editMedia = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media_edit.fxml"));
             FXMLLoader card_editGenre = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_genre_edit.fxml"));
             FXMLLoader card_editBand = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_band_edit.fxml"));
 
             // Set cards in scene
+            pane_base.getChildren().add(card_block.load());
             pane_base.getChildren().add(card_media.load());
             pane_base.getChildren().add(card_editMedia.load());
             pane_base.getChildren().add(card_editGenre.load());
             pane_base.getChildren().add(card_editBand.load());
 
             // Get card controllers
+            PageBlockController page_blockController = card_block.getController();
             card_mediaController = card_media.getController();
             card_editMediaController = card_editMedia.getController();
             card_editGenreController = card_editGenre.getController();
@@ -124,10 +128,14 @@ public class BrowseController
             card_editBandController.setMediaCard(card_mediaController);
 
             // Make cards invisible
+            page_blockController.setVisibility(false);
             card_mediaController.setVisible(false);
             card_editMediaController.setVisible(false);
             card_editGenreController.setVisible(false);
             card_editBandController.setVisible(false);
+
+            // Setup page blocker
+            card_mediaController.setPageBlock(page_blockController);
         }
         catch (IOException e)
         {
