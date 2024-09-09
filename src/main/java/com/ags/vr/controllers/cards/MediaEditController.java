@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
+//TODO REMOVE GENRE AND BAND EDITING FUNCTIONALITY
+
 public class MediaEditController implements CardBase
 {
     // Text display
@@ -80,21 +82,14 @@ public class MediaEditController implements CardBase
             //update the media object
             DBMedia.Update(newMedia, oldMedia);
 
-            //connect with genre linker
-            String genres = genresDisplay.getText();
-            String[] genresAr = genres.split("\n");
-
-            for (String genre : genresAr) {
-                //insert genres if they're not in the db
-                if (!DBGenre.Contains(genre))
-                {
-                    DBGenre.Insert(genre);
-                }
-                DBGenreLinker.Insert(newMedia.getID(), Hash.StringHash(genre));
-            }
+            //update genre object
+            genreHelper(newMedia);
 
             //connect media and stock
-            stockSave();
+            stockSave(newMedia);
+
+            //set the new media and display
+            setMedia(newMedia);
 
             Graphical.InfoPopup("Update", "Updated successfully");
         }
@@ -165,6 +160,23 @@ public class MediaEditController implements CardBase
             dlpRB.setSelected(true);
         }
 
+        //display correct medium
+        if(this.media.getMedium().equals("vinyl"))
+        {
+            medium = "vinyl";
+            vinylRB.setSelected(true);
+        }
+        else if(this.media.getMedium().equals("CD"))
+        {
+            medium = "CD";
+            cdRB.setSelected(true);
+        }
+        else if(this.media.getMedium().equals("Cassette"))
+        {
+            medium = "Cassette";
+            cassetteRB.setSelected(true);
+        }
+
         //displaying genre
         int[] genreIDs = DBMedia.getGenres(this.media);
         String[] genresAr = DBGenre.getName(genreIDs);
@@ -200,16 +212,38 @@ public class MediaEditController implements CardBase
         invTotal.setText(String.valueOf(st.getStockTotal()));
     }
 
+
+    //TODO REMOVE THE ABILITY TO INSERT A GENRE FROM MEDIA EDIT CONTROLLER
+    /**
+     * Method that connects a media object to its genres.
+     * @param newMedia
+     */
+    public void genreHelper(Media newMedia)
+    {
+        //connect with genre linker
+        String genres = genresDisplay.getText();
+        String[] genresAr = genres.split("\n");
+
+        for (String genre : genresAr) {
+            //insert genres if they're not in the db
+            if (!DBGenre.Contains(genre))
+            {
+                DBGenre.Insert(genre);
+            }
+            DBGenreLinker.Insert(newMedia.getID(), Hash.StringHash(genre));
+        }
+    }
+
     /**
      * Replaces the current stock entry with a new updated entry.
      */
     @FXML
-    void stockSave()
+    void stockSave(Media m)
     {
         try
         {
             //creating new stock object
-            Stock st = createUpdatedStock();
+            Stock st = createUpdatedStock(m);
             DBInventory.Insert(st);
             invTotal.setText(String.valueOf(st.getStockTotal()));
         }
@@ -391,7 +425,7 @@ public class MediaEditController implements CardBase
      * Creates a stock object based off the current stock data in the spinners and the current input name.
      * @return Stock object
      */
-    public Stock createUpdatedStock()
+    public Stock createUpdatedStock(Media m)
     {
         byte[] ar = {
                 (byte) gfSpinner.getValue().intValue(),
@@ -402,7 +436,7 @@ public class MediaEditController implements CardBase
                 (byte) bpSpinner.getValue().intValue(),
         };
 
-        return new Stock(this.media.getID(), ar);
+        return new Stock(m.getID(), ar);
     }
 
     /**

@@ -97,8 +97,11 @@ public class Connector
             Reader reader = new BufferedReader(new FileReader("database/buildOldSkoolDB.sql"));
             //Running the script
             sr.runScript(reader);
-
             con.close();
+            con = null;
+
+            //reconnecting to the db
+            connect();
         }
         catch (SQLException e)
         {

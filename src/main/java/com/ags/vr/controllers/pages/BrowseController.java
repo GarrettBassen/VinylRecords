@@ -31,6 +31,8 @@ import java.util.*;
 
 import static com.ags.vr.utils.Connector.con;
 
+//TODO FIX BUG WHEN DESELECTING MEDIUM AND FORMAT (BREAKS THE SEARCH)
+
 public class BrowseController
 {
     // Panes

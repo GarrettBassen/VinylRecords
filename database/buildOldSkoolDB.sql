@@ -116,27 +116,6 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
-----------------------
----NULL media ENTRY---
-----------------------
-INSERT INTO media(media_id, title, medium, album_format, year, band_id)
-VALUES(0, 'null', 'CD', 'EP', 0, 0);
-
-INSERT INTO genre(genre_id, name)
-VALUES(0, 'null');
-
------------------------------
----NULL genre_linker ENTRY---
------------------------------
-INSERT INTO genre_linker(media_id, genre_id)
-VALUES(0,0);
-
----------------------
----NULL band ENTRY---
----------------------
-INSERT INTO band(band_id, name)
-VALUES(0, 'null');
-
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
