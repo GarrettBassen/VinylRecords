@@ -5,29 +5,19 @@ import com.ags.vr.objects.Media;
 import com.ags.vr.utils.database.DBGenre;
 import com.ags.vr.utils.database.DBGenreLinker;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
-
-import java.awt.event.MouseEvent;
+import javafx.scene.input.MouseEvent;
 
 public class GenreEditController implements CardBase
 {
     @FXML private ListView<String> list_genres;
     @FXML private HBox pane_base;
 
-    ObservableList<String> genres = FXCollections.observableArrayList();
-
     private MediaCardController card_base;
     private Media media;
-    //Test
-    private MouseEvent mouseEvent;
 
     @FXML
     void initialize()
@@ -85,4 +75,15 @@ public class GenreEditController implements CardBase
         }
     }
 
+    @FXML
+    void genreCard(MouseEvent event)
+    {
+        System.out.println("MOUSE CLICKED");
+    }
+
+    @FXML
+    void GenreCard(MouseEvent mouseEvent)
+    {
+        System.out.println(this.list_genres.getSelectionModel().getSelectedItem());
+    }
 }

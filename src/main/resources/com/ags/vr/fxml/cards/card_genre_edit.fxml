@@ -23,7 +23,7 @@
                         <Font size="24.0" />
                      </font>
                   </Text>
-                  <ListView fx:id="list_genres" fixedCellSize="50.0" onMouseClicked="#genreCard" VBox.vgrow="ALWAYS">
+                  <ListView fx:id="list_genres" fixedCellSize="50.0" onMouseClicked="#GenreCard" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets bottom="43.0" top="15.0" />
                      </VBox.margin>

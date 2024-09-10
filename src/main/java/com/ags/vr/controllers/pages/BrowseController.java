@@ -141,8 +141,10 @@ public class BrowseController
         }
         catch (IOException e)
         {
-            Graphical.ErrorPopup("Initialization Error",
-                    "Error loading popup card in InitializePages() | BrowseController.java");
+            Graphical.ErrorPopup("Initialization Error", String.format(
+                    "Error loading popup card in InitializePages() | BrowseController.java\n\nError:%s",
+                    e.getMessage())
+            );
         }
 
         // Set edit controller to open edit screen
