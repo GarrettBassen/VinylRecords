@@ -31,8 +31,6 @@ import java.util.*;
 
 import static com.ags.vr.utils.Connector.con;
 
-//TODO FIX BUG WHEN DESELECTING MEDIUM AND FORMAT (BREAKS THE SEARCH)
-
 public class BrowseController
 {
     // Panes
@@ -91,6 +89,9 @@ public class BrowseController
         sp_year_min.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1400,Year.now().getValue()));
         sp_year_max.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1400,Year.now().getValue()));
         ClearYearInput();
+
+        Arrays.fill(medium,"");
+        Arrays.fill(format,"");
 
         InitializePages();
     }
@@ -186,6 +187,7 @@ public class BrowseController
             Media[] media = sqlSearch();
             media = slimResults(media);
             AddContentPane(card_mediaController, media);
+            ClearParameters();
         }
         catch (SQLException e)
         {
@@ -236,12 +238,12 @@ public class BrowseController
                 searchCase = 2;
                 return GenreQuery();
             }
-            else if (medium[0] != null)
+            else if (!medium[0].isBlank())
             {
                 searchCase = 3;
                 return MediumQuery();
             }
-            else if (format[0] != null)
+            else if (!format[0].isBlank())
             {
                 searchCase = 4;
                 return FormatQuery();
@@ -288,13 +290,13 @@ public class BrowseController
         }
 
         // Slim down to specified mediums
-        if(medium[0] != null && searchCase != 3)
+        if(!medium[0].isEmpty() && searchCase != 3)
         {
             mediaList = FilterMedium(mediaList);
         }
 
         // Slim media to only specified formats
-        if(format[0] != null && searchCase != 4)
+        if(!format[0].isEmpty() && searchCase != 4)
         {
             mediaList = FilterFormat(mediaList);
         }
@@ -658,6 +660,16 @@ public class BrowseController
         }
 
         return mediaList.toArray(new Media[0]);
+    }
+
+    /**
+     * Clears all search parameters and variables.
+     */
+    private void ClearParameters()
+    {
+        this.searchCase = 0;
+        Arrays.fill(medium,"");
+        Arrays.fill(format,"");
     }
 
 
