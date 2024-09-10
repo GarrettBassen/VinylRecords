@@ -6,11 +6,16 @@ import com.ags.vr.utils.database.DBGenre;
 import com.ags.vr.utils.database.DBGenreLinker;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
+
+import java.awt.event.MouseEvent;
 
 public class GenreEditController implements CardBase
 {
@@ -21,6 +26,15 @@ public class GenreEditController implements CardBase
 
     private MediaCardController card_base;
     private Media media;
+    //Test
+    private MouseEvent mouseEvent;
+
+    @FXML
+    void initialize()
+    {
+        this.list_genres.setEditable(true);
+        this.list_genres.setCellFactory(TextFieldListCell.forListView());
+    }
 
     @Override
     public void Close()
@@ -70,4 +84,5 @@ public class GenreEditController implements CardBase
             this.list_genres.getItems().add(DBGenre.getName(genre)[0]);
         }
     }
+
 }
