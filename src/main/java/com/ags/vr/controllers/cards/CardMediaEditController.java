@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 
 //TODO REMOVE GENRE AND BAND EDITING FUNCTIONALITY
 
-public class MediaEditController implements CardBase
+public class CardMediaEditController implements CardBase
 {
     // Text display
     @FXML private TextField nameDisplay;
@@ -48,13 +48,14 @@ public class MediaEditController implements CardBase
     private String format = "";
 
     @FXML private HBox pane_base;
-    private MediaCardController card_base;
+    private CardMediaViewController card_base;
     private Media media;
 
     @FXML
     public void initialize()
     {
         SpinnerInitialize();
+        this.setVisible(false);
     }
 
     /**
@@ -469,7 +470,7 @@ public class MediaEditController implements CardBase
     }
 
     @Override
-    public void setMediaCard(MediaCardController controller)
+    public void setMediaCard(CardMediaViewController controller)
     {
         this.card_base = controller;
     }

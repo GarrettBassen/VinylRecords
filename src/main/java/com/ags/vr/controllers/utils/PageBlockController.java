@@ -7,6 +7,12 @@ public class PageBlockController
 {
     @FXML private AnchorPane pane_blocker;
 
+    @FXML
+    void initialize()
+    {
+        this.setVisibility(false);
+    }
+
     public void setVisibility(boolean condition)
     {
         this.pane_blocker.setVisible(condition);

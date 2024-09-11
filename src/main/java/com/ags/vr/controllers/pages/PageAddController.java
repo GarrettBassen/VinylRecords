@@ -17,7 +17,7 @@ import java.time.Year;
  * checking and error displays are utilized to ensure the user may not insert improperly formatted data and that they
  * know when an error occurs and how to fix it.
  */
-public class AddController
+public class PageAddController
 {
     // Medium variables
     @FXML private CheckBox cb_vinyl;

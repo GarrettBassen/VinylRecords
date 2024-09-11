@@ -11,12 +11,12 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.input.MouseEvent;
 
-public class GenreEditController implements CardBase
+public class CardGenreEditController implements CardBase
 {
     @FXML private ListView<String> list_genres;
     @FXML private HBox pane_base;
 
-    private MediaCardController card_base;
+    private CardMediaViewController card_base;
     private Media media;
 
     @FXML
@@ -24,6 +24,7 @@ public class GenreEditController implements CardBase
     {
         this.list_genres.setEditable(true);
         this.list_genres.setCellFactory(TextFieldListCell.forListView());
+        this.setVisible(false);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class GenreEditController implements CardBase
     }
 
     @Override
-    public void setMediaCard(MediaCardController controller)
+    public void setMediaCard(CardMediaViewController controller)
     {
         this.card_base = controller;
     }

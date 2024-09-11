@@ -1,6 +1,6 @@
 package com.ags.vr.controllers.utils;
 
-import com.ags.vr.controllers.cards.MediaCardController;
+import com.ags.vr.controllers.cards.CardMediaViewController;
 import com.ags.vr.objects.Media;
 import javafx.fxml.FXML;
 
@@ -22,7 +22,7 @@ public interface CardBase
      * Grabs reference to media card to allow for a 'Go Back' feature on current card.
      * @param controller MediaCardController
      */
-    void setMediaCard(MediaCardController controller);
+    void setMediaCard(CardMediaViewController controller);
 
     /**
      * Sets page visibility.

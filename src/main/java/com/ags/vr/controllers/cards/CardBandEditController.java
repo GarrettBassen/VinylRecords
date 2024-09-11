@@ -1,18 +1,24 @@
 package com.ags.vr.controllers.cards;
 
 import com.ags.vr.controllers.utils.CardBase;
-
 import com.ags.vr.objects.Media;
+
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 
-public class BandEditController implements CardBase
+public class CardBandEditController implements CardBase
 {
     @FXML private HBox pane_base;
 
     // Previous card
-    private MediaCardController card_base;
+    private CardMediaViewController card_base;
     private Media media;
+
+    @FXML
+    void initialize()
+    {
+        this.setVisible(false);
+    }
 
     @Override
     public void Close()
@@ -29,7 +35,7 @@ public class BandEditController implements CardBase
     }
 
     @Override
-    public void setMediaCard(MediaCardController controller)
+    public void setMediaCard(CardMediaViewController controller)
     {
         this.card_base = controller;
     }

@@ -1,10 +1,10 @@
 package com.ags.vr.controllers.pages;
 
-import com.ags.vr.controllers.cards.BandEditController;
-import com.ags.vr.controllers.cards.GenreEditController;
-import com.ags.vr.controllers.cards.MediaEditController;
+import com.ags.vr.controllers.cards.CardBandEditController;
+import com.ags.vr.controllers.cards.CardGenreEditController;
+import com.ags.vr.controllers.cards.CardMediaEditController;
 import com.ags.vr.controllers.utils.ContentPaneController;
-import com.ags.vr.controllers.cards.MediaCardController;
+import com.ags.vr.controllers.cards.CardMediaViewController;
 import com.ags.vr.controllers.utils.PageBlockController;
 import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
@@ -31,17 +31,17 @@ import java.util.*;
 
 import static com.ags.vr.utils.Connector.con;
 
-public class BrowseController
+public class PageBrowseController
 {
     // Panes
     @FXML private AnchorPane pane_base;
     @FXML private VBox pane_content;
 
     // Popup card controllers
-    private MediaCardController card_mediaController;
-    private MediaEditController card_editMediaController;
-    private GenreEditController card_editGenreController;
-    private BandEditController card_editBandController;
+    private CardMediaViewController card_mediaController;
+    private CardMediaEditController card_editMediaController;
+    private CardGenreEditController card_editGenreController;
+    private CardBandEditController card_editBandController;
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                      SEARCH FILTER VARIABLES                                                  */
@@ -106,7 +106,7 @@ public class BrowseController
         {
             // Get cards
             FXMLLoader card_block = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/utils/page_block.fxml"));
-            FXMLLoader card_media = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media.fxml"));
+            FXMLLoader card_media = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media_view.fxml"));
             FXMLLoader card_editMedia = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_media_edit.fxml"));
             FXMLLoader card_editGenre = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_genre_edit.fxml"));
             FXMLLoader card_editBand = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/cards/card_band_edit.fxml"));
@@ -129,13 +129,6 @@ public class BrowseController
             card_editMediaController.setMediaCard(card_mediaController);
             card_editGenreController.setMediaCard(card_mediaController);
             card_editBandController.setMediaCard(card_mediaController);
-
-            // Make cards invisible
-            page_blockController.setVisibility(false);
-            card_mediaController.setVisible(false);
-            card_editMediaController.setVisible(false);
-            card_editGenreController.setVisible(false);
-            card_editBandController.setVisible(false);
 
             // Setup page blocker
             card_mediaController.setPageBlock(page_blockController);
@@ -622,7 +615,7 @@ public class BrowseController
      * Creates content panes from media object(s) which is then added to the vbox display region.
      * @param media Media object(s)
      */
-    private void AddContentPane(MediaCardController cardPopup, Media... media)
+    private void AddContentPane(CardMediaViewController cardPopup, Media... media)
     {
         for (Media m : media) {
             try

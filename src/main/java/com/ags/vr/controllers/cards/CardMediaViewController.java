@@ -14,7 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-public class MediaCardController
+public class CardMediaViewController
 {
     // Display variables
     @FXML private HBox pane_base;
@@ -26,9 +26,15 @@ public class MediaCardController
     // Reference variables
     private Media media;
     private PageBlockController pageBlockController;
-    private MediaEditController mediaEditController;
-    private GenreEditController genreEditController;
-    private BandEditController bandEditController;
+    private CardMediaEditController cardMediaEditController;
+    private CardGenreEditController cardGenreEditController;
+    private CardBandEditController cardBandEditController;
+
+    @FXML
+    void initialize()
+    {
+        this.setVisible(false);
+    }
 
     /**
      * Closes popup card by setting it to invisible.
@@ -45,51 +51,51 @@ public class MediaCardController
     void EditMedia()
     {
         setVisible(false);
-        mediaEditController.setMedia(this.media);
-        mediaEditController.setVisible(true);
+        cardMediaEditController.setMedia(this.media);
+        cardMediaEditController.setVisible(true);
     }
 
     @FXML
     void EditGenre()
     {
         setVisible(false);
-        genreEditController.setMedia(this.media);
-        genreEditController.setVisible(true);
+        cardGenreEditController.setMedia(this.media);
+        cardGenreEditController.setVisible(true);
     }
 
     @FXML
     void EditBand()
     {
         setVisible(false);
-        bandEditController.setMedia(this.media);
-        bandEditController.setVisible(true);
+        cardBandEditController.setMedia(this.media);
+        cardBandEditController.setVisible(true);
     }
 
     /**
      * Sets media edit controller.
      * @param controller MediaEditController object
      */
-    public void setMediaEditController(MediaEditController controller)
+    public void setMediaEditController(CardMediaEditController controller)
     {
-        this.mediaEditController = controller;
+        this.cardMediaEditController = controller;
     }
 
     /**
      * Sets genre edit controller.
      * @param controller GenreEditController object
      */
-    public void setGenreEditController(GenreEditController controller)
+    public void setGenreEditController(CardGenreEditController controller)
     {
-        this.genreEditController = controller;
+        this.cardGenreEditController = controller;
     }
 
     /**
      * Sets band edit controller.
      * @param controller BandEditController object
      */
-    public void setBandEditController(BandEditController controller)
+    public void setBandEditController(CardBandEditController controller)
     {
-        this.bandEditController = controller;
+        this.cardBandEditController = controller;
     }
 
     /**

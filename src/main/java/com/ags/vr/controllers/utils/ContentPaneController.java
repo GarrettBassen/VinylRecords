@@ -1,6 +1,6 @@
 package com.ags.vr.controllers.utils;
 
-import com.ags.vr.controllers.cards.MediaCardController;
+import com.ags.vr.controllers.cards.CardMediaViewController;
 import com.ags.vr.objects.Media;
 
 import javafx.fxml.FXML;
@@ -22,7 +22,7 @@ public class ContentPaneController
     @FXML private Text txt_year;
 
     // Popup reference
-    private MediaCardController cardPopup;
+    private CardMediaViewController cardPopup;
     private Media media;
 
 
@@ -40,7 +40,7 @@ public class ContentPaneController
      * Sets data in content pane with given Media object.
      * @param media Media object
      */
-    public void setData(MediaCardController cardPopup, Media media)
+    public void setData(CardMediaViewController cardPopup, Media media)
     {
         // Reference variables
         this.media = media;

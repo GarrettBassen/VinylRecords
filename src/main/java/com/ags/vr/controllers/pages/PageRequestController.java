@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
  * variables with not null constraints will be accounted for. Phone number and Email are the only inputs that will be
  * allowed to be left null.
  */
-public class RequestController {
+public class PageRequestController {
 
     //declaring FXML variables for the Request Page
     @FXML private Button addBtn; //calls the launchAddPopUp method
