@@ -7,48 +7,53 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox fx:id="pane_base" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.cards.CardGenreEditController">
+<HBox fx:id="pane_base" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.cards.CardGenreEditController">
    <children>
-      <TitledPane fx:id="popUp" animated="false" prefHeight="247.0" prefWidth="331.0" text="untitled" visible="false">
-         <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="222.0" prefWidth="333.0">
-               <children>
-                  <TextField fx:id="genreDisplay" layoutX="19.0" layoutY="21.0" prefHeight="24.0" prefWidth="296.0" />
-                  <Button fx:id="current_rename_button" layoutX="19.0" layoutY="57.0" mnemonicParsing="false" onAction="#currentRename" text="Change Name For Current Media" />
-                  <Button fx:id="current_remove_button" layoutX="19.0" layoutY="99.0" mnemonicParsing="false" onAction="#currentRemove" text="Remove From Current Media" />
-                  <Button fx:id="system_rename_button" layoutX="19.0" layoutY="138.0" mnemonicParsing="false" onAction="#systemRename" text="Change Name In System" />
-                  <Button fx:id="system_remove_button" layoutX="19.0" layoutY="178.0" mnemonicParsing="false" onAction="#systemRemove" text="Remove From System" />
-                  <Button fx:id="close_popup_button" layoutX="251.0" layoutY="178.0" mnemonicParsing="false" onAction="#closePopup" text="Close" />
-               </children>
-            </AnchorPane>
-         </content>
-      </TitledPane>
-      <HBox alignment="CENTER" maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="435.0" prefHeight="600.0" prefWidth="435.0" style="-fx-background-color: grey;" HBox.hgrow="NEVER">
+      <StackPane maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" HBox.hgrow="NEVER">
          <children>
-            <VBox prefWidth="200.0">
+            <HBox fx:id="genre_box" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: grey;">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Genres">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Text>
-                  <ListView fx:id="list_genres" fixedCellSize="50.0" onMouseClicked="#GenreCard" VBox.vgrow="ALWAYS">
-                     <VBox.margin>
-                        <Insets bottom="43.0" top="15.0" />
-                     </VBox.margin>
-                  </ListView>
+                  <VBox prefWidth="200.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Genres">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                        <ListView fx:id="list_genres" fixedCellSize="50.0" onMouseClicked="#GenreCard" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets bottom="43.0" top="15.0" />
+                           </VBox.margin>
+                        </ListView>
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#Back" text="Back" />
+                  <Button mnemonicParsing="false" onAction="#Close" text="Close" />
                </children>
-            </VBox>
-            <Button mnemonicParsing="false" onAction="#Back" text="Back" />
-            <Button mnemonicParsing="false" onAction="#Close" text="Close" />
+            </HBox>
+            <TitledPane fx:id="popUp" animated="false" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" style="-fx-background-color: grey;" text="untitled" visible="false">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="222.0" prefWidth="333.0">
+                     <children>
+                        <TextField fx:id="genreDisplay" layoutX="19.0" layoutY="21.0" prefHeight="24.0" prefWidth="296.0" />
+                        <Button fx:id="current_rename_button" layoutX="19.0" layoutY="57.0" mnemonicParsing="false" onAction="#currentRename" text="Change Name For Current Media" />
+                        <Button fx:id="current_remove_button" layoutX="19.0" layoutY="99.0" mnemonicParsing="false" onAction="#currentRemove" text="Remove From Current Media" />
+                        <Button fx:id="system_rename_button" layoutX="19.0" layoutY="138.0" mnemonicParsing="false" onAction="#systemRename" text="Change Name In System" />
+                        <Button fx:id="system_remove_button" layoutX="19.0" layoutY="178.0" mnemonicParsing="false" onAction="#systemRemove" text="Remove From System" />
+                        <Button fx:id="close_popup_button" layoutX="251.0" layoutY="178.0" mnemonicParsing="false" onAction="#closePopup" text="Close" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
          </children>
-      </HBox>
+      </StackPane>
    </children>
 </HBox>

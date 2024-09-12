@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 public class CardGenreEditController implements CardBase
 {
     @FXML private ListView<String> list_genres;
+    @FXML private HBox genre_box;
     @FXML private HBox pane_base;
 
     private CardMediaViewController card_base;
@@ -93,7 +94,8 @@ public class CardGenreEditController implements CardBase
             genre_popup_base = popupLoader.getController();
              */
         popUp.setVisible(true);
-        list_genres.setVisible(false);
+        // TODO REMOVE AFTER TESTING
+        // list_genres.setVisible(false);
     }
 
     //popup stuff
