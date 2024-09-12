@@ -5,8 +5,12 @@ import com.ags.vr.objects.Media;
 import com.ags.vr.utils.database.DBGenre;
 import com.ags.vr.utils.database.DBGenreLinker;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.input.MouseEvent;
@@ -77,14 +81,67 @@ public class CardGenreEditController implements CardBase
     }
 
     @FXML
-    void genreCard(MouseEvent event)
-    {
-        System.out.println("MOUSE CLICKED");
-    }
-
-    @FXML
     void GenreCard(MouseEvent mouseEvent)
     {
         System.out.println(this.list_genres.getSelectionModel().getSelectedItem());
+        //broken
+            /*
+            //com/ags/vr/fxml/pages/page_add.fxml
+            ///com/ags/vr/fxml/popups/popup_genre_edit.fxml
+            FXMLLoader popupLoader = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/popups/popup_genre_edit.fxml"));
+            pane_base.getChildren().add(popupLoader.load());
+            genre_popup_base = popupLoader.getController();
+             */
+        popUp.setVisible(true);
+        list_genres.setVisible(false);
+    }
+
+    //popup stuff
+    @FXML
+    private Button current_remove_button;
+
+    @FXML
+    private Button current_rename_button;
+
+    @FXML
+    private TextField genreDisplay;
+
+    @FXML
+    private TitledPane popUp;
+
+    @FXML
+    private Button system_remove_button;
+
+    @FXML
+    private Button system_rename_button;
+
+    @FXML
+    private Button close_popup_button;
+
+    @FXML
+    void closePopup(ActionEvent event)
+    {
+        popUp.setVisible(false);
+        list_genres.setVisible(true);
+    }
+
+    @FXML
+    void currentRemove(ActionEvent event) {
+
+    }
+
+    @FXML
+    void currentRename(ActionEvent event) {
+
+    }
+
+    @FXML
+    void systemRemove(ActionEvent event) {
+
+    }
+
+    @FXML
+    void systemRename(ActionEvent event) {
+
     }
 }
