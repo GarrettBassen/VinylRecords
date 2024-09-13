@@ -78,7 +78,6 @@ public class DBMedia
         }
     }
 
-    // TODO ADD BAND FOR HASH SEARCH
     /**
      * Checks if media with specified ID exists within database, returning a boolean value.
      * @param hash Hash ID
@@ -103,7 +102,6 @@ public class DBMedia
         }
     }
 
-    // TODO TEST
     public static boolean Contains(String title, String medium)
     {
         try

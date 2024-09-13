@@ -2,6 +2,8 @@ package com.ags.vr.controllers.cards;
 
 import com.ags.vr.controllers.utils.CardBase;
 import com.ags.vr.objects.Media;
+import com.ags.vr.utils.Graphical;
+import com.ags.vr.utils.Hash;
 import com.ags.vr.utils.database.DBGenre;
 import com.ags.vr.utils.database.DBGenreLinker;
 
@@ -15,6 +17,9 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.input.MouseEvent;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class CardGenreEditController implements CardBase
 {
     @FXML private ListView<String> list_genres;
@@ -23,6 +28,8 @@ public class CardGenreEditController implements CardBase
 
     private CardMediaViewController card_base;
     private Media media;
+
+    private String selected_genre;
 
     @FXML
     void initialize()
@@ -94,8 +101,8 @@ public class CardGenreEditController implements CardBase
             genre_popup_base = popupLoader.getController();
              */
         popUp.setVisible(true);
-        // TODO REMOVE AFTER TESTING
-        // list_genres.setVisible(false);
+        selected_genre = this.list_genres.getSelectionModel().getSelectedItem();
+        genreDisplay.setText(selected_genre);
     }
 
     //popup stuff
@@ -124,7 +131,6 @@ public class CardGenreEditController implements CardBase
     void closePopup(ActionEvent event)
     {
         popUp.setVisible(false);
-        list_genres.setVisible(true);
     }
 
     @FXML
@@ -132,9 +138,28 @@ public class CardGenreEditController implements CardBase
 
     }
 
+    //TODO TEST
     @FXML
     void currentRename(ActionEvent event) {
 
+        if (!DBGenre.Contains(genreDisplay.getText()))
+        {
+            boolean bool = Graphical.ConfirmationPopup("Genre not in system", "\"" + genreDisplay.getText() + "\" is not in system." +
+                    "Would you like to add it to the system and rename the selected genre?");
+
+            //if user selects yes
+            if (bool)
+            {
+                //insert and connect the genre
+                DBGenre.Insert(genreDisplay.getText());
+                renameHelper();
+            }
+            //do nothing if the user selects no
+        }
+        else
+        {
+            renameHelper();
+        }
     }
 
     @FXML
@@ -145,5 +170,21 @@ public class CardGenreEditController implements CardBase
     @FXML
     void systemRename(ActionEvent event) {
 
+    }
+
+    private void renameHelper()
+    {
+        //remove the old connection
+        DBGenreLinker.Delete(media.getID(), Hash.StringHash(selected_genre));
+
+        //make new connection
+        DBGenreLinker.Insert(media.getID(), Hash.StringHash(genreDisplay.getText()));
+
+        //inform user
+        Graphical.InfoPopup("Genre renamed", "Genre successfully renamed");
+
+        //update the list view
+        ClearData();
+        addGenres();
     }
 }

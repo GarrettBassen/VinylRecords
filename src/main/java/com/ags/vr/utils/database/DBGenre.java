@@ -1,5 +1,6 @@
 package com.ags.vr.utils.database;
 
+import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 
@@ -11,16 +12,23 @@ import static com.ags.vr.utils.Connector.con;
 
 public class DBGenre
 {
-    // TODO TEST
     public static boolean Insert(String genre)
     {
         try
         {
-            PreparedStatement statement = con.prepareStatement("INSERT INTO genre VALUES (?,?)");
-            statement.setInt(1,Hash.StringHash(genre));
-            statement.setString(2,genre);
-            statement.execute();
-            return true;
+            //check if the genre is already in the system
+            if(!Contains(genre))
+            {
+                PreparedStatement statement = con.prepareStatement("INSERT INTO genre VALUES (?,?)");
+                statement.setInt(1,Hash.StringHash(genre));
+                statement.setString(2,genre);
+                statement.execute();
+                return true;
+            }
+            else
+            {
+                throw new SQLException("Genre already exists");
+            }
         }
         catch (SQLException e)
         {
@@ -32,7 +40,6 @@ public class DBGenre
         }
     }
 
-    // TODO TEST
     public static boolean Contains(String genre)
     {
         try
@@ -51,7 +58,7 @@ public class DBGenre
         }
     }
 
-    // TODO TEST
+    //TODO TEST
     public static boolean Delete(String genre)
     {
         try
