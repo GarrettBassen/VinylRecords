@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 //TODO REMOVE GENRE AND BAND EDITING FUNCTIONALITY
+//TODO FIX CRASH THAT HAPPENS WHEN THE MEDIA HAS NO GENRES
 
 public class CardMediaEditController implements CardBase
 {

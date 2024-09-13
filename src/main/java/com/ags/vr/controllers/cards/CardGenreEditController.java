@@ -7,6 +7,7 @@ import com.ags.vr.utils.Hash;
 import com.ags.vr.utils.database.DBGenre;
 import com.ags.vr.utils.database.DBGenreLinker;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,7 +19,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.input.MouseEvent;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+
+import static com.ags.vr.utils.Connector.con;
 
 public class CardGenreEditController implements CardBase
 {
@@ -91,18 +96,28 @@ public class CardGenreEditController implements CardBase
     @FXML
     void GenreCard(MouseEvent mouseEvent)
     {
-        System.out.println(this.list_genres.getSelectionModel().getSelectedItem());
-        //broken
-            /*
-            //com/ags/vr/fxml/pages/page_add.fxml
-            ///com/ags/vr/fxml/popups/popup_genre_edit.fxml
-            FXMLLoader popupLoader = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/popups/popup_genre_edit.fxml"));
-            pane_base.getChildren().add(popupLoader.load());
-            genre_popup_base = popupLoader.getController();
-             */
         popUp.setVisible(true);
         selected_genre = this.list_genres.getSelectionModel().getSelectedItem();
         genreDisplay.setText(selected_genre);
+    }
+
+    /**
+     * Checks if the genre argument is displayed in the list view.
+     * @param genre Genre being serched for.
+     * @return True if the genre is displayed; false otherwise.
+     */
+    private boolean containsGenre(String genre)
+    {
+        ObservableList<String> obList = list_genres.getItems();
+        for(int i = 0; i < obList.size(); i++)
+        {
+            //check if the genre is in the display
+            if(obList.get(i).equals(genre))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     //popup stuff
@@ -133,18 +148,39 @@ public class CardGenreEditController implements CardBase
         popUp.setVisible(false);
     }
 
+    /**
+     * Breaks the connection between the genre argument and the current media.
+     * @param event Button press
+     */
     @FXML
-    void currentRemove(ActionEvent event) {
-
+    void currentRemove(ActionEvent event)
+    {
+        //if the textbox genre is connected with the media
+        if(containsGenre(genreDisplay.getText()))
+        {
+            DBGenreLinker.Delete(media.getID(), Hash.StringHash(genreDisplay.getText()));
+            Graphical.InfoPopup("Removal Successful", "\"" + genreDisplay.getText() + "\" removed successfully.");
+            selected_genre = "";
+            ClearData();
+            addGenres();
+        }
+        else
+        {
+            Graphical.ErrorPopup("Removal Unsuccessful", "\"" + genreDisplay.getText() + "\" is not connected with this media.");
+        }
     }
 
-    //TODO TEST
+    /**
+     * Renames the current genre that is displayed
+     * @param event Button press
+     */
     @FXML
-    void currentRename(ActionEvent event) {
+    void currentRename(ActionEvent event)
+    {
 
         if (!DBGenre.Contains(genreDisplay.getText()))
         {
-            boolean bool = Graphical.ConfirmationPopup("Genre not in system", "\"" + genreDisplay.getText() + "\" is not in system." +
+            boolean bool = Graphical.ConfirmationPopup("Genre is not in system", "\"" + genreDisplay.getText() + "\" is not in system." +
                     "Would you like to add it to the system and rename the selected genre?");
 
             //if user selects yes
@@ -156,20 +192,105 @@ public class CardGenreEditController implements CardBase
             }
             //do nothing if the user selects no
         }
-        else
+        else if(!containsGenre(genreDisplay.getText()))
         {
             renameHelper();
+        }
+        else
+        {
+            Graphical.ErrorPopup("Genre Rename Error", "\"" + genreDisplay.getText() + "\" is already connected to this media.");
         }
     }
 
     @FXML
-    void systemRemove(ActionEvent event) {
+    void systemRemove(ActionEvent event)
+    {
+        try
+        {
+            if(containsGenre(genreDisplay.getText()))
+            {
+                boolean bool = Graphical.ConfirmationPopup("System Removal", "Are you sure you want to remove \"" +
+                        genreDisplay.getText() + "\" from your system?");
 
+                if(bool)
+                {
+                    //get all genre linkers
+                    PreparedStatement stmt = con.prepareStatement("SELECT * FROM genre_linker WHERE genre_id=?");
+                    stmt.setInt(1, Hash.StringHash(genreDisplay.getText()));
+                    ResultSet rs = stmt.executeQuery();
+
+                    //break all connections
+                    while(rs.next())
+                    {
+                        DBGenreLinker.Delete(rs.getInt("media_id"), rs.getInt("genre_id"));
+                    }
+
+                    //remove the genre
+                    DBGenre.Delete(genreDisplay.getText());
+
+                    //inform user
+                    Graphical.InfoPopup("System Removal Successful", "\"" + genreDisplay.getText() + "\" removed successfully system wide.");
+                }
+            }
+            else
+            {
+                Graphical.ErrorPopup("Removal Unsuccessful", "\"" + genreDisplay.getText() + "\" is not connected with this media.");
+            }
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Genre Removal Error", e.getMessage());
+        }
     }
 
+    /**
+     * Renames the selected genre system-wide.
+     * @param event Button Press
+     */
     @FXML
-    void systemRename(ActionEvent event) {
+    void systemRename(ActionEvent event)
+    {
+        try{
+            if(!DBGenre.Contains(genreDisplay.getText()))
+            {
+                //user conformation
+               boolean bool = Graphical.ConfirmationPopup("Genre is not in system", "\"" + genreDisplay.getText() + "\" is not in system. "
+               + "Would you like to rename the selected genre system wide?");
 
+               if(bool)
+               {
+                   bool = Graphical.ConfirmationPopup("System Rename", "Are you sure you want to rename " + selected_genre + " to "
+                           + genreDisplay.getText() + " throughout the entire system?");
+                   if(bool)
+                   {
+                       //inserting and renaming
+                        DBGenre.Insert(genreDisplay.getText());
+                        systemRenameHelper();
+                   }
+               }
+            }
+            else if(!containsGenre(genreDisplay.getText()))
+            {
+                //user conformation
+                boolean bool = Graphical.ConfirmationPopup("System Rename", "Are you sure you want to rename " + selected_genre + " to "
+                        + genreDisplay.getText() + " throughout the entire system?");
+
+                if(bool)
+                {
+                    //renaming
+                    systemRenameHelper();
+                }
+            }
+            else
+            {
+                Graphical.ErrorPopup("Genre Rename Error", "\"" + genreDisplay.getText() + "\" is already connected to this media.");
+            }
+
+        }
+        catch(SQLException e)
+        {
+            Graphical.ErrorPopup("SQL Error", e.getMessage());
+        }
     }
 
     private void renameHelper()
@@ -183,8 +304,41 @@ public class CardGenreEditController implements CardBase
         //inform user
         Graphical.InfoPopup("Genre renamed", "Genre successfully renamed");
 
+        //change the currently selected genre
+        selected_genre = genreDisplay.getText();
+
         //update the list view
         ClearData();
         addGenres();
+
+        //reselect the edited name
+        list_genres.getSelectionModel().select(selected_genre);
+    }
+
+
+    private void systemRenameHelper() throws SQLException
+    {
+        //get all genre_linker entries that have the selected genre
+        PreparedStatement stmt = con.prepareStatement("SELECT * FROM genre_linker WHERE genre_id=?");
+        stmt.setInt(1, Hash.StringHash(selected_genre));
+        ResultSet rs = stmt.executeQuery();
+
+        //delete all current genre linkers
+        //create new links with the new genre
+        while(rs.next())
+        {
+            DBGenreLinker.Delete(rs.getInt("media_id"), rs.getInt("genre_id"));
+            DBGenreLinker.Insert(rs.getInt("media_id"), Hash.StringHash(genreDisplay.getText()));
+        }
+
+
+        //remove the genre from the database
+        DBGenre.Delete(selected_genre);
+        //change the selected genre and display
+        selected_genre = genreDisplay.getText();
+        ClearData();
+        addGenres();
+
+        Graphical.InfoPopup("Genre renamed", "Genre successfully renamed system wide");
     }
 }
