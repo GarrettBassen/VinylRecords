@@ -95,9 +95,10 @@ public class PageAddController
     private void AddMedia()
     {
         // Validate all inputs and terminate for any errors
-        if (!TextInputValidation())                                    { return; }
-        if (!CheckboxValidation(array_medium,"media type"))     { return; }
-        if (!CheckboxValidation(array_format,"album format"))   { return; }
+        if (!TextInputValidation())                                     { return; }
+        if (!CheckboxValidation(array_medium,"media type"))      { return; }
+        if (!CheckboxValidation(array_format,"album format"))    { return; }
+        if (!InventoryValidation())                                     { return; }
 
         // Create media from data, warn user if media already exists within database and terminate if so
         Media media = CreateMedia();
@@ -132,6 +133,27 @@ public class PageAddController
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*                                           VALIDATION METHODS                                                  */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Checks inventory inputs and notifies user if no inventory value is given. If no input is given, a popup is
+     * shown and allows the user to insert the media object with no inventory or to cancel and update the inventory.
+     * @return True if inventory has inputs; False otherwise
+     */
+    private boolean InventoryValidation()
+    {
+        for (Spinner<Integer> cb : array_inventory)
+        {
+            if (cb.getValue() != null && cb.getValue() != 0)
+            {
+                return true;
+            }
+        }
+
+        return Graphical.ConfirmationPopup("No Inventory",
+                "No inventory data has been input for this media. Are you sure you would " +
+                        "like to add this item without any inventory?"
+        );
+    }
 
     /**
      * Ensures that one and only one of the checkboxes in the given array are activated. If an error is found,
@@ -230,7 +252,7 @@ public class PageAddController
         // Set text inputs
         Media media = new Media();
         media.setTitle(tf_title.getText().strip());
-        media.setYear(Short.parseShort(tf_year.getText()));
+        media.setYear(Short.parseShort(tf_year.getText().strip()));
         media.setBand(tf_band.getText().strip());
 
         // Set medium

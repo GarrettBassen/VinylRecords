@@ -4,13 +4,11 @@ import com.ags.vr.utils.Connector;
 import com.ags.vr.utils.Graphical;
 
 import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class PageBaseController
 {
@@ -45,32 +43,28 @@ public class PageBaseController
 
     /**
      * Opens "Add" page to add media to inventory when button is pressed.
-     * @param event Event handler
      */
     @FXML
-    private void PageAccessAdd(ActionEvent event)
+    private void PageAccessAdd()
     {
         LoadPage("page_add.fxml");
     }
 
     /**
      * Opens "Browse" page to browse media in inventory when button is pressed.
-     * @param event Event handler
      */
     @FXML
-    private void PageAccessBrowse(ActionEvent event)
+    private void PageAccessBrowse()
     {
         LoadPage("page_browse.fxml");
     }
 
     /**
      * Opens "Requests" page to view and modify requests when button is pressed.
-     * @param event Event handler
      */
     @FXML
-    private void PageAccessRequests(ActionEvent event)
+    private void PageAccessRequests()
     {
         LoadPage("page_requests.fxml");
     }
-
 }
