@@ -21,7 +21,6 @@ import javafx.scene.input.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
 
 import static com.ags.vr.utils.Connector.con;
 
@@ -35,6 +34,41 @@ public class CardGenreEditController implements CardBase
     private Media media;
 
     private String selected_genre;
+
+    //popup stuff
+    @FXML
+    private Button current_remove_button;
+
+    @FXML
+    private Button current_rename_button;
+
+    @FXML
+    private TextField genreDisplay;
+
+    @FXML
+    private TitledPane popUp;
+
+    @FXML
+    private Button system_remove_button;
+
+    @FXML
+    private Button system_rename_button;
+
+    @FXML
+    private Button close_popup_button;
+
+    //add popup stuff
+    @FXML
+    private TitledPane addGenrePopup;
+
+    @FXML
+    private TextField newGenreInput;
+
+    @FXML
+    private Button newGenreCancel;
+
+    @FXML
+    private Button newGenreConfirm;
 
     @FXML
     void initialize()
@@ -76,7 +110,7 @@ public class CardGenreEditController implements CardBase
     {
         ClearData();
         this.media = media;
-        addGenres();
+        displayGenres();
     }
 
     private void ClearData()
@@ -84,7 +118,7 @@ public class CardGenreEditController implements CardBase
         this.list_genres.getItems().clear();
     }
 
-    private void addGenres()
+    private void displayGenres()
     {
         int[] genreArray = DBGenreLinker.getGenres(this.media);
         for (int genre : genreArray)
@@ -96,9 +130,17 @@ public class CardGenreEditController implements CardBase
     @FXML
     void GenreCard(MouseEvent mouseEvent)
     {
-        popUp.setVisible(true);
-        selected_genre = this.list_genres.getSelectionModel().getSelectedItem();
-        genreDisplay.setText(selected_genre);
+        if(list_genres.getSelectionModel().getSelectedItem() != null)
+        {
+            popUp.setVisible(true);
+            selected_genre = this.list_genres.getSelectionModel().getSelectedItem();
+            popUp.setText(selected_genre);
+            genreDisplay.setText(selected_genre);
+        }
+        else
+        {
+            addGenrePopup.setVisible(true);
+        }
     }
 
     /**
@@ -120,28 +162,6 @@ public class CardGenreEditController implements CardBase
         return false;
     }
 
-    //popup stuff
-    @FXML
-    private Button current_remove_button;
-
-    @FXML
-    private Button current_rename_button;
-
-    @FXML
-    private TextField genreDisplay;
-
-    @FXML
-    private TitledPane popUp;
-
-    @FXML
-    private Button system_remove_button;
-
-    @FXML
-    private Button system_rename_button;
-
-    @FXML
-    private Button close_popup_button;
-
     @FXML
     void closePopup(ActionEvent event)
     {
@@ -162,7 +182,7 @@ public class CardGenreEditController implements CardBase
             Graphical.InfoPopup("Removal Successful", "\"" + genreDisplay.getText() + "\" removed successfully.");
             selected_genre = "";
             ClearData();
-            addGenres();
+            displayGenres();
         }
         else
         {
@@ -309,7 +329,7 @@ public class CardGenreEditController implements CardBase
 
         //update the list view
         ClearData();
-        addGenres();
+        displayGenres();
 
         //reselect the edited name
         list_genres.getSelectionModel().select(selected_genre);
@@ -337,8 +357,43 @@ public class CardGenreEditController implements CardBase
         //change the selected genre and display
         selected_genre = genreDisplay.getText();
         ClearData();
-        addGenres();
+        displayGenres();
 
         Graphical.InfoPopup("Genre renamed", "Genre successfully renamed system wide");
+    }
+
+    //addPopup Methods
+
+    @FXML
+    void closeAddGenre(ActionEvent event)
+    {
+        addGenrePopup.setVisible(false);
+    }
+
+    @FXML
+    void confirmNewGenre(ActionEvent event) {
+        //add and connect the genre if its not already connected to this media object
+        if (!containsGenre(newGenreInput.getText()))
+        {
+            //if the genre is not already in the system add the genre
+            if (!DBGenre.Contains(newGenreInput.getText()))
+            {
+                DBGenre.Insert(newGenreInput.getText());
+            }
+
+            //create the new link
+            DBGenreLinker.Insert(media.getID(), Hash.StringHash(newGenreInput.getText()));
+
+            //display new data
+            ClearData();
+            displayGenres();
+            //close popup
+            addGenrePopup.setVisible(false);
+        }
+        //the genre is already connected
+        else
+        {
+            Graphical.ErrorPopup("Genre Confirmation Error", "This genre is already connected with this media.");
+        }
     }
 }

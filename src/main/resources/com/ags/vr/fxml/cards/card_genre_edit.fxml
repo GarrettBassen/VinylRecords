@@ -43,12 +43,24 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="222.0" prefWidth="333.0">
                      <children>
-                        <TextField fx:id="genreDisplay" layoutX="19.0" layoutY="21.0" prefHeight="24.0" prefWidth="296.0" />
+                        <TextField fx:id="genreDisplay" layoutX="19.0" layoutY="21.0" prefHeight="24.0" prefWidth="370.0" />
                         <Button fx:id="current_rename_button" layoutX="19.0" layoutY="57.0" mnemonicParsing="false" onAction="#currentRename" text="Change Name For Current Media" />
                         <Button fx:id="current_remove_button" layoutX="19.0" layoutY="99.0" mnemonicParsing="false" onAction="#currentRemove" text="Remove From Current Media" />
-                        <Button fx:id="system_rename_button" layoutX="19.0" layoutY="138.0" mnemonicParsing="false" onAction="#systemRename" text="Change Name In System" />
-                        <Button fx:id="system_remove_button" layoutX="19.0" layoutY="178.0" mnemonicParsing="false" onAction="#systemRemove" text="Remove From System" />
-                        <Button fx:id="close_popup_button" layoutX="251.0" layoutY="178.0" mnemonicParsing="false" onAction="#closePopup" text="Close" />
+                        <Button fx:id="system_rename_button" layoutX="19.0" layoutY="188.0" mnemonicParsing="false" onAction="#systemRename" text="Change Name In System" />
+                        <Button fx:id="system_remove_button" layoutX="19.0" layoutY="226.0" mnemonicParsing="false" onAction="#systemRemove" text="Remove From System" />
+                        <Button fx:id="close_popup_button" layoutX="19.0" layoutY="323.0" mnemonicParsing="false" onAction="#closePopup" text="Close" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+            <TitledPane fx:id="addGenrePopup" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="547.0" text="Add Genre" visible="false">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="598.0">
+                     <children>
+                        <TextField fx:id="newGenreInput" layoutX="138.0" layoutY="37.0" prefHeight="24.0" prefWidth="313.0" />
+                        <Text layoutX="14.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Genre Name" />
+                        <Button fx:id="newGenreCancel" layoutX="14.0" layoutY="93.0" mnemonicParsing="false" onAction="#closeAddGenre" prefHeight="24.0" prefWidth="142.0" text="Cancel" />
+                        <Button fx:id="newGenreConfirm" layoutX="14.0" layoutY="150.0" mnemonicParsing="false" onAction="#confirmNewGenre" prefHeight="24.0" prefWidth="140.0" text="Confirm" />
                      </children>
                   </AnchorPane>
                </content>
