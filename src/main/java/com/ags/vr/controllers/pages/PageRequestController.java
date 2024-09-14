@@ -3,9 +3,16 @@ package com.ags.vr.controllers.pages;
 //imports
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 
 /**
@@ -42,11 +49,31 @@ public class PageRequestController {
     /**
      * Method used to launch a popup that will contain text fields that when entered will be stored
      * in the database and later displayed to the user.
-     * @param e is the action of the button being pressed by the user
+     * @param event is the action of the button being pressed by the user
      */
-    public void launchAddPopUp(ActionEvent e) {
+    public void launchAddPopUp(ActionEvent event) {
+        //try catch block to catch any errors with locating the correct file path
+        try {
+            //create new FXMLLoader object with the file path to the new scene
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/pages/page_requests_add.fxml"));
+            Parent popUp = fxmlLoader.load();
 
+            //create new stage object and set title
+            Stage addRequest = new Stage();
+            addRequest.setTitle("Old Skool's Inventory Management System");
+
+            //set size of stage
+            addRequest.setMinWidth(400);
+            addRequest.setMinHeight(500);
+
+            //set scene and display
+            addRequest.setScene(new Scene(popUp));
+            addRequest.show();
+        } catch (Exception e) {
+            System.out.println("There were issues loading the new window!");
+        }
     }
+
 
     //todo!
     /**
