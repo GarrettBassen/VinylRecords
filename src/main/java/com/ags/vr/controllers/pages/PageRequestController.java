@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.io.IOException;
 public class PageRequestController {
 
     //declaring FXML variables for the Request Page
+    @FXML private BorderPane rootPane;
     @FXML private Button addBtn; //calls the launchAddPopUp method
     @FXML private ImageView refreshBtn; //calls the refreshRequests method
 
@@ -56,19 +58,24 @@ public class PageRequestController {
         try {
             //create new FXMLLoader object with the file path to the new scene
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/pages/page_requests_add.fxml"));
-            Parent popUp = fxmlLoader.load();
 
             //create new stage object and set title
             Stage addRequest = new Stage();
             addRequest.setTitle("Old Skool's Inventory Management System");
 
             //set size of stage
-            addRequest.setMinWidth(400);
-            addRequest.setMinHeight(500);
+            addRequest.setMaxWidth(400);
+            addRequest.setMaxHeight(500);
+
+            //create new Scene
+            Scene popUp = new Scene(fxmlLoader.load(), 400, 500);
 
             //set scene and display
-            addRequest.setScene(new Scene(popUp));
+            addRequest.setMaximized(false);
+            addRequest.setResizable(false);
+            addRequest.setScene(popUp);
             addRequest.show();
+            addRequest.setFullScreen(false);
         } catch (Exception e) {
             System.out.println("There were issues loading the new window!");
         }
