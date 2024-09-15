@@ -24,6 +24,7 @@ import java.sql.SQLException;
 
 import static com.ags.vr.utils.Connector.con;
 
+
 public class CardGenreEditController implements CardBase
 {
     @FXML private ListView<String> list_genres;
@@ -166,6 +167,8 @@ public class CardGenreEditController implements CardBase
     void closePopup(ActionEvent event)
     {
         popUp.setVisible(false);
+        selected_genre = "";
+        list_genres.getSelectionModel().clearSelection();
     }
 
     /**
@@ -368,6 +371,7 @@ public class CardGenreEditController implements CardBase
     void closeAddGenre(ActionEvent event)
     {
         addGenrePopup.setVisible(false);
+        list_genres.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -389,6 +393,7 @@ public class CardGenreEditController implements CardBase
             displayGenres();
             //close popup
             addGenrePopup.setVisible(false);
+            list_genres.getSelectionModel().clearSelection();
         }
         //the genre is already connected
         else
