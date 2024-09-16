@@ -6,32 +6,37 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<AnchorPane fx:id="pane_content" maxHeight="100.0" maxWidth="1.7976931348623157E308" minHeight="100.0" prefWidth="600.0" style="-fx-background-color: #f0f0f0;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.utils.ContentPaneController">
+<AnchorPane fx:id="pane_content" maxHeight="110.0" maxWidth="1.7976931348623157E308" minHeight="110.0" style="-fx-background-color: #f0f0f0;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.utils.ContentPaneController">
    <children>
-      <Text fx:id="txt_title" layoutX="10.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TITLE" wrappingWidth="491.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="99.0" AnchorPane.topAnchor="8.0">
+      <TextFlow maxHeight="64.0" maxWidth="1.7976931348623157E308" minHeight="64.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="8.0">
+         <children>
+            <Text fx:id="txt_title" strokeType="OUTSIDE" strokeWidth="0.0" text="TITLE">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="28.0" />
+               </font>
+            </Text>
+         </children>
+      </TextFlow>
+      <Text layoutX="9.0" layoutY="91.8515625" strokeType="OUTSIDE" strokeWidth="0.0" text="By: " AnchorPane.bottomAnchor="14.375" AnchorPane.leftAnchor="9.0">
          <font>
-            <Font name="Arial Rounded MT Bold" size="28.0" />
+            <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="14.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By: " AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="14.0">
+      <Text fx:id="txt_band" layoutX="40.0" layoutY="93.4208984375" strokeType="OUTSIDE" strokeWidth="0.0" text="BAND" wrappingWidth="458.0" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="102.0">
          <font>
-            <Font name="Arial Rounded MT Bold" size="18.0" />
+            <Font size="22.0" />
          </font>
       </Text>
-      <Text fx:id="txt_band" layoutX="55.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BAND" wrappingWidth="448.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="99.0">
-         <font>
-            <Font name="Arial Rounded MT Bold" size="26.0" />
-         </font>
-      </Text>
-      <ImageView fx:id="img_medium" fitHeight="64.0" fitWidth="64.0" layoutX="522.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="14.0" />
+      <ImageView fx:id="img_medium" fitHeight="64.0" fitWidth="64.0" layoutX="522.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="19.0" AnchorPane.rightAnchor="14.0" />
       <Separator layoutX="505.0" orientation="VERTICAL" prefHeight="100.0" prefWidth="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="89.0" AnchorPane.topAnchor="0.0" />
-      <Text fx:id="txt_format" layoutX="511.0" layoutY="24.1337890625" strokeType="OUTSIDE" strokeWidth="0.0" text="Single" textAlignment="CENTER" wrappingWidth="85.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
+      <Text fx:id="txt_format" layoutX="511.0" layoutY="22.27734375" strokeType="OUTSIDE" strokeWidth="0.0" text="Single" textAlignment="CENTER" wrappingWidth="85.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="0.0">
          <font>
             <Font name="Arial Rounded MT Bold" size="24.0" />
          </font>
       </Text>
-      <Text fx:id="txt_year" layoutX="455.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YEAR" textAlignment="RIGHT" wrappingWidth="42.517578125" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="100.0">
+      <Text fx:id="txt_year" layoutX="531.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YEAR" textAlignment="CENTER" wrappingWidth="42.517578125" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="26.0">
          <font>
             <Font name="Arial Rounded MT Bold" size="13.0" />
          </font></Text>

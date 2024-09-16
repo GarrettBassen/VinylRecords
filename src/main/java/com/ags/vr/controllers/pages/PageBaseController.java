@@ -5,7 +5,6 @@ import com.ags.vr.utils.Graphical;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
@@ -30,8 +29,8 @@ public class PageBaseController
     {
         try
         {
-            Node page = FXMLLoader.load(getClass().getResource("/com/ags/vr/fxml/pages/" + pageName));
-            content_pane.setCenter(page);
+            FXMLLoader page = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/pages/" + pageName));
+            content_pane.setCenter(page.load());
         }
         catch (IOException e)
         {

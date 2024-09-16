@@ -37,6 +37,9 @@ public class PageBrowseController
     @FXML private AnchorPane pane_base;
     @FXML private VBox pane_content;
 
+    // Current page controller reference
+    private PageBrowseController page_browseController;
+
     // Popup card controllers
     private CardMediaViewController card_mediaController;
     private CardMediaEditController card_editMediaController;
@@ -179,7 +182,7 @@ public class PageBrowseController
             pane_content.getChildren().clear();
             Media[] media = sqlSearch();
             media = slimResults(media);
-            AddContentPane(card_mediaController, media);
+            AddContentPane(media);
             ClearParameters();
         }
         catch (SQLException e)
@@ -615,7 +618,7 @@ public class PageBrowseController
      * Creates content panes from media object(s) which is then added to the vbox display region.
      * @param media Media object(s)
      */
-    private void AddContentPane(CardMediaViewController cardPopup, Media... media)
+    private void AddContentPane(Media... media)
     {
         for (Media m : media) {
             try
@@ -623,7 +626,7 @@ public class PageBrowseController
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/utils/pane_content.fxml"));
                 pane_content.getChildren().add(loader.load());
                 ContentPaneController controller = loader.getController();
-                controller.setData(cardPopup, m);
+                controller.setData(card_mediaController, m);
             }
             catch (IOException e)
             {
