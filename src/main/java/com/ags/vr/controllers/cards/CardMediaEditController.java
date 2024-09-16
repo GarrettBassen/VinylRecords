@@ -84,7 +84,7 @@ public class CardMediaEditController implements CardBase
             }
 
             //update the media object
-            DBMedia.Update(newMedia, oldMedia);
+            DBMedia.Update(newMedia, oldMedia, DBGenreLinker.getGenres(oldMedia));
 
             //update genre object
             genreHelper(newMedia);

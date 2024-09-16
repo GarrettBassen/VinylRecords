@@ -202,13 +202,24 @@ public class DBMedia
         }
     }
 
-    //TODO RECONNECT GENRES
-    public static void Update(Media newMedia, Media oldMedia)
+    /**
+     * Updates a media entry in the database. Updates the old media with the values of the
+     * new media.
+     * @param newMedia up-to-date values
+     * @param oldMedia old values
+     * @param genres array of genre ids for media object
+     */
+    public static void Update(Media newMedia, Media oldMedia, int[] genres)
     {
         //delete the old media
         Delete(oldMedia);
         //create new media
         Insert(newMedia);
+        //reconnect genres
+        for(int genre : genres)
+        {
+            DBGenreLinker.Insert(newMedia.getID(), genre);
+        }
     }
 
     /**

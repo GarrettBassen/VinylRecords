@@ -135,7 +135,6 @@ public class CardBandEditController implements CardBase
         }
     }
 
-    //TODO RECONNECT GENRES
     /**
      * Helper function for renameMedia()
      */
@@ -144,28 +143,31 @@ public class CardBandEditController implements CardBase
         //new media object with updated band
         Media newMedia = new Media(media.getTitle(), media.getMedium(), media.getFormat(), media.getYear(), band);
         //update
-        DBMedia.Update(newMedia, media);
+        DBMedia.Update(newMedia, media, DBGenreLinker.getGenres(media));
         media = newMedia;
         //inform user
         Graphical.InfoPopup("Band Rename Successful", "The band was successfully renamed to " + band + ".");
     }
 
-    //TODO RECONNECT GENRES
+    /**
+     * Helper function for renameSystem()
+     * @param newBand
+     */
     private void renameSystemHelper(String newBand)
     {
         try
         {
-            //getGenre linkers for all media objects that are getting updated
-            PreparedStatement oldMediaStmt = con.prepareStatement("SELECT * FROM media WHERE band_id=?");
-            oldMediaStmt.setInt(1, Hash.StringHash(band));
-            ResultSet rs = oldMediaStmt.executeQuery();
+            //getGenre media with the old band
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM media WHERE band_id=?");
+            stmt.setInt(1, Hash.StringHash(band));
+            ResultSet rs = stmt.executeQuery();
 
             //update all media objects
             while(rs.next())
             {
                 Media oldMedia = new Media(rs);
-                Media newMedia = new Media(oldMedia.getTitle(), oldMedia.getMedium(), oldMedia.getFormat(), oldMedia.getYear(), band);
-                DBMedia.Update(newMedia, oldMedia);
+                Media newMedia = new Media(oldMedia.getTitle(), oldMedia.getMedium(), oldMedia.getFormat(), oldMedia.getYear(), newBand);
+                DBMedia.Update(newMedia, oldMedia, DBGenreLinker.getGenres(oldMedia));
             }
 
 
