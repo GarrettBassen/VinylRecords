@@ -202,7 +202,7 @@ public class DBMedia
         }
     }
 
-//TODO WRITE HERE
+    //TODO RECONNECT GENRES
     public static void Update(Media newMedia, Media oldMedia)
     {
         //delete the old media

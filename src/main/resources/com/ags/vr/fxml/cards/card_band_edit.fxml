@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Text?>
 
 <HBox fx:id="pane_base" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.cards.CardBandEditController">
    <children>
-      <HBox alignment="CENTER" maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0" style="-fx-background-color: grey;">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BAND EDIT PAGE" />
-            <Button mnemonicParsing="false" onAction="#Close" text="Close" />
-            <Button mnemonicParsing="false" onAction="#Back" text="Back" />
-         </children>
-      </HBox>
+      <TitledPane fx:id="popUp" animated="false" prefHeight="353.0" prefWidth="348.0" text="untitled">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Button layoutX="8.0" layoutY="243.0" mnemonicParsing="false" onAction="#Close" text="Close" />
+                  <Button layoutX="10.0" layoutY="187.0" mnemonicParsing="false" onAction="#Back" text="Back" />
+                  <TextField fx:id="bandDisplay" layoutX="13.0" layoutY="30.0" prefHeight="24.0" prefWidth="321.0" />
+                  <Button fx:id="mediaRenameButton" layoutX="10.0" layoutY="70.0" mnemonicParsing="false" onAction="#renameMedia" prefHeight="24.0" prefWidth="139.0" text="Rename in Media" />
+                  <Button fx:id="renameSystemButton" layoutX="9.0" layoutY="127.0" mnemonicParsing="false" onAction="#renameSystem" text="Rename in System" />
+               </children>
+            </AnchorPane>
+        </content>
+      </TitledPane>
    </children>
 </HBox>

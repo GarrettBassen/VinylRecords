@@ -93,59 +93,18 @@ public class DBBand
      * @return true if the band was removed or was already not in the database, false otherwise.
      * @throws SQLException
      */
-    public static boolean Delete(String band) throws SQLException
+    public static void Delete(String band) throws SQLException
     {
-        PreparedStatement stmt = null;
-        boolean bool = false;
-
-        //Generated String ID
-        String ID = String.valueOf(Hash.StringHash(band));
-
         try
         {
             //deleting band from the database
-            stmt = con.prepareStatement("DELETE FROM band WHERE band_id = (?)");
-            stmt.setString(1,ID);
+            PreparedStatement stmt  = con.prepareStatement("DELETE FROM band WHERE band_id = (?)");
+            stmt.setInt(1,Hash.StringHash(band));
             stmt.execute();
-            //as band was deleted so updating bool
-            bool = true;
         }
         catch (SQLException e)
         {
             //throwing error
-            Graphical.ErrorPopup("Database Error", e.toString());
-        }
-        finally
-        {
-            if(stmt != null)
-            {
-                stmt.close();
-            }
-        }
-
-        return bool;
-    }
-
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    /*                                              BAND LINKER                                                  */
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-    public static void createBandLink(Media media, String band) throws SQLException
-    {
-        //IDs of the media and band
-        String mediaID = String.valueOf(media.getID());
-        String bandID = String.valueOf(Hash.StringHash(band));
-
-        try
-        {
-            //updating the band_ID
-            PreparedStatement stmt = con.prepareStatement("UPDATE media SET band_id = (?) WHERE media_id = (?)");
-            stmt.setString(1,bandID);
-            stmt.setString(2,mediaID);
-            stmt.execute();
-        }
-        catch (SQLException e)
-        {
             Graphical.ErrorPopup("Database Error", e.toString());
         }
     }
