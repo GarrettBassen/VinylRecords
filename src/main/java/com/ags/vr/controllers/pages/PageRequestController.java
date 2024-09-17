@@ -7,10 +7,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -30,13 +32,16 @@ public class PageRequestController {
     @FXML private BorderPane rootPane;
     @FXML private Button addBtn; //calls the launchAddPopUp method
     @FXML private ImageView refreshBtn; //calls the refreshRequests method
+    @FXML private TextArea requests;
 
     //declaring FXML variables for the Add Request pop-up
+    @FXML private VBox addPopUp;
     @FXML private TextField customerField;
     @FXML private TextField dateField;
     @FXML private TextField emailField;
     @FXML private TextField phoneField;
     @FXML private TextField requestField;
+    @FXML private Button submitBtn;
 
     //todo!
     /**
@@ -47,38 +52,30 @@ public class PageRequestController {
     }
 
 
+    /**
+     * Method used to launch a popup that will contain text fields that when
+     * entered will be stored in the database and later displayed to the user.
+     * @param event is the action of the add request button being pressed by the user.
+     */
+    public void launchAddPopUp(ActionEvent event) { addPopUp.setVisible(true); }
+
+
     //todo!
     /**
-     * Method used to launch a popup that will contain text fields that when entered will be stored
-     * in the database and later displayed to the user.
-     * @param event is the action of the button being pressed by the user
+     * Method used to send the data that the user inputs to the
+     * database to be stored and later displayed to the user.
+     * WIP to error handle any improper text fields input.
+     * Upon clicking submit if there are no errors then the popup close.
+     * @param event is the action of the submit button being pressed by the user.
      */
-    public void launchAddPopUp(ActionEvent event) {
-        //try catch block to catch any errors with locating the correct file path
-        try {
-            //create new FXMLLoader object with the file path to the new scene
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/pages/page_requests_add.fxml"));
+    public void submitRequest(ActionEvent event) {
 
-            //create new stage object and set title
-            Stage addRequest = new Stage();
-            addRequest.setTitle("Old Skool's Inventory Management System");
+        //future code to check for any errors in the user input...
 
-            //set size of stage
-            addRequest.setMaxWidth(400);
-            addRequest.setMaxHeight(500);
 
-            //create new Scene
-            Scene popUp = new Scene(fxmlLoader.load(), 400, 500);
+        //set vBox visibility to false so that the popup can be "closed"
+        addPopUp.setVisible(false);
 
-            //set scene and display
-            addRequest.setMaximized(false);
-            addRequest.setResizable(false);
-            addRequest.setScene(popUp);
-            addRequest.show();
-            addRequest.setFullScreen(false);
-        } catch (Exception e) {
-            System.out.println("There were issues loading the new window!");
-        }
     }
 
 
