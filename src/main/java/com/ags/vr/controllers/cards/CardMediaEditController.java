@@ -5,6 +5,7 @@ import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.database.*;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -137,6 +138,9 @@ public class CardMediaEditController implements CardBase
         nameDisplay.setText(this.media.getTitle());
         yearDisplay.setText(String.valueOf(this.media.getYear()));
 
+        //somehow this fixes the selection bug
+        deselect(nameDisplay);
+
         // Display correct format
         if(this.media.getFormat().equals("Single"))
         {
@@ -177,12 +181,12 @@ public class CardMediaEditController implements CardBase
         }
 
         //clear the spinners for update
-        gfSpinner.decrement((int) gfSpinner.getValue());
-        ffSpinner.decrement((int) ffSpinner.getValue());
-        pfSpinner.decrement((int) pfSpinner.getValue());
-        gbSpinner.decrement((int) gbSpinner.getValue());
-        fbSpinner.decrement((int) fbSpinner.getValue());
-        gbSpinner.decrement((int) gbSpinner.getValue());
+        gfSpinner.decrement(gfSpinner.getValue());
+        ffSpinner.decrement(ffSpinner.getValue());
+        pfSpinner.decrement(pfSpinner.getValue());
+        gbSpinner.decrement(gbSpinner.getValue());
+        fbSpinner.decrement(fbSpinner.getValue());
+        gbSpinner.decrement(gbSpinner.getValue());
 
         //stock object
         Stock st = new Stock(this.media);
@@ -421,5 +425,23 @@ public class CardMediaEditController implements CardBase
     {
         this.media = media;
         setDisplay();
+    }
+
+    //fixes highlighting bug
+    /*
+    Source:
+    profile https://stackoverflow.com/users/6154431/gearquicker
+    Stack overflow question https://stackoverflow.com/questions/52304360/javafx-deselect-text-in-textfield-when-open-new-stage
+    */
+    private void deselect(TextField textField) {
+        Platform.runLater(() -> {
+            if (textField.getText().length() > 0 &&
+                    textField.selectionProperty().get().getEnd() == 0) {
+                deselect(textField);
+            }else{
+                textField.selectEnd();
+                textField.deselect();
+            }
+        });
     }
 }
