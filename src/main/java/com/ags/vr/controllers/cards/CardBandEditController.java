@@ -6,7 +6,6 @@ import com.ags.vr.objects.Media;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 import com.ags.vr.utils.database.DBBand;
-import com.ags.vr.utils.database.DBGenre;
 import com.ags.vr.utils.database.DBGenreLinker;
 import com.ags.vr.utils.database.DBMedia;
 import javafx.fxml.FXML;
@@ -17,8 +16,6 @@ import javafx.scene.layout.HBox;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedList;
 
 import static com.ags.vr.utils.Connector.con;
 

@@ -4,31 +4,27 @@ import com.ags.vr.controllers.utils.CardBase;
 import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
-import com.ags.vr.utils.Hash;
 import com.ags.vr.utils.database.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
-//TODO REMOVE GENRE AND BAND EDITING FUNCTIONALITY
-//TODO FIX CRASH THAT HAPPENS WHEN THE MEDIA HAS NO GENRES
-//TODO FIX STOCK BUG
-//TODO FIX UPDATE BUG (LOSES ALL GENRES AND CAUSES A CRASH)
+import java.time.Year;
 
+//TODO FIX STOCK ERROR POPUP
+//TODO FIX nameDisplay PRESELECTED BUG
 public class CardMediaEditController implements CardBase
 {
     // Text display
     @FXML private TextField nameDisplay;
-    @FXML private TextField bandDisplay;
-    @FXML private TextArea genresDisplay;
     @FXML private TextField yearDisplay;
     @FXML private TextField invTotal;
 
     // Inventory variables
-    @FXML private Spinner<Integer> bgSpinner;
-    @FXML private Spinner<Integer> bfSpinner;
-    @FXML private Spinner<Integer> bpSpinner;
+    @FXML private Spinner<Integer> gbSpinner;
+    @FXML private Spinner<Integer> fbSpinner;
+    @FXML private Spinner<Integer> pbSpinner;
     @FXML private Spinner<Integer> gfSpinner;
     @FXML private Spinner<Integer> ffSpinner;
     @FXML private Spinner<Integer> pfSpinner;
@@ -45,6 +41,7 @@ public class CardMediaEditController implements CardBase
     @FXML private RadioButton cassetteRB;
 
     @FXML private Button update;
+    @FXML private Button delete;
 
     //used with radio buttons
     private String medium = "";
@@ -68,6 +65,11 @@ public class CardMediaEditController implements CardBase
     @FXML
     void applyUpdate(ActionEvent event)
     {
+        //return if there is invalid input
+        if(invalidInput(event))
+        {
+            return;
+        }
         try {
             // Do nothing if media is null
             if (this.media == null) { return; }
@@ -77,17 +79,8 @@ public class CardMediaEditController implements CardBase
             //creating new media object
             Media newMedia = createUpdatedMedia();
 
-            //insert the band if it's not in the db
-            if (!DBBand.Contains(newMedia.getBand()))
-            {
-                DBBand.Insert(newMedia.getBand());
-            }
-
             //update the media object
             DBMedia.Update(newMedia, oldMedia, DBGenreLinker.getGenres(oldMedia));
-
-            //update genre object
-            genreHelper(newMedia);
 
             //connect media and stock
             stockSave(newMedia);
@@ -110,17 +103,20 @@ public class CardMediaEditController implements CardBase
     @FXML
     void deleteEntry(ActionEvent event)
     {
-        // Do nothing if media is null
-        if (this.media == null) { return; }
+        //return if there is invalid input
+        if(invalidInput(event))
+        {
+            return;
+        }
 
         //ask the user for deletion conformation
         boolean delete = Graphical.ConfirmationPopup("Deletion", "Are you sure" +
                 " you want to delete this item?");
 
-        //deletion confermend
+        //deletion confirmed
         if(delete)
         {
-            DBMedia.Delete(this.media);
+            DBMedia.Delete(createUpdatedMedia());
             Graphical.InfoPopup("Delete", "Deleted successfully");
         }
         //deletion averted
@@ -131,15 +127,14 @@ public class CardMediaEditController implements CardBase
     }
 
 
-    // TODO COMMENT
+    /**
+     * Sets the display of CardMediaEditController. Uses the currently selected media as information for the display.
+     * Is used when updating a media object to update the display.
+     */
     void setDisplay()
     {
-        // Do nothing if media is null
-        if (this.media == null) { return; }
-
         //setting the media display text fields
         nameDisplay.setText(this.media.getTitle());
-        bandDisplay.setText(this.media.getBand());
         yearDisplay.setText(String.valueOf(this.media.getYear()));
 
         // Display correct format
@@ -181,25 +176,13 @@ public class CardMediaEditController implements CardBase
             cassetteRB.setSelected(true);
         }
 
-        //displaying genre
-        int[] genreIDs = DBMedia.getGenres(this.media);
-        String[] genresAr = DBGenre.getName(genreIDs);
-        String display = "";
-
-        for(int i = 0; i < genresAr.length-1; i++)
-        {
-            display += genresAr[i] + "\n";
-        }
-        display += genresAr[genresAr.length-1];
-        genresDisplay.setText(display);
-
         //clear the spinners for update
         gfSpinner.decrement((int) gfSpinner.getValue());
         ffSpinner.decrement((int) ffSpinner.getValue());
         pfSpinner.decrement((int) pfSpinner.getValue());
-        bgSpinner.decrement((int) bgSpinner.getValue());
-        bfSpinner.decrement((int) bfSpinner.getValue());
-        bgSpinner.decrement((int) bgSpinner.getValue());
+        gbSpinner.decrement((int) gbSpinner.getValue());
+        fbSpinner.decrement((int) fbSpinner.getValue());
+        gbSpinner.decrement((int) gbSpinner.getValue());
 
         //stock object
         Stock st = new Stock(this.media);
@@ -208,35 +191,14 @@ public class CardMediaEditController implements CardBase
         gfSpinner.increment(data[1]);
         ffSpinner.increment(data[2]);
         pfSpinner.increment(data[3]);
-        bgSpinner.increment(data[4]);
-        bfSpinner.increment(data[5]);
-        bpSpinner.increment(data[6]);
+        gbSpinner.increment(data[4]);
+        fbSpinner.increment(data[5]);
+        pbSpinner.increment(data[6]);
 
         //setting total stock value
         invTotal.setText(String.valueOf(st.getStockTotal()));
     }
 
-
-    //TODO REMOVE THE ABILITY TO INSERT A GENRE FROM MEDIA EDIT CONTROLLER
-    /**
-     * Method that connects a media object to its genres.
-     * @param newMedia
-     */
-    public void genreHelper(Media newMedia)
-    {
-        //connect with genre linker
-        String genres = genresDisplay.getText();
-        String[] genresAr = genres.split("\n");
-
-        for (String genre : genresAr) {
-            //insert genres if they're not in the db
-            if (!DBGenre.Contains(genre))
-            {
-                DBGenre.Insert(genre);
-            }
-            DBGenreLinker.Insert(newMedia.getID(), Hash.StringHash(genre));
-        }
-    }
 
     /**
      * Replaces the current stock entry with a new updated entry.
@@ -297,7 +259,7 @@ public class CardMediaEditController implements CardBase
      */
     private void formatControl(ActionEvent event)
     {
-        //deselcting all buttons
+        //deselecting all buttons
         singleRB.setSelected(false);
         epRB.setSelected(false);
         lpRB.setSelected(false);
@@ -341,7 +303,7 @@ public class CardMediaEditController implements CardBase
     {
         Spinner<Integer>[] spinners = new Spinner[] {
                 gfSpinner, ffSpinner, pfSpinner,
-                bgSpinner, bfSpinner, bpSpinner
+                gbSpinner, fbSpinner, pbSpinner
         };
 
         // Initialize spinners
@@ -350,80 +312,49 @@ public class CardMediaEditController implements CardBase
             sp.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0,255));
         }
     }
-
+    
     /**
      * Deals with all possible invalid input cases.
      * @param event action event of current method being run.
      * @return Returns true if an invalid input is detected. Returns false if there is no invalid input.
      */
-    /* TODO CHECK IF NEEDED
     public boolean invalidInput(ActionEvent event)
     {
-        //Search scenarios
-        if(event.getSource().equals(searchButton) && input.getText().isEmpty())
-        {
-            Graphical.InfoPopup("Invalid Input", "Please enter a valid name in the \"Media Name\" text field.");
-            return true;
-        }
-        else if(medium.equals(""))
+
+        if(medium.equals(""))
         {
             Graphical.InfoPopup("Invalid Input", "Please select a medium.");
             return true;
         }
-        else if(event.getSource().equals(searchButton) && !DBMedia.Contains(input.getText(), medium))
+        else if(format.equals(""))
         {
-            boolean GotoPage = Graphical.ConfirmationPopup("Media Does not exist",String.format(
-                    "'%s'is not in your system. Would you like to go to the add page to " +
-                            "insert this item?",input.getText())
-            );
-
-            if (GotoPage)
-            {
-                // TODO BRING USER TO ADD PAGE FOR THE MEDIA ENTRY
-                System.out.println("Media Search InventoryController.java");
-            }
-            return true;
+            Graphical.InfoPopup("Invalid Input", "Please select a format.");
         }
-        //stock update scenarios
-        else if(event.getSource().equals(update) && input.getText().isEmpty())
-        {
-            Graphical.InfoPopup("No Media Selected", "Please enter a valid name in the \"Media Name\" " +
-                    "text field for update.");
-            return true;
-        }
-        else if(event.getSource().equals(update) && nameDisplay.getText().isEmpty())
+        else if(nameDisplay.getText().isEmpty())
         {
             Graphical.InfoPopup("Invalid Name Entry", "Please enter a valid name in the \"Name\" " +
-                    "text field for update.");
+                    "text field.");
             return true;
         }
-        else if(event.getSource().equals(update) && bandDisplay.getText().isEmpty())
-        {
-            Graphical.InfoPopup("Invalid Band Entry", "Please enter a valid band name in the " +
-                    "\"Band\" text field for update.");
-            return true;
-        }
-        else if(event.getSource().equals(update) && yearDisplay.getText().isEmpty())
+        else if(yearDisplay.getText().isEmpty() || Short.parseShort(yearDisplay.getText()) > Year.now().getValue() || Short.parseShort(yearDisplay.getText()) < 1400)
         {
             Graphical.InfoPopup("Invalid Year Entry", "Please enter a valid year in the \"Year\" " +
-                    "text field for update.");
+                    "text field.");
             return true;
         }
-        else if(event.getSource().equals(update) && genresDisplay.getText().isEmpty())
+        else if(event.getSource().equals(delete) && !DBMedia.Contains(createUpdatedMedia()))
         {
-            Graphical.InfoPopup("Invalid Genre Entry", "Please enter a valid Genre in the \"Genres\" " +
-                    "text field for update.");
+            Graphical.InfoPopup("Media Already Not In System", "Cannot delete the displayed media because it is already not in the system.");
             return true;
         }
-        else if(event.getSource().equals(delete) && input.getText().isEmpty())
+        else if(nameDisplay.getText().length() > 255)
         {
-            Graphical.InfoPopup("Invalid Input", "Please enter a valid media in the \"Media name\"" +
-                    "text field for deletion");
+            Graphical.ErrorPopup("Name Update Error", "The name is too long and cannot be entered into the system. Please use a shorter name");
             return true;
         }
+
         return false;
     }
-     */
 
     /**
      * Creates a stock object based off the current stock data in the spinners and the current input name.
@@ -435,9 +366,9 @@ public class CardMediaEditController implements CardBase
                 (byte) gfSpinner.getValue().intValue(),
                 (byte) ffSpinner.getValue().intValue(),
                 (byte) pfSpinner.getValue().intValue(),
-                (byte) bgSpinner.getValue().intValue(),
-                (byte) bfSpinner.getValue().intValue(),
-                (byte) bpSpinner.getValue().intValue(),
+                (byte) gbSpinner.getValue().intValue(),
+                (byte) fbSpinner.getValue().intValue(),
+                (byte) pbSpinner.getValue().intValue(),
         };
 
         return new Stock(m.getID(), ar);
@@ -454,7 +385,7 @@ public class CardMediaEditController implements CardBase
                 medium,
                 format,
                 Short.parseShort(yearDisplay.getText()),
-                bandDisplay.getText()
+                media.getBand()
         );
     }
 
