@@ -8,7 +8,7 @@
 
 <HBox fx:id="pane_base" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.cards.CardBandEditController">
    <children>
-      <TitledPane fx:id="popUp" animated="false" prefHeight="353.0" prefWidth="348.0" text="untitled">
+      <TitledPane fx:id="popUp" animated="false" collapsible="false" prefHeight="353.0" prefWidth="348.0" text="untitled">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>

@@ -75,7 +75,10 @@ public class CardBandEditController implements CardBase
     @Override
     public void setMedia(Media media) {this.media = media;}
 
-    //TODO TEST
+    /**
+     * Renames the current medias band.
+     * If the user tries to rename a band that is not in the database, the band is added to the system.
+     */
     @FXML
     void renameMedia()
     {
@@ -103,6 +106,11 @@ public class CardBandEditController implements CardBase
         popUp.setText(band);
     }
 
+    /**
+     * Renames the current medias band system-wide. Meaning that if media "A" and media "B"
+     * both have the band "Example Band" as their band and the user renames A's band to "New Example".
+     * Both media A and B will have their bands set to "New Example".
+     */
     @FXML
     void renameSystem()
     {

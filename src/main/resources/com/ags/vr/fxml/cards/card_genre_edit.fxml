@@ -39,7 +39,7 @@
                   <Button mnemonicParsing="false" onAction="#Close" text="Close" />
                </children>
             </HBox>
-            <TitledPane fx:id="popUp" animated="false" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" style="-fx-background-color: grey;" text="untitled" visible="false">
+            <TitledPane fx:id="popUp" animated="false" collapsible="false" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" style="-fx-background-color: grey;" text="untitled" visible="false">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="222.0" prefWidth="333.0">
                      <children>
@@ -53,7 +53,7 @@
                   </AnchorPane>
                </content>
             </TitledPane>
-            <TitledPane fx:id="addGenrePopup" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="547.0" text="Add Genre" visible="false">
+            <TitledPane fx:id="addGenrePopup" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="547.0" text="Add Genre" visible="false">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="598.0">
                      <children>
