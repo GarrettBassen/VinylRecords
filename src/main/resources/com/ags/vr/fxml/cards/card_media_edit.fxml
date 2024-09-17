@@ -3,144 +3,131 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <HBox fx:id="pane_base" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.cards.CardMediaEditController">
    <children>
-      <HBox alignment="CENTER" maxHeight="600.0" maxWidth="800.0" minHeight="600.0" minWidth="800.0">
+      <VBox fx:id="vbox" prefHeight="672.0" prefWidth="428.0" style="-fx-background-color: grey;">
          <children>
-            <AnchorPane style="-fx-background-color: white;" HBox.hgrow="ALWAYS">
+            <AnchorPane fx:id="topPane" prefHeight="246.0" prefWidth="428.0">
                <children>
-                  <Text layoutX="116.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+                  <Text fill="WHITE" layoutX="20.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
                      <font>
-                        <Font name="Arial Rounded MT Bold" size="13.0" />
+                        <Font name="System Bold" size="13.0" />
                      </font>
                   </Text>
-                  <Text layoutX="116.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Band" wrappingWidth="38.3525390625">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="13.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="378.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Genres">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="13.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="120.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Year">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="13.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="nameDisplay" layoutX="189.0" layoutY="100.0">
+                  <TextField fx:id="nameDisplay" layoutX="109.0" layoutY="24.0" prefHeight="24.0" prefWidth="214.0">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="bandDisplay" layoutX="189.0" layoutY="141.0">
+                  <TextField fx:id="yearDisplay" layoutX="109.0" layoutY="61.0" prefHeight="24.0" prefWidth="214.0">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="yearDisplay" layoutX="189.0" layoutY="187.0">
+                  <RadioButton fx:id="singleRB" layoutX="22.0" layoutY="176.0" mnemonicParsing="false" onAction="#formatControl" text="Single" textFill="WHITE">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
-                  </TextField>
-                  <Spinner fx:id="gfSpinner" editable="true" layoutX="247.0" layoutY="274.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
-                  <Text layoutX="117.0" layoutY="291.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Good Front Stock">
+                  </RadioButton>
+                  <RadioButton fx:id="epRB" layoutX="111.0" layoutY="176.0" mnemonicParsing="false" onAction="#formatControl" text="EP" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="13.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="lpRB" layoutX="174.0" layoutY="176.0" mnemonicParsing="false" onAction="#formatControl" text="LP" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="13.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="dlpRB" layoutX="241.0" layoutY="176.0" mnemonicParsing="false" onAction="#formatControl" text="DLP" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="13.0" />
+                     </font>
+                  </RadioButton>
+                  <Button layoutX="352.0" layoutY="61.0" mnemonicParsing="false" onAction="#Close" text="CLOSE" />
+                  <Button layoutX="347.0" layoutY="17.0" mnemonicParsing="false" onAction="#Back" text="Go Back" />
+                  <RadioButton fx:id="vinylRB" layoutX="25.0" layoutY="124.0" mnemonicParsing="false" onAction="#mediumControl" text="Vinyl" textFill="WHITE" />
+                  <RadioButton fx:id="cdRB" layoutX="110.0" layoutY="124.0" mnemonicParsing="false" onAction="#mediumControl" text="CD" textFill="WHITE" />
+                  <RadioButton fx:id="cassetteRB" layoutX="174.0" layoutY="124.0" mnemonicParsing="false" onAction="#mediumControl" text="Cassette" textFill="WHITE" />
+                  <Text fill="WHITE" layoutX="20.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Year">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="middlePane" prefHeight="231.0" prefWidth="428.0">
+               <children>
+                  <Spinner fx:id="gfSpinner" editable="true" layoutX="56.0" layoutY="29.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
+                  <Text fill="WHITE" layoutX="41.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Good Front Stock">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
                   </Text>
-                  <Text layoutX="122.0" layoutY="327.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fair Front Stock">
+                  <Text fill="WHITE" layoutX="46.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fair Front Stock">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
                   </Text>
-                  <Text layoutX="119.0" layoutY="366.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Poor Front Stock">
+                  <Text fill="WHITE" layoutX="43.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Poor Front Stock">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
                   </Text>
-                  <Text layoutX="396.0" layoutY="291.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Good Back Stock">
+                  <Spinner fx:id="ffSpinner" editable="true" layoutX="56.0" layoutY="88.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
+                  <Spinner fx:id="pfSpinner" editable="true" layoutX="56.0" layoutY="149.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
+                  <Text fill="WHITE" layoutX="269.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Good Back Stock">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
                   </Text>
-                  <Text layoutX="401.0" layoutY="327.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fair Back Stock">
+                  <Text fill="WHITE" layoutX="274.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fair Back Stock">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
                   </Text>
-                  <Text layoutX="399.0" layoutY="366.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Poor Back Stock">
+                  <Text fill="WHITE" layoutX="272.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Poor Back Stock">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
                   </Text>
-                  <Spinner fx:id="ffSpinner" editable="true" layoutX="247.0" layoutY="310.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
-                  <Spinner fx:id="pfSpinner" editable="true" layoutX="247.0" layoutY="349.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
-                  <Spinner fx:id="bgSpinner" editable="true" layoutX="521.0" layoutY="274.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
-                  <Spinner fx:id="bfSpinner" editable="true" layoutX="521.0" layoutY="310.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
-                  <Spinner fx:id="bpSpinner" editable="true" layoutX="521.0" layoutY="349.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
-                  <Text layoutX="122.0" layoutY="396.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Stock" wrappingWidth="81.529296875">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="13.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="invTotal" editable="false" layoutX="213.0" layoutY="379.0">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="13.0" />
-                     </font>
-                  </TextField>
-                  <Button fx:id="update" layoutX="458.0" layoutY="379.0" mnemonicParsing="false" onAction="#applyUpdate" prefHeight="24.0" prefWidth="171.0" text="Update">
+                  <Spinner fx:id="gbSpinner" editable="true" layoutX="283.0" layoutY="29.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
+                  <Spinner fx:id="fbSpinner" editable="true" layoutX="283.0" layoutY="88.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
+                  <Spinner fx:id="pbSpinner" editable="true" layoutX="283.0" layoutY="149.0" prefHeight="24.0" prefWidth="82.0" stylesheets="@../../css/spinner_text.css" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="bottemPane" prefHeight="234.0" prefWidth="428.0">
+               <children>
+                  <Button fx:id="update" layoutX="129.0" layoutY="100.0" mnemonicParsing="false" onAction="#applyUpdate" prefHeight="24.0" prefWidth="171.0" text="Update">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
                   </Button>
-                  <Button layoutX="119.0" layoutY="430.0" mnemonicParsing="false" onAction="#deleteEntry" text="Delete">
+                  <Button layoutX="184.0" layoutY="162.0" mnemonicParsing="false" onAction="#deleteEntry" text="Delete">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
                   </Button>
-                  <RadioButton fx:id="singleRB" layoutX="117.0" layoutY="233.0" mnemonicParsing="false" onAction="#formatControl" text="Single">
+                  <TextField fx:id="invTotal" editable="false" layoutX="129.0" layoutY="45.0">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="13.0" />
                      </font>
-                  </RadioButton>
-                  <RadioButton fx:id="epRB" layoutX="278.0" layoutY="233.0" mnemonicParsing="false" onAction="#formatControl" text="EP">
+                  </TextField>
+                  <Text fill="WHITE" layoutX="170.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Stock" wrappingWidth="88.44677734375">
                      <font>
-                        <Font name="Arial Rounded MT Bold" size="13.0" />
+                        <Font name="System Bold" size="13.0" />
                      </font>
-                  </RadioButton>
-                  <RadioButton fx:id="lpRB" layoutX="419.0" layoutY="233.0" mnemonicParsing="false" onAction="#formatControl" text="LP">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="13.0" />
-                     </font>
-                  </RadioButton>
-                  <RadioButton fx:id="dlpRB" layoutX="604.0" layoutY="233.0" mnemonicParsing="false" onAction="#formatControl" text="DLP">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="13.0" />
-                     </font>
-                  </RadioButton>
-                  <TextArea fx:id="genresDisplay" layoutX="439.0" layoutY="95.0" prefHeight="116.0" prefWidth="246.0">
-                     <font>
-                        <Font name="Arial Rounded MT Bold" size="13.0" />
-                     </font>
-                  </TextArea>
-                  <Button layoutX="495.0" layoutY="481.0" mnemonicParsing="false" onAction="#Close" text="CLOSE" AnchorPane.leftAnchor="495.0" AnchorPane.topAnchor="481.0" />
-                  <Button layoutX="557.0" layoutY="481.0" mnemonicParsing="false" onAction="#Back" text="Go Back" AnchorPane.leftAnchor="557.0" AnchorPane.topAnchor="481.0" />
-                  <RadioButton fx:id="vinylRB" layoutX="121.0" layoutY="484.0" mnemonicParsing="false" onAction="#mediumControl" text="Vinyl" />
-                  <RadioButton fx:id="cdRB" layoutX="208.0" layoutY="484.0" mnemonicParsing="false" onAction="#mediumControl" text="CD" />
-                  <RadioButton fx:id="cassetteRB" layoutX="299.0" layoutY="484.0" mnemonicParsing="false" onAction="#mediumControl" text="Cassette" />
+                  </Text>
                </children>
             </AnchorPane>
          </children>
-      </HBox>
+      </VBox>
    </children>
 </HBox>
