@@ -11,7 +11,7 @@ import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 
 import com.ags.vr.utils.database.DBGenreLinker;
-import com.ags.vr.utils.serialization.DataBaseSaverLoader;
+import com.ags.vr.utils.serialization.DatabaseSerializer;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -791,7 +791,7 @@ public class PageBrowseController
     void saveFile()
     {
         //creating new saver loader object which getts all tables from database
-        DataBaseSaverLoader saver = new DataBaseSaverLoader(true);
+        DatabaseSerializer saver = new DatabaseSerializer(true);
         boolean bool = saver.save("databaseSaves/" + fileInput.getText() + ".ser");
 
         if(bool)

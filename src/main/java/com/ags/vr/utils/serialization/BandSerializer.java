@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import static com.ags.vr.utils.Connector.con;
 
-public class BandSaver
+public class BandSerializer
 {
     /**
      * Gets every entry from the band table and returns it in an array list of strings.

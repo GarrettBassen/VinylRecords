@@ -1,6 +1,7 @@
 package com.ags.vr.utils.serialization;
 
 import com.ags.vr.objects.Media;
+import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
 
 import java.sql.PreparedStatement;
@@ -10,29 +11,31 @@ import java.util.ArrayList;
 
 import static com.ags.vr.utils.Connector.con;
 
-public class MediaSaver {
+public class InventorySerializer
+{
+    //TODO COULD BE FASTER
     /**
-     * Gets every entry from the media table and returns it in an array list of media objects.
-     * @return Arraylist of media entries
+     * Gets every entry from the inventory table and returns it in an array list of stock objects.
+     * @return Array list of inventory entries.
      */
-    public static ArrayList<Media> saveMediaEntries()
+    public static ArrayList<Stock> saveInventoryEntries()
     {
         try
         {
-            ArrayList<Media> mediaEntries = new ArrayList<>();
+            ArrayList<Stock> stockEntries = new ArrayList<>();
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM media");
             ResultSet rs = stmt.executeQuery();
 
             while(rs.next())
             {
-                mediaEntries.add(new Media(rs));
+                stockEntries.add(new Stock(new Media(rs)));
             }
 
-            return mediaEntries;
+            return stockEntries;
         }
-        catch(SQLException e)
+        catch (SQLException e)
         {
-            Graphical.ErrorPopup("Media Save Error", e.getMessage());
+            Graphical.ErrorPopup("Inventory Save Error", e.getMessage());
         }
         return null;
     }

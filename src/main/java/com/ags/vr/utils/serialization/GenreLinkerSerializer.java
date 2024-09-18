@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import static com.ags.vr.utils.Connector.con;
 
-public class GenreLinkerSaver
+public class GenreLinkerSerializer
 {
     public static ArrayList<String> saveGenreLinkerEntries()
     {
