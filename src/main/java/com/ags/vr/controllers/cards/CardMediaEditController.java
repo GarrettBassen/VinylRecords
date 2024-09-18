@@ -174,9 +174,9 @@ public class CardMediaEditController implements CardBase
             medium = "CD";
             cdRB.setSelected(true);
         }
-        else if(this.media.getMedium().equals("Cassette"))
+        else if(this.media.getMedium().equals("cassette"))
         {
-            medium = "Cassette";
+            medium = "cassette";
             cassetteRB.setSelected(true);
         }
 

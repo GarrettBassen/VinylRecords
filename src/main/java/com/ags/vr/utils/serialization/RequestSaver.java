@@ -1,4 +1,7 @@
 package com.ags.vr.utils.serialization;
 
-public class RequestSaver {
+//TODO ADD METHOD
+public class RequestSaver
+{
+
 }

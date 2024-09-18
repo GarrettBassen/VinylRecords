@@ -1,0 +1,7 @@
+package com.ags.vr.utils.serialization;
+
+public class DataBaseSaverLoader
+{
+    //TODO ADD METHOD FOR SERIALIZING THE DB USING THE DB SAVER METHODS
+    //TODO ADD METHOD FOR RECONSTRUCTING THE DB USING DESERIALIZED ARRAYLIST
+}
