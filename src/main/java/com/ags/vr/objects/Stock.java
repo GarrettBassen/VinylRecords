@@ -4,10 +4,11 @@ import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.database.DBInventory;
 import com.ags.vr.utils.database.DBMedia;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Stock
+public class Stock implements Serializable
 {
     private int media_id;
     private byte frontGood = 0;

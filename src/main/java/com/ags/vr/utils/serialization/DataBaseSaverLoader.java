@@ -44,8 +44,9 @@ public class DataBaseSaverLoader implements java.io.Serializable
 
     /**
      * Serializes the database.
+     * @return Returns true if the save was successful; false otherwise.
      */
-    public void save(String filename)
+    public boolean save(String filename)
     {
         try
         {
@@ -58,12 +59,15 @@ public class DataBaseSaverLoader implements java.io.Serializable
 
             out.close();
             file.close();
+
+            return true;
         }
 
         catch(IOException e)
         {
             Graphical.ErrorPopup("Save Error", e.getMessage());
         }
+        return false;
     }
 
     //TODO IMPLEMENT

@@ -11,6 +11,7 @@ import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 
 import com.ags.vr.utils.database.DBGenreLinker;
+import com.ags.vr.utils.serialization.DataBaseSaverLoader;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -207,7 +208,9 @@ public class PageBrowseController
     @FXML
     void openSettings()
     {
-
+        settingsPopup.setVisible(true);
+        selectionBox.getItems().addAll("Daily", "Monthly", "Yearly");
+        selectionBox.setValue("Auto Save Frequency");
     }
 
 
@@ -787,7 +790,14 @@ public class PageBrowseController
     @FXML
     void saveFile()
     {
+        //creating new saver loader object which getts all tables from database
+        DataBaseSaverLoader saver = new DataBaseSaverLoader(true);
+        boolean bool = saver.save("databaseSaves/" + fileInput.getText() + ".ser");
 
+        if(bool)
+        {
+            Graphical.InfoPopup("Save Successful", fileInput.getText() + "saved.");
+        }
     }
 
     @FXML
@@ -799,7 +809,7 @@ public class PageBrowseController
     @FXML
     void closeSettings()
     {
-        
+        settingsPopup.setVisible(false);
     }
 
 }

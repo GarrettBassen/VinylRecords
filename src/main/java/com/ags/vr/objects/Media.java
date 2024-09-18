@@ -4,13 +4,14 @@ import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.database.DBBand;
 import com.ags.vr.utils.Hash;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  * Media object adds readability and make media-related database operations easier.
  */
-public class Media
+public class Media implements Serializable
 {
     // Variables
     private int old_id = Integer.MIN_VALUE;
