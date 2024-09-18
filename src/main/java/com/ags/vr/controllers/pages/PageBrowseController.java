@@ -74,6 +74,9 @@ public class PageBrowseController
     @FXML private Spinner<Integer> sp_year_min;
     @FXML private Spinner<Integer> sp_year_max;
 
+    //Settings button
+    @FXML private Button settingsButton;
+
     // Filter helper variables
     private String[] medium = new String[4];
     private String[] format = new String[5];
@@ -199,6 +202,12 @@ public class PageBrowseController
     {
         sp_year_min.getValueFactory().setValue(Integer.MIN_VALUE);
         sp_year_max.getValueFactory().setValue(Integer.MAX_VALUE);
+    }
+
+    @FXML
+    void openSettings()
+    {
+
     }
 
 
@@ -762,4 +771,35 @@ public class PageBrowseController
 
         return true;
     }
+
+    //************************************POPUP****************************************************//
+    @FXML private TitledPane settingsPopup;
+
+    @FXML private TextField fileInput;
+
+    @FXML private Button saveButton;
+    @FXML private Button loadButton;
+    @FXML private Button closeSettingsButton;
+
+    @FXML private ChoiceBox<String> selectionBox;
+
+    //methods
+    @FXML
+    void saveFile()
+    {
+
+    }
+
+    @FXML
+    void loadFile()
+    {
+
+    }
+
+    @FXML
+    void closeSettings()
+    {
+        
+    }
+
 }

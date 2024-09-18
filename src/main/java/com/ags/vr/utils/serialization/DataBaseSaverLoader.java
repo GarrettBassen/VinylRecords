@@ -24,36 +24,31 @@ public class DataBaseSaverLoader implements java.io.Serializable
     private ArrayList<String> genreLinkerTable;
     //TODO ADD ARRAY LIST FOR REQUEST TABLE
 
-    //number of files created
-    //TODO CHANGE IMPLEMENTATION SO FILENUM IS NOT SERIALIZED
-    private static int fileNum = 0;
 
 
     /**
-     * Initializes the DataBaseSaverLoader object by initializing all array list with
-     * Database table values.
+     * Initializes the DataBaseSaverLoader object.
+     * @param bool True has the constructor initialize all array list. False does not initialize any array list.
      */
-    public DataBaseSaverLoader()
+    public DataBaseSaverLoader(boolean bool)
     {
-        mediaTable = MediaSaver.saveMediaEntries();
-        stockTable = InventorySaver.saveInventoryEntries();
-        bandTable = BandSaver.saveBandEntries();
-        genreTable = GenreSaver.saveGenreEntries();
-        genreLinkerTable = GenreLinkerSaver.saveGenreLinkerEntries();
+        if(bool)
+        {
+            mediaTable = MediaSaver.saveMediaEntries();
+            stockTable = InventorySaver.saveInventoryEntries();
+            bandTable = BandSaver.saveBandEntries();
+            genreTable = GenreSaver.saveGenreEntries();
+            genreLinkerTable = GenreLinkerSaver.saveGenreLinkerEntries();
+        }
     }
 
     /**
      * Serializes the database.
      */
-    public void save()
+    public void save(String filename)
     {
         try
         {
-            //generate file name
-            String filename = "Database-Save" + Year.now() + "-" + MonthDay.now().getMonthValue() + "-" + MonthDay.now().getDayOfMonth();
-            fileNum++;
-            filename += fileNum;
-
             //Creating file
             FileOutputStream file = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(file);
