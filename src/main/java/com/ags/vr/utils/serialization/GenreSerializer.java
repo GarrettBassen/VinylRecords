@@ -37,4 +37,31 @@ public class GenreSerializer
         return null;
     }
 
+    /**
+     * Inserts all data from genreEntries arrayList into the genre_linker table.
+     * @param genreEntries ArrayList full of genre data.
+     */
+    public static void loadGenreEntries(ArrayList<String> genreEntries)
+    {
+        try
+        {
+            for(String genre : genreEntries)
+            {
+                String[] genreSplit = genre.split("\\|");
+
+                //insert loaded object into database
+                PreparedStatement stmt = con.prepareStatement("INSERT INTO genre (genre_id, name) VALUES (?, ?)");
+                //id
+                stmt.setString(1, genreSplit[0]);
+                //name
+                stmt.setString(2, genreSplit[1]);
+                stmt.executeUpdate();
+            }
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Genre Load Error", e.getMessage());
+        }
+    }
+
 }

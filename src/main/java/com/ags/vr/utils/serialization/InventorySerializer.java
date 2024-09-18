@@ -3,6 +3,7 @@ package com.ags.vr.utils.serialization;
 import com.ags.vr.objects.Media;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
+import com.ags.vr.utils.database.DBInventory;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,5 +39,18 @@ public class InventorySerializer
             Graphical.ErrorPopup("Inventory Save Error", e.getMessage());
         }
         return null;
+    }
+
+
+    /**
+     * Inserts all data from stockEntries array list into the inventory table.
+     * @param stockEntries Arraylist full of inventory data.
+     */
+    public static void loadInventoryEntries(ArrayList<Stock> stockEntries)
+    {
+        for (Stock stock : stockEntries)
+        {
+            DBInventory.Insert(stock);
+        }
     }
 }

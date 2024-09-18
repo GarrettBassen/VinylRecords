@@ -41,4 +41,31 @@ public class BandSerializer
         }
         return null;
     }
+
+    /**
+     * Inserts all data from bandEntries arrayList into the band table.
+     * @param bandEntries ArrayList full of band data.
+     */
+    public static void loadBandEntries(ArrayList<String> bandEntries)
+    {
+        try
+        {
+            for(String band : bandEntries)
+            {
+                String[] bandSplit = band.split("\\|");
+
+                //insert loaded object into database
+                PreparedStatement stmt = con.prepareStatement("INSERT INTO band (band_id, name) VALUES (?, ?)");
+                //id
+                stmt.setString(1, bandSplit[0]);
+                //name
+                stmt.setString(2, bandSplit[1]);
+                stmt.executeUpdate();
+            }
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Band Load Error", e.getMessage());
+        }
+    }
 }

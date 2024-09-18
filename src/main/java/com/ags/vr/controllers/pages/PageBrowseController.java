@@ -32,6 +32,7 @@ import java.util.*;
 
 import static com.ags.vr.utils.Connector.con;
 
+//TODO ADD AUTO SAVING FUNCTIONALITY
 public class PageBrowseController
 {
     // Panes
@@ -800,6 +801,7 @@ public class PageBrowseController
         }
     }
 
+    //TODO IMPLEMENT
     @FXML
     void loadFile()
     {
@@ -811,5 +813,4 @@ public class PageBrowseController
     {
         settingsPopup.setVisible(false);
     }
-
 }

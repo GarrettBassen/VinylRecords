@@ -5,7 +5,12 @@ import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
 
 import java.io.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+
+import static com.ags.vr.utils.Connector.con;
 
 public class DatabaseSerializer implements java.io.Serializable
 {
@@ -102,9 +107,32 @@ public class DatabaseSerializer implements java.io.Serializable
         return false;
     }
 
-    //TODO Implement
+    //TODO test
     public void load()
     {
+        try
+        {
+            //deleting all database info
+            Statement stmt = con.createStatement();
+            stmt.addBatch("DELETE FROM genre_linker");
+            stmt.addBatch("DELETE FROM genre");
+            stmt.addBatch("DELETE FROM band");
+            stmt.addBatch("DELETE FROM inventory");
+            stmt.addBatch("DELETE FROM media");
+            stmt.addBatch("DELETE FROM request");
+            stmt.executeBatch();
 
+            //loading new database info
+            BandSerializer.loadBandEntries(bandTable);
+            GenreSerializer.loadGenreEntries(genreTable);
+            MediaSerializer.loadMediaEntries(mediaTable);
+            InventorySerializer.loadInventoryEntries(stockTable);
+            GenreLinkerSerializer.loadGenreLinkerEntries(genreLinkerTable);
+            //TODO ADD REQUEST LOADING FUNCTIONALITY
+        }
+        catch(SQLException e)
+        {
+            Graphical.ErrorPopup("Database Load Error", e.getMessage());
+        }
     }
 }

@@ -37,4 +37,31 @@ public class GenreLinkerSerializer
         }
         return null;
     }
+
+    /**
+     * Inserts all data from genreLinkerEntries arrayList into the genre_linker table.
+     * @param genreLinkerEntries ArrayList full of genre_linker data.
+     */
+    public static void loadGenreLinkerEntries(ArrayList<String> genreLinkerEntries)
+    {
+        try
+        {
+            for(String genreLinker : genreLinkerEntries)
+            {
+                String[] genreLinkerSplit = genreLinker.split("\\|");
+
+                //insert loaded object into database
+                PreparedStatement stmt = con.prepareStatement("INSERT INTO genre_linker (media_id, genre_id) VALUES (?, ?)");
+                //media id
+                stmt.setString(1, genreLinkerSplit[0]);
+                //genre id
+                stmt.setString(2, genreLinkerSplit[1]);
+                stmt.executeUpdate();
+            }
+        }
+        catch (SQLException e)
+        {
+            Graphical.ErrorPopup("Genre Linker Load Error", e.getMessage());
+        }
+    }
 }
