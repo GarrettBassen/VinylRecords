@@ -29,12 +29,13 @@ public class PageRequestController {
 
     //declaring FXML variables for the Add Request pop-up
     @FXML private VBox addPopUp;
+    @FXML private ImageView closeBtn; //calls the closePopUp method
     @FXML private TextField customerField;
     @FXML private TextField dateField;
     @FXML private TextField emailField;
     @FXML private TextField phoneField;
     @FXML private TextField requestField;
-    @FXML private Button submitBtn;
+    @FXML private Button submitBtn; //calls the submitRequest method
 
     //todo!
     /**
@@ -44,6 +45,8 @@ public class PageRequestController {
 
     }
 
+
+    //------------------ Functionality ------------------
 
     /**
      * Method used to launch a popup that will contain text fields that when
@@ -66,8 +69,8 @@ public class PageRequestController {
         //future code to check for any errors in the user input...
 
 
-        //set vBox visibility to false so that the popup can be "closed"
-        addPopUp.setVisible(false);
+        //call helper method so that the popup can be "closed"
+        closePopUp();
 
     }
 
@@ -81,12 +84,23 @@ public class PageRequestController {
 
     }
 
-    //todo!
-    /**
-     * Method used to build a string using the data that is stored in the request table from the database.
-     * These strings will later be displayed in the text area that contains the current requests.
-     */
-    public void buildRequestString() {
 
+    //------------------ Validation ------------------
+
+    /**
+     * Method to validate user input ensuring that the data may be stored.
+     * @return a boolean value, true meaning the input can be stored and false resulting in the user having to try again.
+     */
+    private boolean userInputValidation() {
+        return true; //for now...
     }
+
+    
+    //------------------ Helper Methods ------------------
+
+    /**
+     * Helper method used to close the popup if exit icon or submit button is pressed.
+     */
+    public void closePopUp() { addPopUp.setVisible(false); }
+
 }

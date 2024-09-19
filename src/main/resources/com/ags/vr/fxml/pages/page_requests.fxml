@@ -5,13 +5,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.pages.PageRequestController">
    <children>
@@ -94,10 +94,13 @@
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="closeBtn" fitHeight="50.0" fitWidth="50.0" onMousePressed="#closePopUp" pickOnBounds="true" preserveRatio="true">
                            <HBox.margin>
-                              <Insets left="5.0" top="5.0" />
+                              <Insets left="5.0" top="2.0" />
                            </HBox.margin>
+                           <image>
+                              <Image url="@../../artwork/icons/circle_x.png" />
+                           </image>
                         </ImageView>
                      </children>
                   </HBox>
