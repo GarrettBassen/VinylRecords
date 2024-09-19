@@ -110,18 +110,27 @@ public class DatabaseSerializer implements java.io.Serializable
     }
 
     //TODO test
-    public void load()
+    public boolean load()
     {
         try
         {
             //deleting all database info
             Statement stmt = con.createStatement();
+            //not working
+            /*
             stmt.addBatch("DELETE FROM genre_linker");
             stmt.addBatch("DELETE FROM genre");
             stmt.addBatch("DELETE FROM band");
             stmt.addBatch("DELETE FROM inventory");
             stmt.addBatch("DELETE FROM media");
             stmt.addBatch("DELETE FROM request");
+             */
+            stmt.addBatch("DELETE FROM request");
+            stmt.addBatch("DELETE FROM media");
+            stmt.addBatch("DELETE FROM inventory");
+            stmt.addBatch("DELETE FROM band");
+            stmt.addBatch("DELETE FROM genre");
+            stmt.addBatch("DELETE FROM genre_linker");
             stmt.executeBatch();
 
             //loading new database info
@@ -131,10 +140,12 @@ public class DatabaseSerializer implements java.io.Serializable
             InventorySerializer.loadInventoryEntries(stockTable);
             GenreLinkerSerializer.loadGenreLinkerEntries(genreLinkerTable);
             RequestSerializer.loadRequestEntries(requestTable);
+            return true;
         }
         catch(SQLException e)
         {
             Graphical.ErrorPopup("Database Load Error", e.getMessage());
         }
+        return false;
     }
 }

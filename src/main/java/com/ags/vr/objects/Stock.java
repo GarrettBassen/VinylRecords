@@ -60,6 +60,7 @@ public class Stock implements Serializable
             result.next();
 
             //setting the values (null assigns 0)
+            this.media_id = result.getInt("media_id");
             this.frontGood = result.getByte("front_good");
             this.frontFair = result.getByte("front_fair");
             this.frontPoor = result.getByte("front_poor");

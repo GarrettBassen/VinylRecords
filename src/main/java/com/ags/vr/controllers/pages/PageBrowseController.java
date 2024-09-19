@@ -225,6 +225,7 @@ public class PageBrowseController
         {
             fileListView.getItems().add(filesList[i].getName());
         }
+        settingsButton.setDisable(true);
     }
 
 
@@ -827,7 +828,26 @@ public class PageBrowseController
     @FXML
     void loadFile()
     {
-        //
+        //check if a file has been selected
+        if(fileListView.getSelectionModel().isEmpty())
+        {
+            Graphical.ErrorPopup("No file selected", "Please select a file.");
+            return;
+        }
+
+        String filename = fileListView.getSelectionModel().getSelectedItem();
+        if(Graphical.ConfirmationPopup("Load File", "Are you sure you want to load " +
+                filename + "? All currently stored data will be lost."))
+        {
+            DatabaseSerializer loader = new DatabaseSerializer(false);
+            boolean getFileBool = loader.getFile("databaseSaves/" + filename);
+            boolean loadBool = loader.load();
+
+            if(getFileBool && loadBool)
+            {
+                Graphical.InfoPopup("Load Successful", filename + " Loaded successfully.");
+            }
+        }
     }
 
     //TODO IMPLEMENT
@@ -842,5 +862,6 @@ public class PageBrowseController
     {
         fileListView.getItems().clear();
         settingsPopup.setVisible(false);
+        settingsButton.setDisable(false);
     }
 }
