@@ -1,11 +1,11 @@
 package com.ags.vr.utils.serialization;
 
 import com.ags.vr.objects.Media;
+import com.ags.vr.objects.Request;
 import com.ags.vr.objects.Stock;
 import com.ags.vr.utils.Graphical;
 
 import java.io.*;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class DatabaseSerializer implements java.io.Serializable
     private ArrayList<String> bandTable;
     private ArrayList<String> genreTable;
     private ArrayList<String> genreLinkerTable;
-    //TODO ADD ARRAY LIST FOR REQUEST TABLE
+    private ArrayList<Request> requestTable;
 
 
 
@@ -40,6 +40,7 @@ public class DatabaseSerializer implements java.io.Serializable
             bandTable = BandSerializer.saveBandEntries();
             genreTable = GenreSerializer.saveGenreEntries();
             genreLinkerTable = GenreLinkerSerializer.saveGenreLinkerEntries();
+            requestTable = RequestSerializer.saveRequestEntries();
         }
     }
 
@@ -98,6 +99,7 @@ public class DatabaseSerializer implements java.io.Serializable
             this.bandTable = loaded.bandTable;
             this.genreTable = loaded.genreTable;
             this.genreLinkerTable = loaded.genreLinkerTable;
+            this.requestTable = loaded.requestTable;
             return true;
         }
         catch (IOException | ClassNotFoundException e)
@@ -128,7 +130,7 @@ public class DatabaseSerializer implements java.io.Serializable
             MediaSerializer.loadMediaEntries(mediaTable);
             InventorySerializer.loadInventoryEntries(stockTable);
             GenreLinkerSerializer.loadGenreLinkerEntries(genreLinkerTable);
-            //TODO ADD REQUEST LOADING FUNCTIONALITY
+            RequestSerializer.loadRequestEntries(requestTable);
         }
         catch(SQLException e)
         {

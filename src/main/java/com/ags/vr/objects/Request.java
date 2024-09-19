@@ -38,7 +38,7 @@ public class Request implements Serializable {
 
         this.customerName = customerName;
         this.phoneNumber = phoneNumber;
-        this.email =email;
+        this.email = email;
         this.date = date;
         this.request = request;
     }
