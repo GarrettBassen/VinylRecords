@@ -13,9 +13,9 @@ public class Request implements Serializable {
 
     //variable declaration
     private String customerName;
-    private String phoneNumber;
+    private double phoneNumber;
     private String email;
-    private String date;
+    private short date;
     private String request;
 
 
@@ -29,12 +29,12 @@ public class Request implements Serializable {
     /**
      * Constructor to create a Request object with the following parameters.
      * @param customerName is string holding the respected information.
-     * @param phoneNumber is string holding the respected information.
+     * @param phoneNumber is double holding the respected information.
      * @param email is string holding the respected information.
-     * @param date is string holding the respected information.
+     * @param date is short holding the respected information.
      * @param request is string holding the respected information.
      */
-    public Request(String customerName, String phoneNumber, String email, String date, String request) {
+    public Request(String customerName, double phoneNumber, String email, short date, String request) {
 
         this.customerName = customerName;
         this.phoneNumber = phoneNumber;
@@ -52,9 +52,9 @@ public class Request implements Serializable {
         try
         {
             this.customerName = request.getString("customer");
-            this.phoneNumber = request.getString("phone_number");
+            this.phoneNumber = request.getDouble("phone_number");
             this.email = request.getString("email");
-            this.date = request.getString("date");
+            this.date = request.getShort("date");
             this.request = request.getString("request");
         }
         catch (SQLException e)
@@ -77,9 +77,9 @@ public class Request implements Serializable {
 
     /**
      * Method to set the phone number.
-     * @param phoneNumber is a string that represents one way of contacting the customer.
+     * @param phoneNumber is a double that represents one way of contacting the customer.
      */
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public void setPhoneNumber(double phoneNumber) { this.phoneNumber = phoneNumber; }
 
     /**
      * Method to set the email.
@@ -89,9 +89,9 @@ public class Request implements Serializable {
 
     /**
      * Method to set the date.
-     * @param date is a string that represents the date that the request was made/entered into the program.
+     * @param date is a short that represents the date that the request was made/entered into the program.
      */
-    public void setDate(String date) { this.date = date; }
+    public void setDate(short date) { this.date = date; }
 
     /**
      * Method to set the request that was made.
@@ -110,9 +110,9 @@ public class Request implements Serializable {
 
     /**
      * Method to return one way to contact the customer.
-     * @return a String representing the phone number of the customer making the request.
+     * @return a double representing the phone number of the customer making the request.
      */
-    public String getPhoneNumber() { return phoneNumber; }
+    public double getPhoneNumber() { return phoneNumber; }
 
     /**
      * Method to return one way to contact the customer.
@@ -122,9 +122,9 @@ public class Request implements Serializable {
 
     /**
      * Method to return the date of the request.
-     * @return a String representing the date that the request was made/entered into the program.
+     * @return a short representing the date that the request was made/entered into the program.
      */
-    public String getDate() { return date; }
+    public short getDate() { return date; }
 
     /**
      * Method to return the request that was made.

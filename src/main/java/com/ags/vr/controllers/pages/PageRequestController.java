@@ -1,6 +1,10 @@
 package com.ags.vr.controllers.pages;
 
 //imports
+import com.ags.vr.objects.Request;
+import com.ags.vr.utils.Graphical;
+import com.ags.vr.utils.database.DBMedia;
+import com.ags.vr.utils.database.DBRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -66,12 +70,22 @@ public class PageRequestController {
      */
     public void submitRequest(ActionEvent event) {
 
-        //future code to check for any errors in the user input...
+        //future code to check for any errors in the user input using the validation method...
 
+        //create the request
+        Request request = createRequest();
 
-        //call helper method so that the popup can be "closed"
+        //insert request into the Database
+        DBRequest.Insert(request);
+
+        //call helper methods to clear the text fields and also ensure that the popup is "closed"
         closePopUp();
 
+        //inform the user that the adding of the request was successful via popup
+        Graphical.ConfirmationPopup("Success Adding Request",String.format(
+                "'%s' was requested by '%s' was successfully added to your requests",
+                request.getRequest(), request.getCustomerName()
+        ));
     }
 
 
@@ -95,12 +109,50 @@ public class PageRequestController {
         return true; //for now...
     }
 
-    
+
     //------------------ Helper Methods ------------------
 
     /**
-     * Helper method used to close the popup if exit icon or submit button is pressed.
+     * Method used to create a Request Object from the user input.
+     * @return the newly developed Request Object.
      */
-    public void closePopUp() { addPopUp.setVisible(false); }
+    private Request createRequest() {
 
+        //initialize new Request Object
+        Request request = new Request();
+
+        //get text fields entered by the user and set them to the Request Object
+        request.setCustomerName(customerField.getText());
+        request.setPhoneNumber(Double.parseDouble(phoneField.getText()));
+        request.setEmail(emailField.getText());
+        request.setDate(Short.parseShort(dateField.getText()));
+        request.setRequest(requestField.getText());
+
+        //return the Request Object
+        return request;
+    }
+
+    /**
+     * Helper method used to close the popup if exit icon or submit button is pressed.
+     * Additionally, the helper function to clear the text fields will be called as well.
+     */
+    public void closePopUp() {
+
+        clearFields(); //first call the helper method to clear all text fields
+        addPopUp.setVisible(false); //toggle the visibility to false
+    }
+
+
+    /**
+     * Method used to clear all the text fields.
+     */
+    public void clearFields() {
+
+        //clear all text fields
+        customerField.clear();
+        phoneField.clear();
+        emailField.clear();
+        dateField.clear();
+        requestField.clear();
+    }
 }
