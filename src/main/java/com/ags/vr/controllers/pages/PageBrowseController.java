@@ -22,6 +22,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -212,6 +213,18 @@ public class PageBrowseController
         settingsPopup.setVisible(true);
         selectionBox.getItems().addAll("Daily", "Monthly", "Yearly");
         selectionBox.setValue("Auto Save Frequency");
+
+        //get all files from databaseSaves directory
+        //Creating a File object for directory
+        File directoryPath = new File("databaseSaves");
+        //List of all files and directories
+        File filesList[] = directoryPath.listFiles();
+
+        //fill the list view with the files
+        for(int i = 0; i < filesList.length; i++)
+        {
+            fileListView.getItems().add(filesList[i].getName());
+        }
     }
 
 
@@ -780,6 +793,7 @@ public class PageBrowseController
     @FXML private TitledPane settingsPopup;
 
     @FXML private TextField fileInput;
+    @FXML private ListView<String> fileListView;
 
     @FXML private Button saveButton;
     @FXML private Button loadButton;
@@ -791,12 +805,20 @@ public class PageBrowseController
     @FXML
     void saveFile()
     {
+        if(fileListView.getItems().contains(fileInput.getText() + ".ser"))
+        {
+            Graphical.ErrorPopup("Same Save Name", "Delete highlighted save before adding new save with same name.");
+            fileListView.getSelectionModel().select(fileInput.getText() + ".ser");
+            return;
+        }
+
         //creating new saver loader object which getts all tables from database
         DatabaseSerializer saver = new DatabaseSerializer(true);
         boolean bool = saver.save("databaseSaves/" + fileInput.getText() + ".ser");
 
         if(bool)
         {
+            fileListView.getItems().add(fileInput.getText() + ".ser");
             Graphical.InfoPopup("Save Successful", fileInput.getText() + "saved.");
         }
     }
@@ -805,12 +827,20 @@ public class PageBrowseController
     @FXML
     void loadFile()
     {
+        //
+    }
+
+    //TODO IMPLEMENT
+    @FXML
+    void deleteFile()
+    {
 
     }
 
     @FXML
     void closeSettings()
     {
+        fileListView.getItems().clear();
         settingsPopup.setVisible(false);
     }
 }

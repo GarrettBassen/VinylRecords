@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Spinner?>
@@ -58,15 +59,17 @@
                               <VBox fx:id="pane_content" stylesheets="@../../css/page_browse.css" />
                            </content>
                         </ScrollPane>
-                        <TitledPane fx:id="settingsPopup" animated="false" collapsible="false" layoutX="94.0" layoutY="59.0" prefHeight="326.0" prefWidth="465.0" text="Settings" visible="false">
+                        <TitledPane fx:id="settingsPopup" animated="false" collapsible="false" layoutX="87.0" layoutY="59.0" prefHeight="444.0" prefWidth="472.0" text="Settings" visible="false">
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="463.0">
                                  <children>
-                                    <Button fx:id="saveButton" layoutX="20.0" layoutY="61.0" mnemonicParsing="false" onAction="#saveFile" text="Save" />
+                                    <Button fx:id="saveButton" layoutX="21.0" layoutY="49.0" mnemonicParsing="false" onAction="#saveFile" prefHeight="26.0" prefWidth="150.0" text="Save" />
                                     <TextField fx:id="fileInput" layoutX="20.0" layoutY="14.0" prefHeight="24.0" prefWidth="281.0" promptText="input file name" />
-                                    <Button fx:id="loadButton" layoutX="20.0" layoutY="91.0" mnemonicParsing="false" onAction="#loadFile" text="Load" />
-                                    <Button fx:id="closeSettingsButton" layoutX="18.0" layoutY="263.0" mnemonicParsing="false" onAction="#closeSettings" text="Close" />
+                                    <Button fx:id="loadButton" layoutX="21.0" layoutY="376.0" mnemonicParsing="false" onAction="#loadFile" prefHeight="26.0" prefWidth="199.0" text="Load" />
+                                    <Button fx:id="closeSettingsButton" layoutX="405.0" layoutY="376.0" mnemonicParsing="false" onAction="#closeSettings" text="Close" />
                                     <ChoiceBox fx:id="selectionBox" layoutX="308.0" layoutY="14.0" prefWidth="150.0" />
+                                    <ListView fx:id="fileListView" layoutX="21.0" layoutY="91.0" prefHeight="272.0" prefWidth="281.0" />
+                                    <Button fx:id="deleteFileButton" layoutX="227.0" layoutY="376.0" mnemonicParsing="false" onAction="#deleteFile" prefHeight="26.0" prefWidth="75.0" text="Delete" />
                                  </children>
                               </AnchorPane>
                            </content>
