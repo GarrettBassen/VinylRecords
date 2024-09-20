@@ -116,21 +116,12 @@ public class DatabaseSerializer implements java.io.Serializable
         {
             //deleting all database info
             Statement stmt = con.createStatement();
-            //not working
-            /*
-            stmt.addBatch("DELETE FROM genre_linker");
-            stmt.addBatch("DELETE FROM genre");
-            stmt.addBatch("DELETE FROM band");
-            stmt.addBatch("DELETE FROM inventory");
-            stmt.addBatch("DELETE FROM media");
             stmt.addBatch("DELETE FROM request");
-             */
-            stmt.addBatch("DELETE FROM request");
-            stmt.addBatch("DELETE FROM media");
             stmt.addBatch("DELETE FROM inventory");
             stmt.addBatch("DELETE FROM band");
-            stmt.addBatch("DELETE FROM genre");
+            stmt.addBatch("DELETE FROM media");
             stmt.addBatch("DELETE FROM genre_linker");
+            stmt.addBatch("DELETE FROM genre");
             stmt.executeBatch();
 
             //loading new database info

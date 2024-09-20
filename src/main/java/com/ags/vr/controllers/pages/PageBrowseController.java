@@ -845,7 +845,7 @@ public class PageBrowseController
 
             if(getFileBool && loadBool)
             {
-                Graphical.InfoPopup("Load Successful", filename + " Loaded successfully.");
+                Graphical.InfoPopup("Load Successful", filename + " loaded successfully.");
             }
         }
     }
