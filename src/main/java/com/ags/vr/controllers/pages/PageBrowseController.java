@@ -802,7 +802,9 @@ public class PageBrowseController
 
     @FXML private ChoiceBox<String> selectionBox;
 
-    //methods
+    /**
+     * Saves the entirety of the current database into a .ser file.
+     */
     @FXML
     void saveFile()
     {
@@ -824,19 +826,21 @@ public class PageBrowseController
         }
     }
 
-    //TODO IMPLEMENT
+    /**
+     * Loads a saved database. All current entries are deleted and replaced with the loaded entries.
+     */
     @FXML
     void loadFile()
     {
         //check if a file has been selected
         if(fileListView.getSelectionModel().isEmpty())
         {
-            Graphical.ErrorPopup("No file selected", "Please select a file.");
+            Graphical.ErrorPopup("No Save Selected", "Please select a save.");
             return;
         }
 
         String filename = fileListView.getSelectionModel().getSelectedItem();
-        if(Graphical.ConfirmationPopup("Load File", "Are you sure you want to load " +
+        if(Graphical.ConfirmationPopup("Load Save", "Are you sure you want to load " +
                 filename + "? All currently stored data will be lost."))
         {
             DatabaseSerializer loader = new DatabaseSerializer(false);
@@ -850,11 +854,35 @@ public class PageBrowseController
         }
     }
 
-    //TODO IMPLEMENT
+    /**
+     * Deletes a saved database file. The file is removed from the databaseSaves directory.
+     */
     @FXML
     void deleteFile()
     {
+        if(fileListView.getSelectionModel().isEmpty())
+        {
+            Graphical.ErrorPopup("No file selected", "Please select a file.");
+            return;
+        }
 
+        String filename = fileListView.getSelectionModel().getSelectedItem();
+
+        if(Graphical.ConfirmationPopup("Save Deletion", "Are you sure you want to delete this save?"))
+        {
+            File file = new File("databaseSaves/" + filename);
+            boolean deletion = file.delete();
+
+            if(deletion)
+            {
+                Graphical.InfoPopup("Delete Successful", filename + " deleted successfully.");
+                fileListView.getItems().remove(filename);
+            }
+            else
+            {
+                Graphical.ErrorPopup("Deletion Failed", filename + " could not be deleted.");
+            }
+        }
     }
 
     @FXML
