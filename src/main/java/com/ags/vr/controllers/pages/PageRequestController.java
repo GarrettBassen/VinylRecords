@@ -3,16 +3,19 @@ package com.ags.vr.controllers.pages;
 //imports
 import com.ags.vr.objects.Request;
 import com.ags.vr.utils.Graphical;
-import com.ags.vr.utils.database.DBMedia;
 import com.ags.vr.utils.database.DBRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import static com.ags.vr.utils.Connector.con;
 
 
 /**
@@ -29,7 +32,7 @@ public class PageRequestController {
     @FXML private BorderPane rootPane;
     @FXML private Button addBtn; //calls the launchAddPopUp method
     @FXML private ImageView refreshBtn; //calls the refreshRequests method
-    @FXML private TextArea requests;
+    @FXML private VBox requests;
 
     //declaring FXML variables for the Add Request pop-up
     @FXML private VBox addPopUp;
@@ -110,6 +113,29 @@ public class PageRequestController {
     }
 
 
+    //------------------ Database ------------------
+
+    /**
+     * Method used to grab all current requests from the database and store inside a ResultSet.
+     * From there calls a helper method to turn that into an array to later be returned back to the user.
+     * @return an array of Request Objects.
+     * @throws SQLException exception.
+     */
+    private Request[] grabRequests() throws SQLException
+    {
+        //create a SQL statement to grab all entries from the request table
+        PreparedStatement statement = con.prepareStatement("SELECT * FROM request");
+        ResultSet result = statement.executeQuery();
+
+        //initialize an array of Request objects by calling to a helper method
+        Request[] request = rsToRequest(result);
+
+        //close and return the array
+        statement.close();
+        return request;
+    }
+
+
     //------------------ Helper Methods ------------------
 
     /**
@@ -131,6 +157,34 @@ public class PageRequestController {
         //return the Request Object
         return request;
     }
+
+
+    /**
+     * Method used to return an array of Request Objects pulled from a result set.
+     * @param sets is a ResultSet from the database that contains all info regarding the request.
+     * @return an array of Request objects.
+     * @throws SQLException exception.
+     */
+    private Request[] rsToRequest(ResultSet... sets) throws SQLException
+    {
+        //create new LinkedList object
+        LinkedList<Request> requestList = new LinkedList<>();
+
+        //for loop to iterate through the ResultSet
+        for (ResultSet set : sets)
+        {
+            //while loop that checks if the current result is null and that there is another following.
+            while (set != null && set.next())
+            {
+                //add to the LinkedList
+                requestList.addLast(new Request(set));
+            }
+        }
+
+        //return the LinkedList converted to an array
+        return requestList.toArray(new Request[0]);
+    }
+
 
     /**
      * Helper method used to close the popup if exit icon or submit button is pressed.
