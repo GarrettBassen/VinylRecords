@@ -41,6 +41,15 @@ public class PageBaseController
     }
 
     /**
+     * Opens "Settings" page to modify program parameters.
+     */
+    @FXML
+    private void PageAccessSettings()
+    {
+        LoadPage("page_settings.fxml");
+    }
+
+    /**
      * Opens "Add" page to add media to inventory when button is pressed.
      */
     @FXML

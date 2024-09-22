@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="600.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.pages.PageBaseController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="600.0" minWidth="600.0" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.pages.PageBaseController">
    <children>
       <BorderPane fx:id="content_pane" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -35,6 +35,7 @@
                             <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="100.0" />
                             <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="100.0" />
                               <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="100.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -51,6 +52,11 @@
                                  </font>
                               </Button>
                               <Button alignment="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#PageAccessRequests" style="-fx-background-color: #383845;" text="Requests" textFill="#b2b2b2" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                 <font>
+                                    <Font name="Arial Rounded MT Bold" size="16.0" />
+                                 </font>
+                              </Button>
+                              <Button alignment="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#PageAccessSettings" style="-fx-background-color: #383845;" text="Settings" textFill="#b2b2b2" GridPane.columnIndex="3">
                                  <font>
                                     <Font name="Arial Rounded MT Bold" size="16.0" />
                                  </font>

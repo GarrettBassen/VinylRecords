@@ -77,9 +77,6 @@ public class PageBrowseController
     @FXML private Spinner<Integer> sp_year_min;
     @FXML private Spinner<Integer> sp_year_max;
 
-    //Settings button
-    @FXML private Button settingsButton;
-
     // Filter helper variables
     private String[] medium = new String[4];
     private String[] format = new String[5];
@@ -205,27 +202,6 @@ public class PageBrowseController
     {
         sp_year_min.getValueFactory().setValue(Integer.MIN_VALUE);
         sp_year_max.getValueFactory().setValue(Integer.MAX_VALUE);
-    }
-
-    @FXML
-    void openSettings()
-    {
-        settingsPopup.setVisible(true);
-        selectionBox.getItems().addAll("Daily", "Monthly", "Yearly");
-        selectionBox.setValue("Auto Save Frequency");
-
-        //get all files from databaseSaves directory
-        //Creating a File object for directory
-        File directoryPath = new File("databaseSaves");
-        //List of all files and directories
-        File filesList[] = directoryPath.listFiles();
-
-        //fill the list view with the files
-        for(int i = 0; i < filesList.length; i++)
-        {
-            fileListView.getItems().add(filesList[i].getName());
-        }
-        settingsButton.setDisable(true);
     }
 
 
@@ -788,108 +764,5 @@ public class PageBrowseController
         }
 
         return true;
-    }
-
-    //************************************POPUP****************************************************//
-    @FXML private TitledPane settingsPopup;
-
-    @FXML private TextField fileInput;
-    @FXML private ListView<String> fileListView;
-
-    @FXML private Button saveButton;
-    @FXML private Button loadButton;
-    @FXML private Button closeSettingsButton;
-
-    @FXML private ChoiceBox<String> selectionBox;
-
-    /**
-     * Saves the entirety of the current database into a .ser file.
-     */
-    @FXML
-    void saveFile()
-    {
-        if(fileListView.getItems().contains(fileInput.getText() + ".ser"))
-        {
-            Graphical.ErrorPopup("Same Save Name", "Delete highlighted save before adding new save with same name.");
-            fileListView.getSelectionModel().select(fileInput.getText() + ".ser");
-            return;
-        }
-
-        //creating new saver loader object which getts all tables from database
-        DatabaseSerializer saver = new DatabaseSerializer(true);
-        boolean bool = saver.save("databaseSaves/" + fileInput.getText() + ".ser");
-
-        if(bool)
-        {
-            fileListView.getItems().add(fileInput.getText() + ".ser");
-            Graphical.InfoPopup("Save Successful", fileInput.getText() + "saved.");
-        }
-    }
-
-    /**
-     * Loads a saved database. All current entries are deleted and replaced with the loaded entries.
-     */
-    @FXML
-    void loadFile()
-    {
-        //check if a file has been selected
-        if(fileListView.getSelectionModel().isEmpty())
-        {
-            Graphical.ErrorPopup("No Save Selected", "Please select a save.");
-            return;
-        }
-
-        String filename = fileListView.getSelectionModel().getSelectedItem();
-        if(Graphical.ConfirmationPopup("Load Save", "Are you sure you want to load " +
-                filename + "? All currently stored data will be lost."))
-        {
-            DatabaseSerializer loader = new DatabaseSerializer(false);
-            boolean getFileBool = loader.getFile("databaseSaves/" + filename);
-            boolean loadBool = loader.load();
-
-            if(getFileBool && loadBool)
-            {
-                Graphical.InfoPopup("Load Successful", filename + " loaded successfully.");
-            }
-        }
-    }
-
-    /**
-     * Deletes a saved database file. The file is removed from the databaseSaves directory.
-     */
-    @FXML
-    void deleteFile()
-    {
-        if(fileListView.getSelectionModel().isEmpty())
-        {
-            Graphical.ErrorPopup("No file selected", "Please select a file.");
-            return;
-        }
-
-        String filename = fileListView.getSelectionModel().getSelectedItem();
-
-        if(Graphical.ConfirmationPopup("Save Deletion", "Are you sure you want to delete this save?"))
-        {
-            File file = new File("databaseSaves/" + filename);
-            boolean deletion = file.delete();
-
-            if(deletion)
-            {
-                Graphical.InfoPopup("Delete Successful", filename + " deleted successfully.");
-                fileListView.getItems().remove(filename);
-            }
-            else
-            {
-                Graphical.ErrorPopup("Deletion Failed", filename + " could not be deleted.");
-            }
-        }
-    }
-
-    @FXML
-    void closeSettings()
-    {
-        fileListView.getItems().clear();
-        settingsPopup.setVisible(false);
-        settingsButton.setDisable(false);
     }
 }
