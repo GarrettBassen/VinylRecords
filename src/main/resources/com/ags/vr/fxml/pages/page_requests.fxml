@@ -80,7 +80,14 @@
             </HBox>
          </bottom>
          <center>
-            <VBox fx:id="requests" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-color: #242424; -fx-border-width: 5; -fx-border-radius: 2.5;" BorderPane.alignment="CENTER" />
+            <VBox fx:id="requests" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white; -fx-background-radius: 5; -fx-border-color: #242424; -fx-border-width: 5; -fx-border-radius: 2.5;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="noRequests" alignment="CENTER" prefHeight="48.0" prefWidth="231.0" text="No Current Requests..." textFill="#242424">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="18.0" />
+                     </font>
+                  </Label>
+               </children></VBox>
          </center>
       </BorderPane>
       <VBox fx:id="addPopUp" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: white; -fx-border-color: #242424; -fx-border-width: 4;" visible="false">

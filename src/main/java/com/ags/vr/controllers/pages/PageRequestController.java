@@ -1,16 +1,20 @@
 package com.ags.vr.controllers.pages;
 
 //imports
+import com.ags.vr.controllers.utils.PaneRequestEntryController;
 import com.ags.vr.objects.Request;
 import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.database.DBRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,6 +37,7 @@ public class PageRequestController {
     @FXML private Button addBtn; //calls the launchAddPopUp method
     @FXML private ImageView refreshBtn; //calls the refreshRequests method
     @FXML private VBox requests;
+    @FXML private Label noRequests;
 
     //declaring FXML variables for the Add Request pop-up
     @FXML private VBox addPopUp;
@@ -44,12 +49,14 @@ public class PageRequestController {
     @FXML private TextField requestField;
     @FXML private Button submitBtn; //calls the submitRequest method
 
-    //todo!
+
     /**
      * Method used to initialize the page with possible data from the database
      */
-    @FXML void initialize() {
+    @FXML void initialize() throws SQLException {
 
+        //call helper method to launch cards containing request info if present
+        refreshRequests();
     }
 
 
@@ -63,15 +70,15 @@ public class PageRequestController {
     public void launchAddPopUp(ActionEvent event) { addPopUp.setVisible(true); }
 
 
-    //todo!
     /**
      * Method used to send the data that the user inputs to the
      * database to be stored and later displayed to the user.
      * WIP to error handle any improper text fields input.
      * Upon clicking submit if there are no errors then the popup close.
      * @param event is the action of the submit button being pressed by the user.
+     * @throws SQLException exception.
      */
-    public void submitRequest(ActionEvent event) {
+    public void submitRequest(ActionEvent event) throws SQLException {
 
         //future code to check for any errors in the user input using the validation method...
 
@@ -89,16 +96,9 @@ public class PageRequestController {
                 "'%s' was requested by '%s' was successfully added to your requests",
                 request.getRequest(), request.getCustomerName()
         ));
-    }
 
-
-    //todo!
-    /**
-     * Method used to refresh the text area with the data that is stored in the request table from the database.
-     * @param e is the action of the button being pressed by the user
-     */
-    public void refreshRequests(ActionEvent e) {
-
+        //call refreshRequest method to update vBox
+        refreshRequests();
     }
 
 
@@ -160,6 +160,35 @@ public class PageRequestController {
 
 
     /**
+     * Method used to load in the fxml file to showcase any current requests in the database.
+     * @param request are all requests (zero to many).
+     */
+    private void addPane(Request... request)
+    {
+        //for loop to iterate through all requests
+        for (Request r : request) {
+            //try catch to ensure that the correct path is taken
+            try
+            {
+                //create new FXMLLoader object with path
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ags/vr/fxml/utils/pane_requestEntry.fxml"));
+                requests.getChildren().add(loader.load());
+                PaneRequestEntryController controller = loader.getController();
+                controller.setData(r); //call helper method to set data inside the fxml to be displayed
+            }
+            catch (IOException e)
+            {
+                //launches pop up with the following message
+                Graphical.ErrorPopup("Error displaying content", String.format(
+                        "Could not display request in addPane(Request...) | RequestController.java\n\n%s",
+                        e.getMessage()
+                ));
+            }
+        }
+    }
+
+
+    /**
      * Method used to return an array of Request Objects pulled from a result set.
      * @param sets is a ResultSet from the database that contains all info regarding the request.
      * @return an array of Request objects.
@@ -183,6 +212,27 @@ public class PageRequestController {
 
         //return the LinkedList converted to an array
         return requestList.toArray(new Request[0]);
+    }
+
+
+    /**
+     * Method used to refresh the vBox with the data that is stored in the request table from the database.
+     * @throws SQLException exception.
+     */
+    public void refreshRequests() throws SQLException {
+
+        //initialize array of Request Objects with grabRequests method
+        Request[] currentRequests = grabRequests();
+
+        //if any current requests then add cards to the vBox
+        if(currentRequests.length > 0) {
+            //clear the children of the vBox
+            requests.getChildren().clear();
+            //call addPane method that'll fill the vBox with all requests
+            addPane(currentRequests);
+            //setVisibility of label to false
+            noRequests.setVisible(false);
+        }
     }
 
 
