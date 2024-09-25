@@ -7,9 +7,14 @@ import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class PageSettingsController
 {
+    private final String BACKUP_DIRECTORY = "database_backups";
+    private final String SETTINGS_FILE = "settings.config";
+
     @FXML private ListView<String> lv_files;
 
 
@@ -31,12 +36,105 @@ public class PageSettingsController
         UpdateFileList();
     }
 
+    // TODO IMPLEMENT
+    @FXML
+    void InitiateDBBackup()
+    {
+        String fileName = String.format(
+                "%d-%d-%d.ser",
+                LocalDateTime.now().getYear(),
+                LocalDateTime.now().getMonthValue(),
+                LocalDateTime.now().getDayOfMonth()
+        );
+
+        // Warn if file collision will occur and give the choice to overwrite file
+        if(lv_files.getItems().contains(fileName))
+        {
+            boolean overwrite = Graphical.ConfirmationPopup("File Collision",
+                    "It appears that a backup for the current date already exists. " +
+                            "Would you like to overwrite this file with a new backup?");
+
+            if (overwrite)
+            {
+                DeleteFile(fileName, true);
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        //creating new saver loader object which gets all tables from database
+        DatabaseSerializer saver = new DatabaseSerializer(true);
+        boolean successful = saver.save(BACKUP_DIRECTORY + File.separator + fileName);
+
+        // Update display
+        UpdateFileList();
+
+        // Display message to user
+        if (successful)
+        {
+            Graphical.InfoPopup("Save Successful", "Database backup successfully saved.");
+        }
+        else
+        {
+            Graphical.ErrorPopup("Unknown Error", "Unknown error serializing database in " +
+                    "InitiateDBBackup() | PageSettingsController.java");
+        }
+    }
+
+    @FXML
+    void EventDeleteFile()
+    {
+        if(lv_files.getSelectionModel().isEmpty())
+        {
+            Graphical.ErrorPopup("No File Selected",
+                    "No file has been selected for deletion. Please select a file and try again.");
+            return;
+        }
+
+        DeleteFile(lv_files.getSelectionModel().getSelectedItem(), false);
+    }
+
+    // TODO FIX JANKY OPTIONAL PARAMETER
+    /**
+     * Deletes a saved database file. The file is removed from the databaseSaves directory.
+     */
+    void DeleteFile(String fileName, boolean permission)
+    {
+        if(fileName == null || fileName.isBlank())
+        {
+            Graphical.ErrorPopup("No File Selected",
+                    "No file has been selected for deletion. Please select a file and try again.");
+            return;
+        }
+
+        // TODO FIX VERBIAGE
+        if(permission || Graphical.ConfirmationPopup("Save Deletion", "Are you sure you want to delete this save?"))
+        {
+            File file = new File(BACKUP_DIRECTORY + File.separator + fileName);
+            boolean deletion = file.delete();
+            UpdateFileList();
+
+            if(deletion && !permission)
+            {
+                Graphical.InfoPopup("Delete Successful", String.format(
+                        "The selected backup '%s' has been deleted successfully", fileName
+                ));
+            }
+            else if (!deletion)
+            {
+                Graphical.ErrorPopup("Deletion Failed", fileName + " could not be deleted.");
+            }
+        }
+    }
+
     /**
      * Gets database backup directory. If it does not exist, create directory.
      */
     private void GetDirectory()
     {
-        directoryPath = new File("database_backups");
+        directoryPath = new File(BACKUP_DIRECTORY);
 
         if (!directoryPath.exists())
         {
@@ -50,7 +148,7 @@ public class PageSettingsController
      */
     private boolean GetConfig()
     {
-        file_config = new File(directoryPath.getPath() + "/settings.config");
+        file_config = new File(BACKUP_DIRECTORY + File.separator + SETTINGS_FILE);
         return file_config.exists();
     }
 
@@ -94,6 +192,9 @@ public class PageSettingsController
      */
     private void UpdateFileList()
     {
+        // Clear listview
+        lv_files.getItems().clear();
+
         for(File file : directoryPath.listFiles())
         {
             // Don't show config file
@@ -154,39 +255,6 @@ public class PageSettingsController
             if(getFileBool && loadBool)
             {
                 Graphical.InfoPopup("Load Successful", filename + " loaded successfully.");
-            }
-        }
-    }
-     */
-
-    /**
-     * Deletes a saved database file. The file is removed from the databaseSaves directory.
-     */
-    /*
-    @FXML
-    void deleteFile()
-    {
-        if(fileListView.getSelectionModel().isEmpty())
-        {
-            Graphical.ErrorPopup("No file selected", "Please select a file.");
-            return;
-        }
-
-        String filename = fileListView.getSelectionModel().getSelectedItem();
-
-        if(Graphical.ConfirmationPopup("Save Deletion", "Are you sure you want to delete this save?"))
-        {
-            File file = new File("databaseSaves/" + filename);
-            boolean deletion = file.delete();
-
-            if(deletion)
-            {
-                Graphical.InfoPopup("Delete Successful", filename + " deleted successfully.");
-                fileListView.getItems().remove(filename);
-            }
-            else
-            {
-                Graphical.ErrorPopup("Deletion Failed", filename + " could not be deleted.");
             }
         }
     }

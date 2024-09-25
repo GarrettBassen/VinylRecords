@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
@@ -11,5 +12,7 @@
       <TextField />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Backup Files" />
       <ListView fx:id="lv_files" prefHeight="200.0" prefWidth="200.0" />
+      <Button mnemonicParsing="false" onAction="#InitiateDBBackup" text="Backup" />
+      <Button mnemonicParsing="false" onAction="#EventDeleteFile" text="Delete" />
    </children>
 </VBox>
