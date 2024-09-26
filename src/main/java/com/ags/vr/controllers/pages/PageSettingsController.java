@@ -8,15 +8,15 @@ import javafx.scene.control.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 public class PageSettingsController
 {
+    // Directory and file constants
     private final String BACKUP_DIRECTORY = "database_backups";
     private final String SETTINGS_FILE = "settings.config";
 
+    // List view display
     @FXML private ListView<String> lv_files;
-
 
     // Backup directory file location
     File directoryPath;
@@ -83,6 +83,9 @@ public class PageSettingsController
         }
     }
 
+    /**
+     * Deletes selected list view item when button is triggered.
+     */
     @FXML
     void EventDeleteFile()
     {
@@ -96,7 +99,6 @@ public class PageSettingsController
         DeleteFile(lv_files.getSelectionModel().getSelectedItem(), false);
     }
 
-    // TODO FIX JANKY OPTIONAL PARAMETER
     /**
      * Deletes a saved database file. The file is removed from the databaseSaves directory.
      */
@@ -110,7 +112,9 @@ public class PageSettingsController
         }
 
         // TODO FIX VERBIAGE
-        if(permission || Graphical.ConfirmationPopup("Save Deletion", "Are you sure you want to delete this save?"))
+        if(permission || Graphical.ConfirmationPopup("Deletion Confirmation", String.format(
+                "Are you sure you want to delete the backup '%s'?", fileName))
+        )
         {
             File file = new File(BACKUP_DIRECTORY + File.separator + fileName);
             boolean deletion = file.delete();
@@ -176,15 +180,20 @@ public class PageSettingsController
     private void PopulateConfigSettings()
     {
         // TODO populate config file with settings
+        // SKELETON TEMPLATE
         /**
          * ## CONFIG FILE
          *
-         * # Frequency in days
+         * # Frequency in Days
          * db.backup.frequency = 7
          *
-         * # How many backups to save
+         * # How Many Backups to Keep
          * db.backup.saves = 5
+         *
+         * # Last Backup Date
+         * db.backup.last = 01/01
          */
+        // TODO SEE ABOUT DELETING OLD BACKUPS WHEN NEW ONE IS MANUALLY CREATED?
     }
 
     /**
@@ -204,31 +213,6 @@ public class PageSettingsController
         }
     }
 
-    /**
-     * Saves the entirety of the current database into a .ser file.
-     */
-    /*
-    @FXML
-    void saveFile()
-    {
-        if(lv_files.getItems().contains(fileInput.getText() + ".ser"))
-        {
-            Graphical.ErrorPopup("Same Save Name", "Delete highlighted save before adding new save with same name.");
-            lv_files.getSelectionModel().select(fileInput.getText() + ".ser");
-            return;
-        }
-
-        //creating new saver loader object which getts all tables from database
-        DatabaseSerializer saver = new DatabaseSerializer(true);
-        boolean bool = saver.save("databaseSaves/" + fileInput.getText() + ".ser");
-
-        if(bool)
-        {
-            lv_files.getItems().add(fileInput.getText() + ".ser");
-            Graphical.InfoPopup("Save Successful", fileInput.getText() + "saved.");
-        }
-    }
-     */
 
     /**
      * Loads a saved database. All current entries are deleted and replaced with the loaded entries.

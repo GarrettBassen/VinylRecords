@@ -11,7 +11,6 @@ import com.ags.vr.utils.Graphical;
 import com.ags.vr.utils.Hash;
 
 import com.ags.vr.utils.database.DBGenreLinker;
-import com.ags.vr.utils.serialization.DatabaseSerializer;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +21,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,15 +31,12 @@ import java.util.*;
 
 import static com.ags.vr.utils.Connector.con;
 
-//TODO ADD AUTO SAVING FUNCTIONALITY
+
 public class PageBrowseController
 {
     // Panes
     @FXML private AnchorPane pane_base;
     @FXML private VBox pane_content;
-
-    // Current page controller reference
-    private PageBrowseController page_browseController;
 
     // Popup card controllers
     private CardMediaViewController card_mediaController;
@@ -186,7 +181,9 @@ public class PageBrowseController
             Media[] media = sqlSearch();
             media = slimResults(media);
             AddContentPane(media);
-            ClearParameters();
+
+            // Reset search case
+            this.searchCase = -1;
         }
         catch (SQLException e)
         {
@@ -659,16 +656,6 @@ public class PageBrowseController
         }
 
         return mediaList.toArray(new Media[0]);
-    }
-
-    /**
-     * Clears all search parameters and variables.
-     */
-    private void ClearParameters()
-    {
-        this.searchCase = 0;
-        Arrays.fill(medium,"");
-        Arrays.fill(format,"");
     }
 
 
