@@ -217,23 +217,22 @@ public class PageSettingsController
     /**
      * Loads a saved database. All current entries are deleted and replaced with the loaded entries.
      */
-    /*
     @FXML
     void loadFile()
     {
         //check if a file has been selected
-        if(fileListView.getSelectionModel().isEmpty())
+        if(lv_files.getSelectionModel().isEmpty())
         {
             Graphical.ErrorPopup("No Save Selected", "Please select a save.");
             return;
         }
 
-        String filename = fileListView.getSelectionModel().getSelectedItem();
+        String filename = lv_files.getSelectionModel().getSelectedItem();
         if(Graphical.ConfirmationPopup("Load Save", "Are you sure you want to load " +
                 filename + "? All currently stored data will be lost."))
         {
             DatabaseSerializer loader = new DatabaseSerializer(false);
-            boolean getFileBool = loader.getFile("databaseSaves/" + filename);
+            boolean getFileBool = loader.getFile(BACKUP_DIRECTORY + File.separator + filename);
             boolean loadBool = loader.load();
 
             if(getFileBool && loadBool)
@@ -242,5 +241,5 @@ public class PageSettingsController
             }
         }
     }
-     */
+
 }

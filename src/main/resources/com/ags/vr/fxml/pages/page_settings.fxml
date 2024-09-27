@@ -6,13 +6,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="700.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.pages.PageSettingsController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="700.0" minWidth="1000.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ags.vr.controllers.pages.PageSettingsController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Backup Frequency" />
       <TextField />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Backup Files" />
       <ListView fx:id="lv_files" prefHeight="200.0" prefWidth="200.0" />
       <Button mnemonicParsing="false" onAction="#InitiateDBBackup" text="Backup" />
+      <Button fx:id="loadButton" mnemonicParsing="false" onAction="#loadFile" text="Load" />
       <Button mnemonicParsing="false" onAction="#EventDeleteFile" text="Delete" />
    </children>
 </VBox>
