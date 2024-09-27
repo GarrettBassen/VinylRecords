@@ -60,13 +60,27 @@ public class Stock implements Serializable
             result.next();
 
             //setting the values (null assigns 0)
-            this.media_id = result.getInt("media_id");
-            this.frontGood = result.getByte("front_good");
-            this.frontFair = result.getByte("front_fair");
-            this.frontPoor = result.getByte("front_poor");
-            this.backGood  = result.getByte("back_good");
-            this.backFair  = result.getByte("back_fair");
-            this.backPoor  = result.getByte("back_poor");
+            try
+            {
+                this.media_id = result.getInt("media_id");
+                this.frontGood = result.getByte("front_good");
+                this.frontFair = result.getByte("front_fair");
+                this.frontPoor = result.getByte("front_poor");
+                this.backGood  = result.getByte("back_good");
+                this.backFair  = result.getByte("back_fair");
+                this.backPoor  = result.getByte("back_poor");
+            }
+            //there is no stock entry set all to 0
+            catch(SQLException e)
+            {
+                this.media_id = media.getID();
+                this.frontGood = 0;
+                this.frontFair = 0;
+                this.frontPoor = 0;
+                this.backGood  = 0;
+                this.backFair  = 0;
+                this.backPoor  = 0;
+            }
         }
         catch (SQLException e)
         {

@@ -14,9 +14,6 @@ import static com.ags.vr.utils.Connector.con;
 
 public class DatabaseSerializer implements java.io.Serializable
 {
-    //TODO ADD METHOD FOR SERIALIZING THE DB USING THE DB SAVER METHODS
-    //TODO ADD METHOD FOR RECONSTRUCTING THE DB USING DESERIALIZED ARRAYLIST
-
     //Database tables
     private ArrayList<Media> mediaTable;
     private ArrayList<Stock> stockTable;
@@ -118,19 +115,19 @@ public class DatabaseSerializer implements java.io.Serializable
             Statement stmt = con.createStatement();
             stmt.addBatch("DELETE FROM request");
             stmt.addBatch("DELETE FROM inventory");
-            stmt.addBatch("DELETE FROM band");
-            stmt.addBatch("DELETE FROM media");
             stmt.addBatch("DELETE FROM genre_linker");
             stmt.addBatch("DELETE FROM genre");
+            stmt.addBatch("DELETE FROM media");
+            stmt.addBatch("DELETE FROM band");
             stmt.executeBatch();
 
             //loading new database info
+            RequestSerializer.loadRequestEntries(requestTable);
             BandSerializer.loadBandEntries(bandTable);
-            GenreSerializer.loadGenreEntries(genreTable);
             MediaSerializer.loadMediaEntries(mediaTable);
+            GenreSerializer.loadGenreEntries(genreTable);
             InventorySerializer.loadInventoryEntries(stockTable);
             GenreLinkerSerializer.loadGenreLinkerEntries(genreLinkerTable);
-            RequestSerializer.loadRequestEntries(requestTable);
             return true;
         }
         catch(SQLException e)

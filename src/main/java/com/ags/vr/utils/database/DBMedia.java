@@ -173,8 +173,6 @@ public class DBMedia
      */
     public static boolean Delete(Media media)
     {
-        // TODO SEE ABOUT RETURNING TRUE IF VALUE NEVER EXISTED IN DATABASE (check SQLException)
-        // TODO TEST
         try
         {
             //delete the associated stock table

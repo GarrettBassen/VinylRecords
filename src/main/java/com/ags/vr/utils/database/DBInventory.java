@@ -69,7 +69,6 @@ public class DBInventory
 
         try
         {
-            // TODO MAKE LOOK GOOD IF POSSIBLE
             //updating the table with all the values from the stock object
             PreparedStatement stmt = con.prepareStatement("UPDATE inventory SET front_good = (?), front_fair = (?), front_poor = (?), back_good = (?), back_fair = (?), back_poor = (?) WHERE media_id = (?)");
             stmt.setInt(1, data[1]);
@@ -87,7 +86,6 @@ public class DBInventory
         }
     }
 
-    // TODO TEST
     /**
      * Deletes the stock entry from the database. Uses a media object to find and
      * delete its corresponding stock entry.
