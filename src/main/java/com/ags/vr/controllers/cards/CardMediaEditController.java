@@ -206,6 +206,7 @@ public class CardMediaEditController implements CardBase
 
     /**
      * Replaces the current stock entry with a new updated entry.
+     * If the new stock entry is empty the stock table entry is deleted.
      */
     @FXML
     void stockSave(Media m)
@@ -214,6 +215,15 @@ public class CardMediaEditController implements CardBase
         {
             //creating new stock object
             Stock st = createUpdatedStock(m);
+            
+            //if the current stock is empty
+            if(st.isEmpty())
+            {
+                //remove the current entry from the table
+                DBInventory.Delete(m);
+                return;
+            }
+
             DBInventory.Insert(st);
             invTotal.setText(String.valueOf(st.getStockTotal()));
         }

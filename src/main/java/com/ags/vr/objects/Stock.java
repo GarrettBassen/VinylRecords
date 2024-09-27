@@ -266,4 +266,30 @@ public class Stock implements Serializable
     {
         this.backPoor = backPoor;
     }
+
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /*                                              Helper                                                       */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Checks if the stock object is empty.
+     * @return True if the stock objects values are all 0; false otherwise.
+     */
+    public boolean isEmpty()
+    {
+        //getting data
+        int[] data = getData();
+        
+        boolean isEmpty = true;
+        //check if any of the values contain data
+        for(int current : data)
+        {
+            if(current > 0)
+            {
+                isEmpty = false;
+            }
+        }
+
+        return isEmpty;
+    }
 }
