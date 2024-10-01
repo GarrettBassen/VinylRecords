@@ -8,6 +8,7 @@ import com.ags.vr.utils.Hash;
 import com.ags.vr.utils.database.DBBand;
 import com.ags.vr.utils.database.DBGenreLinker;
 import com.ags.vr.utils.database.DBMedia;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
@@ -111,7 +112,8 @@ public class CardBandEditController implements CardBase
     @FXML
     void renameSystem()
     {
-        String newBand = bandDisplay.getText();;
+        String newBand = bandDisplay.getText();
+
         if(!DBBand.Contains(newBand))
         {
             //user conformation
@@ -145,6 +147,15 @@ public class CardBandEditController implements CardBase
      */
     private void renameMediaHelper()
     {
+        //only the capitalization changed
+        if(Hash.StringHash(band) == media.getBandID())
+        {
+            //inform the user of error
+            Graphical.ErrorPopup("Band Rename Error", media.getBand() +
+            " has the same spelling as " + band + ". To change the capitalization, try remaining " + band + " system wide.");
+            return;
+        }
+
         //new media object with updated band
         Media newMedia = new Media(media.getTitle(), media.getMedium(), media.getFormat(), media.getYear(), band);
         //update
@@ -162,6 +173,26 @@ public class CardBandEditController implements CardBase
     {
         try
         {
+            //if only the capitalization changed
+            if(Hash.StringHash(band) == Hash.StringHash(newBand))
+            {
+                try
+                {
+                    //update the capitalization system wide
+                    PreparedStatement stmt = con.prepareStatement("UPDATE band SET name = ? WHERE band_id = ?");
+                    stmt.setString(1, newBand);
+                    stmt.setInt(2, Hash.StringHash(newBand));
+                    stmt.executeUpdate();
+                    //inform user of success
+                    Graphical.InfoPopup("Band Renamed", "Band successfully renamed system wide");
+                }
+                catch(SQLException e)
+                {
+                    Graphical.ErrorPopup("System Rename Error", e.getMessage());
+                }
+                return;
+            }
+
             //getGenre media with the old band
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM media WHERE band_id=?");
             stmt.setInt(1, Hash.StringHash(band));
