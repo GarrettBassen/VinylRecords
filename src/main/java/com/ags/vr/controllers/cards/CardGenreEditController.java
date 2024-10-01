@@ -318,6 +318,15 @@ public class CardGenreEditController implements CardBase
 
     private void renameHelper()
     {
+        //only the capitalization changed
+        if(Hash.StringHash(selected_genre) == Hash.StringHash(genreDisplay.getText()))
+        {
+            //inform the user of error
+            Graphical.ErrorPopup("Genre Rename Error", selected_genre +
+            " has the same spelling as " + genreDisplay.getText() + ". To change the capitalization, try remaining " + genreDisplay.getText() + " system wide.");
+            return;
+        }
+
         //remove the old connection
         DBGenreLinker.Delete(media.getID(), Hash.StringHash(selected_genre));
 
@@ -341,6 +350,19 @@ public class CardGenreEditController implements CardBase
 
     private void systemRenameHelper() throws SQLException
     {
+        //if only the capitalization changed
+        if(Hash.StringHash(selected_genre) == Hash.StringHash(genreDisplay.getText()))
+        {
+            //change name
+            PreparedStatement stmt = con.prepareStatement("UPDATE genre SET name = ? WHERE genre_id=?");
+            stmt.setString(1, genreDisplay.getText());
+            stmt.setInt(2, Hash.StringHash(selected_genre));
+            stmt.executeUpdate();
+            //inform user
+            Graphical.InfoPopup("Genre renamed", "Genre successfully renamed system wide");
+            return;
+        }
+
         //get all genre_linker entries that have the selected genre
         PreparedStatement stmt = con.prepareStatement("SELECT * FROM genre_linker WHERE genre_id=?");
         stmt.setInt(1, Hash.StringHash(selected_genre));
