@@ -13,8 +13,7 @@ import javafx.scene.layout.HBox;
 
 import java.time.Year;
 
-//TODO FIX STOCK ERROR POPUP
-//TODO FIX nameDisplay PRESELECTED BUG
+
 public class CardMediaEditController implements CardBase
 {
     // Text display
@@ -406,6 +405,13 @@ public class CardMediaEditController implements CardBase
     @Override
     public void Close()
     {
+        vinylRB.setSelected(false);
+        cdRB.setSelected(false);
+        cassetteRB.setSelected(false);
+        singleRB.setSelected(false);
+        epRB.setSelected(false);
+        lpRB.setSelected(false);
+        dlpRB.setSelected(false);
         this.setVisible(false);
         card_base.setPageBlockVisibility(false);
     }
